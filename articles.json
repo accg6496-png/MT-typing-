@@ -1,0 +1,124 @@
+{
+  "10min": [
+    {
+      "title": "The Invention of the Internet",
+      "text": "The internet has revolutionized the way we communicate, work, and live. Born from a military project in the 1960s called ARPANET, it has grown into a global network connecting billions of people. Tim Berners-Lee invented the World Wide Web in 1989, making the internet accessible to everyone. Today, we use it for everything from shopping to education, from social networking to remote work. The internet has democratized information, allowing anyone with a connection to access knowledge previously locked in libraries. However, it also brings challenges like privacy concerns, misinformation, and digital addiction. As we move forward, the internet continues to evolve with technologies like AI, blockchain, and the metaverse promising to reshape our digital experience once again.",
+      "category": "Technology",
+      "wordCount": 120
+    },
+    {
+      "title": "The Great Wall of China",
+      "text": "The Great Wall of China stands as one of humanity's most impressive architectural achievements. Stretching over 13,000 miles, it was built over centuries by various dynasties to protect against invasions from the north. Contrary to popular belief, it cannot be seen from space with the naked eye. The wall represents the sweat and blood of millions of workers, many of whom died during construction and were buried within the wall itself. Today, it attracts millions of tourists annually and serves as a powerful symbol of Chinese civilization. Sections of the wall date back to the 7th century BC, though most of what remains was built during the Ming Dynasty.",
+      "category": "History",
+      "wordCount": 135
+    },
+    {
+      "title": "Photosynthesis Explained",
+      "text": "Photosynthesis is the process by which plants convert light energy into chemical energy. Using chlorophyll, plants capture sunlight and transform carbon dioxide and water into glucose and oxygen. This process occurs in the chloroplasts, specialized organelles within plant cells. The chemical equation is deceptively simple: six carbon dioxide molecules plus six water molecules, powered by light, produce one glucose molecule and six oxygen molecules. This process is fundamental to life on Earth, as it produces the oxygen we breathe and forms the base of most food chains. Scientists study photosynthesis to develop artificial systems that could produce clean energy.",
+      "category": "Science",
+      "wordCount": 130
+    },
+    {
+      "title": "The Psychology of Color",
+      "text": "Colors profoundly affect our emotions, decisions, and behaviors. Red can increase heart rate and create urgency, which is why it is used in sale signs. Blue evokes trust and calmness, making it popular for corporate logos and social media platforms. Green represents nature and health, often used in organic products and environmental campaigns. Yellow grabs attention but can cause anxiety if overused. Purple has long been associated with royalty and luxury due to the historical difficulty in producing purple dye. Black signifies sophistication and power, while white represents purity and simplicity.",
+      "category": "Psychology",
+      "wordCount": 115
+    },
+    {
+      "title": "Marie Curie's Legacy",
+      "text": "Marie Curie was a pioneering physicist and chemist who became the first woman to win a Nobel Prize and the only person to win Nobel Prizes in two different scientific fields. Born Maria Sklodowska in Warsaw, Poland in 1867, she moved to Paris to pursue her education. Working alongside her husband Pierre, she discovered the elements polonium and radium. Her research on radioactivity, a term she coined, fundamentally changed our understanding of atomic structure. Despite facing significant discrimination as a woman in science, she persisted in her work. Her dedication to science ultimately cost her life, as she died from aplastic anemia likely caused by prolonged exposure to radiation.",
+      "category": "Biography",
+      "wordCount": 125
+    }
+  ],
+  "15min": [
+    {
+      "title": "Climate Change Explained",
+      "text": "Climate change refers to long-term shifts in global temperatures and weather patterns. While natural factors have always influenced climate, human activities since the Industrial Revolution have become the dominant driver. Burning fossil fuels releases greenhouse gases, primarily carbon dioxide, that trap heat in the atmosphere. The consequences include rising sea levels, more frequent extreme weather events, disrupted ecosystems, and threats to food security. The scientific consensus on human-caused climate change is overwhelming, supported by data from multiple independent sources. International agreements like the Paris Agreement aim to limit global warming to well below 2 degrees Celsius. Solutions include transitioning to renewable energy, improving energy efficiency, and protecting forests.",
+      "category": "Environment",
+      "wordCount": 135
+    },
+    {
+      "title": "The Power of Habits",
+      "text": "Habits are automatic behaviors formed through repetition, allowing the brain to conserve mental energy. Charles Duhigg's research identifies the habit loop: cue, routine, and reward. Understanding this loop enables us to change unwanted habits by keeping the cue and reward while changing the routine. Keystone habits, like exercise, can trigger positive changes in other areas of life. It takes an average of 66 days to form a new habit, though this varies widely. Willpower is like a muscle that fatigues with use, which is why it is easier to maintain habits in the morning. Environmental cues significantly influence habit formation.",
+      "category": "Psychology",
+      "wordCount": 125
+    },
+    {
+      "title": "The Moon Landing",
+      "text": "On July 20, 1969, Neil Armstrong became the first human to set foot on the moon, fulfilling President Kennedy's 1961 challenge. The Apollo 11 mission represented the culmination of the Space Race between the United States and the Soviet Union. Armstrong's famous words captured the significance of the moment. Buzz Aldrin joined him on the surface while Michael Collins orbited above. They collected lunar samples, planted the American flag, and performed experiments before returning safely to Earth. The mission required the work of over 400,000 people and cost billions of dollars. The moon landing demonstrated human capability for cooperation and innovation.",
+      "category": "History",
+      "wordCount": 130
+    },
+    {
+      "title": "Democracy's Origins",
+      "text": "Democracy, from Greek words meaning rule by the people, originated in Athens around the 5th century BC. Cleisthenes is credited with establishing the system where citizens participated directly in decision-making. Unlike modern representative democracies, Athenian democracy involved citizens voting directly on legislation and executive bills. However, participation was limited to adult male citizens, excluding women, slaves, and foreigners. The system lasted for about 200 years before being replaced by other forms of government. The Roman Republic adapted democratic elements into a representative system that influenced later governments.",
+      "category": "History",
+      "wordCount": 120
+    },
+    {
+      "title": "DNA Discovery",
+      "text": "Deoxyribonucleic acid, or DNA, carries the genetic instructions for all known living organisms. James Watson and Francis Crick discovered its double helix structure in 1953, building on Rosalind Franklin's crucial X-ray diffraction data. DNA consists of four nucleotide bases: adenine, thymine, cytosine, and guanine, which pair specifically to form the ladder-like structure. This discovery revolutionized biology, explaining how genetic information is stored and transmitted. The Human Genome Project, completed in 2003, mapped all human genes, opening new possibilities in medicine. DNA testing now solves crimes, establishes paternity, and traces ancestry.",
+      "category": "Science",
+      "wordCount": 125
+    }
+  ],
+  "20min": [
+    {
+      "title": "Globalization Effects",
+      "text": "Globalization refers to the increasing interconnectedness of economies, cultures, and populations through trade, technology, and migration. It has lifted billions from poverty, particularly in Asia, by creating manufacturing jobs and expanding markets. Consumers benefit from lower prices and greater product variety. However, globalization has also contributed to job losses in developed countries as manufacturing moved overseas. Cultural exchange has enriched societies but also raised concerns about cultural homogenization. Multinational corporations have gained unprecedented power, sometimes exceeding that of national governments. Global supply chains increase efficiency but create vulnerabilities, as seen during the COVID-19 pandemic.",
+      "category": "Economics",
+      "wordCount": 130
+    },
+    {
+      "title": "Memory Techniques",
+      "text": "Memory techniques, or mnemonics, help encode information for easier recall. The method of loci, dating to ancient Greece, involves visualizing information in familiar locations. Acronyms create memorable words from first letters. Chunking breaks large amounts of information into manageable units, like phone numbers. Spaced repetition, reviewing information at increasing intervals, optimizes long-term retention. The peg system associates numbers with rhyming words to remember sequences. Elaborative encoding connects new information to existing knowledge. Sleep plays a crucial role in memory consolidation, moving information from short-term to long-term storage. Physical exercise and reduced stress improve memory function.",
+      "category": "Psychology",
+      "wordCount": 125
+    },
+    {
+      "title": "The Silk Road",
+      "text": "The Silk Road was a network of trade routes connecting China to the Mediterranean from around 130 BC to 1453 AD. Named for the lucrative silk trade, it facilitated exchange of goods, ideas, and cultures across continents. Besides silk, merchants traded spices, precious metals, ceramics, and textiles. The route enabled the spread of religions including Buddhism, Islam, and Christianity. Technologies like papermaking and gunpowder traveled west, while grapes and glassmaking moved east. The Silk Road was not a single road but a network of land and sea routes spanning over 4,000 miles. Marco Polo's travels along these routes introduced Europeans to Asian cultures.",
+      "category": "History",
+      "wordCount": 125
+    },
+    {
+      "title": "Black Holes Explained",
+      "text": "Black holes are regions of spacetime where gravity is so strong that nothing, not even light, can escape. They form when massive stars collapse under their own gravity at the end of their lives. The boundary beyond which escape is impossible is called the event horizon. At the center lies a singularity, a point of infinite density where physics as we know it breaks down. Black holes can have masses millions or billions of times that of our sun. Stephen Hawking discovered that black holes emit radiation, now called Hawking radiation, and slowly evaporate over immense timescales. In 2019, the Event Horizon Telescope captured the first image of a black hole.",
+      "category": "Science",
+      "wordCount": 130
+    }
+  ],
+  "ielts": [
+    {
+      "title": "IELTS: Technology & Education",
+      "text": "Some people believe that technology has made education more accessible and effective, while others argue that it has created more distractions and reduced the quality of learning. Discuss both views and give your own opinion. Give reasons for your answer and include any relevant examples from your own knowledge or experience.",
+      "category": "IELTS Task 2",
+      "wordCount": 60
+    },
+    {
+      "title": "IELTS: Urbanization",
+      "text": "In many cities, the quality of life is declining due to overpopulation and pollution. What are the main causes of this problem? What measures could be taken to solve it? Give reasons for your answer and include any relevant examples from your own knowledge or experience.",
+      "category": "IELTS Task 2",
+      "wordCount": 55
+    },
+    {
+      "title": "IELTS: Work-Life Balance",
+      "text": "Some people think that the best way to achieve work-life balance is to work shorter hours. Others believe that doing a job you enjoy is more important. Discuss both views and give your own opinion. Give reasons for your answer and include any relevant examples from your own knowledge or experience.",
+      "category": "IELTS Task 2",
+      "wordCount": 58
+    },
+    {
+      "title": "IELTS: Climate Responsibility",
+      "text": "Some argue that individuals should take responsibility for reducing their carbon footprint, while others believe that only governments and large corporations can make a significant difference in combating climate change. Discuss both views and give your own opinion.",
+      "category": "IELTS Task 2",
+      "wordCount": 45
+    },
+    {
+      "title": "IELTS: Traditional vs Modern Medicine",
+      "text": "Some people prefer traditional medicine while others trust modern medicine more. Discuss both views and give your own opinion. Give reasons for your answer and include any relevant examples from your own knowledge or experience.",
+      "category": "IELTS Task 2",
+      "wordCount": 40
+    }
+  ]
+}
