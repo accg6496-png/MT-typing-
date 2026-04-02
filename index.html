@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TypeMaster Pro - Typing Practice with Time Prediction</title>
+    <title>MT Typing - Novel Chapter Practice with Library</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -159,6 +159,100 @@
         .kbd { background: var(--bg-tertiary); padding: 0.2rem 0.5rem; border-radius: 4px; font-family: monospace; font-size: 0.8rem; }
 
         /* Modals */
+        .goals-modal {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(8px);
+            display: none; align-items: center; justify-content: center;
+            z-index: 1003; opacity: 0; transition: opacity 0.3s ease;
+        }
+        [data-theme="light"] .goals-modal { background: rgba(241, 245, 249, 0.9); }
+        .goals-modal.show { display: flex; opacity: 1; }
+        .goals-modal-content {
+            background: var(--bg-secondary); border: 1px solid var(--bg-tertiary); 
+            border-radius: 20px; padding: 2rem; max-width: 500px; width: 90%;
+            transform: scale(0.9); transition: transform 0.3s ease;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+        .goals-modal.show .goals-modal-content { transform: scale(1); }
+        .goals-modal-title { font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--warning); text-align: center; }
+        .goals-form { display: flex; flex-direction: column; gap: 1.25rem; }
+        .goal-presets { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; }
+        .goal-preset-btn {
+            padding: 0.5rem; background: var(--bg-primary); border: 2px solid var(--bg-tertiary);
+            border-radius: 8px; cursor: pointer; color: var(--text-secondary); font-size: 0.85rem;
+            transition: all 0.2s ease;
+        }
+        .goal-preset-btn:hover { border-color: var(--accent); color: var(--accent); }
+        .goal-preset-btn.active { border-color: var(--warning); background: rgba(251, 191, 36, 0.2); color: var(--warning); }
+        .streak-info { font-size: 1.25rem; color: var(--text-primary); text-align: center; padding: 1rem; }
+        .streak-big { font-size: 2.5rem; font-weight: 700; color: var(--warning); }
+        .form-hint { font-size: 0.8rem; color: var(--text-secondary); text-align: center; margin-top: 0.5rem; }
+
+        .library-modal {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(8px);
+            display: none; align-items: center; justify-content: center;
+            z-index: 1002; opacity: 0; transition: opacity 0.3s ease;
+        }
+        [data-theme="light"] .library-modal { background: rgba(241, 245, 249, 0.9); }
+        .library-modal.show { display: flex; opacity: 1; }
+        .library-modal-content {
+            background: var(--bg-secondary); border: 1px solid var(--bg-tertiary); 
+            border-radius: 20px; padding: 2rem; max-width: 700px; width: 90%;
+            transform: scale(0.9); transition: transform 0.3s ease;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); max-height: 90vh; overflow-y: auto;
+        }
+        .library-modal.show .library-modal-content { transform: scale(1); }
+        .library-modal-title { font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--accent); text-align: center; }
+        .library-form { display: flex; flex-direction: column; gap: 1.25rem; }
+        .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+        .form-label { font-weight: 600; color: var(--text-primary); font-size: 0.9rem; }
+        .form-input, .form-textarea {
+            background: var(--bg-primary); border: 2px solid var(--bg-tertiary); border-radius: 8px;
+            padding: 0.75rem 1rem; color: var(--text-primary); font-family: inherit; font-size: 0.95rem;
+            transition: border-color 0.2s ease;
+        }
+        .form-input:focus, .form-textarea:focus { outline: none; border-color: var(--accent); }
+        .form-textarea { min-height: 200px; resize: vertical; font-family: 'JetBrains Mono', monospace; line-height: 1.6; }
+        .char-count { text-align: right; font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.25rem; }
+        .form-actions { display: flex; gap: 1rem; justify-content: flex-end; margin-top: 0.5rem; }
+
+        /* Heatmap Styles */
+        .heatmap-section { margin: 1.5rem 0; padding: 1rem; background: var(--bg-primary); border-radius: 12px; }
+        .heatmap-title { font-size: 1rem; font-weight: 600; color: var(--text-primary); margin-bottom: 1rem; text-align: center; }
+        .heatmap-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.4rem; max-width: 400px; margin: 0 auto; }
+        .heat-key {
+            width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+            border-radius: 6px; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; font-weight: 600;
+            background: var(--bg-tertiary); color: var(--text-secondary); transition: all 0.2s ease;
+        }
+        .heat-key.has-errors { color: white; }
+        .heat-key.level-1 { background: #22c55e; } /* Green - low errors */
+        .heat-key.level-2 { background: #eab308; } /* Yellow - medium */
+        .heat-key.level-3 { background: #f97316; } /* Orange - high */
+        .heat-key.level-4 { background: #ef4444; } /* Red - very high */
+        .heatmap-legend { display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-top: 1rem; font-size: 0.75rem; color: var(--text-secondary); }
+        .heat-gradient { width: 100px; height: 8px; background: linear-gradient(90deg, #22c55e, #eab308, #f97316, #ef4444); border-radius: 4px; }
+
+        /* History Section */
+        .history-section { margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--bg-tertiary); }
+        .history-title { font-size: 1rem; font-weight: 600; color: var(--text-primary); margin-bottom: 1rem; text-align: center; }
+        .history-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1rem; }
+        .history-stat { text-align: center; padding: 0.75rem; background: var(--bg-primary); border-radius: 8px; }
+        .history-value { font-size: 1.5rem; font-weight: 700; color: var(--accent); }
+        .history-label { font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.25rem; }
+        .recent-sessions { max-height: 150px; overflow-y: auto; }
+        .session-row {
+            display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 0.5rem;
+            padding: 0.5rem; font-size: 0.8rem; border-bottom: 1px solid var(--bg-tertiary);
+            align-items: center;
+        }
+        .session-row:last-child { border-bottom: none; }
+        .session-title { color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .session-wpm { color: var(--accent); font-weight: 600; text-align: center; }
+        .session-accuracy { color: var(--success); text-align: center; }
+        .session-date { color: var(--text-secondary); text-align: right; font-size: 0.7rem; }
+
         .results-modal, .settings-modal {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(8px);
@@ -213,14 +307,118 @@
         .volume-slider { width: 100%; -webkit-appearance: none; height: 6px; background: var(--bg-tertiary); border-radius: 3px; outline: none; }
         .volume-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; background: var(--accent); border-radius: 50%; cursor: pointer; }
 
+        /* Goals & Streak Panel */
+        .goals-panel {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+            border: 2px solid var(--warning); border-radius: 16px; padding: 1rem;
+            display: grid; grid-template-columns: auto 1fr auto; gap: 1rem; align-items: center;
+        }
+        .goals-item { display: flex; align-items: center; }
+        .streak-display { display: flex; align-items: center; gap: 0.5rem; }
+        .streak-icon { font-size: 1.5rem; animation: flame 2s infinite; }
+        @keyframes flame { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        .streak-count { font-size: 1.5rem; font-weight: 700; color: var(--warning); }
+        .streak-label { font-size: 0.85rem; color: var(--text-secondary); }
+        .daily-goal { width: 100%; }
+        .goal-header { display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.85rem; }
+        .goal-label { color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; }
+        .goal-value { color: var(--text-primary); font-weight: 600; }
+        .goal-bar { width: 100%; height: 8px; background: var(--bg-primary); border-radius: 4px; overflow: hidden; }
+        .goal-fill { height: 100%; background: linear-gradient(90deg, var(--warning), var(--success)); transition: width 0.5s ease; }
+        .goal-settings-btn {
+            background: var(--bg-primary); border: 1px solid var(--bg-tertiary);
+            padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem;
+            color: var(--text-secondary); transition: all 0.2s ease;
+        }
+        .goal-settings-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+        /* Library System */
+        .library-panel {
+            background: var(--bg-secondary); border: 1px solid var(--bg-tertiary); 
+            border-radius: 12px; padding: 1rem; display: flex; flex-direction: column; gap: 1rem;
+        }
+        .library-header {
+            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;
+        }
+        .library-header h3 { color: var(--accent); font-size: 1.1rem; }
+        .library-btn {
+            padding: 0.5rem 1rem; font-size: 0.85rem;
+        }
+        .library-tabs { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+        .library-content { max-height: 250px; overflow-y: auto; }
+        .library-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 0.75rem; }
+        .library-item {
+            padding: 1rem; background: var(--bg-primary); border: 2px solid var(--bg-tertiary);
+            border-radius: 10px; cursor: pointer; transition: all 0.2s ease;
+            display: flex; flex-direction: column; gap: 0.5rem; position: relative;
+        }
+        .library-item:hover { border-color: var(--accent); transform: translateY(-2px); }
+        .library-item.active { border-color: var(--accent); background: var(--accent-glow); }
+        .library-item-title { font-weight: 600; color: var(--text-primary); font-size: 0.95rem; }
+        .library-item-meta { 
+            display: flex; justify-content: space-between; align-items: center;
+            font-size: 0.75rem; color: var(--text-secondary);
+        }
+        .library-item-stats { display: flex; gap: 0.75rem; }
+        .library-item-actions {
+            display: flex; gap: 0.5rem; margin-top: 0.5rem;
+        }
+        .library-action-btn {
+            padding: 0.25rem 0.5rem; font-size: 0.7rem; background: var(--bg-tertiary);
+            border: none; border-radius: 4px; cursor: pointer; color: var(--text-secondary);
+            transition: all 0.2s ease;
+        }
+        .library-action-btn:hover { background: var(--accent); color: var(--bg-primary); }
+        .library-action-btn.delete:hover { background: var(--error); }
+        .library-empty {
+            text-align: center; padding: 2rem; color: var(--text-secondary);
+            font-style: italic;
+        }
+        .library-category-badge {
+            font-size: 0.7rem; padding: 0.15rem 0.4rem; background: var(--bg-tertiary);
+            border-radius: 4px; text-transform: uppercase; letter-spacing: 0.05em;
+        }
+        .library-category-badge.preset { background: var(--success); color: var(--bg-primary); }
+        .library-category-badge.custom { background: var(--accent); color: var(--bg-primary); }
+        .library-progress-bar {
+            width: 100%; height: 4px; background: var(--bg-tertiary); border-radius: 2px; margin-top: 0.5rem; overflow: hidden;
+        }
+        .library-progress-fill {
+            height: 100%; background: linear-gradient(90deg, var(--accent), var(--success)); transition: width 0.3s ease;
+        }
+
+        /* Pause Overlay */
+        .pause-overlay {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(8px);
+            display: flex; align-items: center; justify-content: center; z-index: 10;
+            border-radius: 16px; animation: fadeIn 0.3s ease;
+        }
+        [data-theme="light"] .pause-overlay { background: rgba(241, 245, 249, 0.95); }
+        .pause-content { text-align: center; }
+        .pause-icon { font-size: 4rem; margin-bottom: 1rem; animation: pulse 2s infinite; }
+        .pause-text { font-size: 2rem; font-weight: 700; color: var(--accent); letter-spacing: 0.2em; margin-bottom: 1rem; }
+        .pause-hint { color: var(--text-secondary); font-size: 0.9rem; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .typing-area { position: relative; }
+
         @media (max-width: 768px) {
             h1 { font-size: 1.75rem; }
             .header-left { text-align: center; width: 100%; }
             header { flex-direction: column; }
             .stats-bar { grid-template-columns: 1fr; }
             .theme-options { grid-template-columns: repeat(2, 1fr); }
-            .article-list { grid-template-columns: 1fr; }
+            .library-list { grid-template-columns: 1fr; }
             .prediction-panel { grid-template-columns: 1fr; }
+            .library-header { flex-direction: column; align-items: stretch; }
+            .library-modal-content { padding: 1.5rem; }
+            .form-actions { flex-direction: column; }
+            .form-actions button { width: 100%; justify-content: center; }
+            .history-stats { grid-template-columns: 1fr; }
+            .session-row { grid-template-columns: 1fr; gap: 0.25rem; }
+            .session-row > div { text-align: center; }
+            .heatmap-container { max-width: 300px; }
+            .heat-key { width: 24px; height: 24px; font-size: 0.7rem; }
         }
     </style>
 </head>
@@ -228,11 +426,36 @@
     <div class="container">
         <header>
             <div class="header-left">
-                <h1>⚡ TypeMaster Pro</h1>
-                <p class="subtitle">Advanced typing practice with time prediction & IELTS prep</p>
+                <h1>⚡ MT Typing</h1>
+                <p class="subtitle">Advanced typing practice with Library System for Novels</p>
             </div>
             <button class="settings-btn" onclick="openSettings()" title="Settings">⚙️</button>
         </header>
+
+        <!-- Goals & Streak Panel -->
+        <div class="goals-panel" id="goalsPanel">
+            <div class="goals-item">
+                <div class="streak-display">
+                    <span class="streak-icon">🔥</span>
+                    <span class="streak-count" id="streakCount">0</span>
+                    <span class="streak-label">day streak</span>
+                </div>
+            </div>
+            <div class="goals-item">
+                <div class="daily-goal">
+                    <div class="goal-header">
+                        <span class="goal-label">Daily Goal</span>
+                        <span class="goal-value"><span id="goalProgress">0</span> / <span id="goalTarget">15</span> min</span>
+                    </div>
+                    <div class="goal-bar">
+                        <div class="goal-fill" id="goalFill" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="goals-item">
+                <button class="goal-settings-btn" onclick="openGoalsModal()">⚙️ Goals</button>
+            </div>
+        </div>
 
         <!-- Time Prediction Panel -->
         <div class="prediction-panel" id="predictionPanel">
@@ -273,18 +496,29 @@
             </div>
         </div>
 
-        <!-- Article Selector -->
-        <div class="article-selector">
-            <div class="selector-tabs">
-                <button class="selector-tab active" onclick="selectCategory('10min')">10 Min Articles</button>
-                <button class="selector-tab" onclick="selectCategory('15min')">15 Min Articles</button>
-                <button class="selector-tab" onclick="selectCategory('20min')">20 Min Articles</button>
-                <button class="selector-tab" onclick="selectCategory('ielts')">IELTS Task 2</button>
+        <!-- Library System -->
+        <div class="library-panel" id="libraryPanel">
+            <div class="library-header">
+                <h3>📚 My Library</h3>
+                <button class="library-btn primary" onclick="openLibraryModal()">+ Add Text</button>
             </div>
-            <div class="article-list" id="articleList"></div>
+            <div class="library-tabs">
+                <button class="selector-tab active" onclick="showLibraryTab('library')">My Library</button>
+                <button class="selector-tab" onclick="showLibraryTab('preset')">Preset Articles</button>
+            </div>
+            <div class="library-content" id="libraryContent">
+                <div class="library-list" id="libraryList"></div>
+            </div>
         </div>
 
         <div class="typing-area" id="typingArea">
+            <div class="pause-overlay" id="pauseOverlay" style="display:none;">
+                <div class="pause-content">
+                    <div class="pause-icon">⏸</div>
+                    <div class="pause-text">PAUSED</div>
+                    <div class="pause-hint">Press <kbd class="kbd">Space</kbd> or click to resume</div>
+                </div>
+            </div>
             <div class="text-display" id="textDisplay"></div>
             <input type="text" class="hidden-input" id="hiddenInput" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
             <div class="progress-bar">
@@ -293,18 +527,17 @@
         </div>
 
         <div class="keyboard-hint">
-            Click text area or press <kbd class="kbd">Space</kbd> to start • <kbd class="kbd">Tab</kbd> + <kbd class="kbd">Enter</kbd> to restart
+            Click text area or press <kbd class="kbd">Space</kbd> to start • <kbd class="kbd">Tab</kbd> + <kbd class="kbd">Enter</kbd> to restart • <kbd class="kbd">Esc</kbd> to pause
         </div>
 
         <div class="controls">
             <button class="primary" onclick="restartTest()"><span>↻</span> Restart</button>
-            <button onclick="loadRandomArticle()"><span>🎲</span> Random Article</button>
-            <button onclick="toggleCustomText()"><span>✎</span> Custom Text</button>
+            <button id="pauseBtn" onclick="togglePause()"><span>⏸</span> Pause</button>
+            <button onclick="loadRandomArticle()"><span>🎲</span> Random</button>
+            <button onclick="openLibraryModal()"><span>📚</span> Library</button>
         </div>
 
-        <div class="upload-section" id="uploadSection" style="display:none;">
-            <textarea class="custom-text" id="customText" placeholder="Paste your text here... Press Ctrl+Enter to load" style="display:block;width:100%;background:var(--bg-primary);border:1px solid var(--bg-tertiary);border-radius:8px;padding:1rem;color:var(--text-primary);min-height:150px;margin-top:1rem;"></textarea>
-        </div>
+        <!-- Library replaces custom text section -->
     </div>
 
     <!-- Results Modal -->
@@ -319,7 +552,86 @@
                 <div class="result-item"><div class="result-label">Characters</div><div class="result-value" id="finalChars">0</div></div>
                 <div class="result-item"><div class="result-label">Errors</div><div class="result-value" id="finalErrors">0</div></div>
             </div>
-            <button class="primary" onclick="closeResults()" style="width: 100%; justify-content: center;">Continue Practicing</button>
+            <div class="heatmap-section" id="heatmapSection" style="display:none;">
+                <div class="heatmap-title">⌨️ Key Error Heatmap</div>
+                <div class="heatmap-container" id="heatmapContainer"></div>
+                <div class="heatmap-legend">
+                    <span class="heat-low">Low</span>
+                    <span class="heat-gradient"></span>
+                    <span class="heat-high">High</span>
+                </div>
+            </div>
+            <div class="history-section" id="historySection">
+                <div class="history-title">📊 Your Progress</div>
+                <div class="history-stats">
+                    <div class="history-stat">
+                        <div class="history-value" id="historyBestWpm">0</div>
+                        <div class="history-label">Best WPM</div>
+                    </div>
+                    <div class="history-stat">
+                        <div class="history-value" id="historyAvgWpm">0</div>
+                        <div class="history-label">Average WPM</div>
+                    </div>
+                    <div class="history-stat">
+                        <div class="history-value" id="historyTotal">0</div>
+                        <div class="history-label">Sessions</div>
+                    </div>
+                </div>
+                <div class="recent-sessions" id="recentSessions"></div>
+            </div>
+            <button class="primary" onclick="closeResults()" style="width: 100%; justify-content: center; margin-top: 1rem;">Continue Practicing</button>
+        </div>
+    </div>
+
+    <!-- Goals Settings Modal -->
+    <div class="goals-modal" id="goalsModal">
+        <div class="goals-modal-content">
+            <h2 class="goals-modal-title">🎯 Daily Goals</h2>
+            <div class="goals-form">
+                <div class="form-group">
+                    <label class="form-label">Daily Practice Target (minutes)</label>
+                    <div class="goal-presets">
+                        <button class="goal-preset-btn" onclick="setGoalTarget(10)">10 min</button>
+                        <button class="goal-preset-btn" onclick="setGoalTarget(15)">15 min</button>
+                        <button class="goal-preset-btn" onclick="setGoalTarget(30)">30 min</button>
+                        <button class="goal-preset-btn" onclick="setGoalTarget(60)">60 min</button>
+                    </div>
+                    <input type="number" class="form-input" id="customGoalTarget" min="1" max="180" value="15" style="margin-top: 0.5rem;">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Current Streak</label>
+                    <div class="streak-info">
+                        <span class="streak-big" id="modalStreak">0</span> days 🔥
+                    </div>
+                    <p class="form-hint">Practice daily to keep your streak alive!</p>
+                </div>
+                <div class="form-actions">
+                    <button onclick="closeGoalsModal()">Cancel</button>
+                    <button class="primary" onclick="saveGoalSettings()">Save Goal</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Library Modal -->
+    <div class="library-modal" id="libraryModal">
+        <div class="library-modal-content">
+            <h2 class="library-modal-title">📚 Add to Library</h2>
+            <div class="library-form">
+                <div class="form-group">
+                    <label class="form-label">Title (e.g., "Novel Chapter 1")</label>
+                    <input type="text" class="form-input" id="libraryTitleInput" placeholder="Enter a name for this text..." maxlength="50">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Text Content</label>
+                    <textarea class="form-textarea" id="libraryTextInput" placeholder="Paste your chapter, article, or any text here..." maxlength="50000"></textarea>
+                    <div class="char-count"><span id="libraryCharCount">0</span> / 50000 characters</div>
+                </div>
+                <div class="form-actions">
+                    <button onclick="closeLibraryModal()">Cancel</button>
+                    <button class="primary" onclick="saveToLibrary()">💾 Save to Library</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -407,6 +719,16 @@
         let isActive = false, isComplete = false;
         let wpmHistory = [];
         let settings = { theme: 'dark', typingSound: false, typingSoundType: 'mechanical', errorSound: false, errorSoundType: 'buzz', volume: 0.5 };
+        let isPaused = false;
+        let pausedTime = 0;
+        let totalPausedDuration = 0;
+        let library = [];
+        let currentLibraryId = null;
+        let progressData = {}; // Stores progress per library item
+        let errorHeatmap = {}; // Tracks error frequency per character
+        let sessionHistory = []; // Tracks completed sessions
+        let dailyGoals = { target: 15, completed: 0, lastDate: null }; // Minutes per day
+        let streakData = { current: 0, lastActive: null }; // Daily streak tracking
         let audioContext = null;
         let currentCategory = '10min';
 
@@ -417,14 +739,23 @@
 
         // Initialize
         function init() {
+            loadLibrary();
+            loadSessionHistory();
+            loadGoals();
+            renderLibrary();
+            renderGoals();
             renderText();
-            renderArticleList();
-            typingArea.addEventListener('click', () => hiddenInput.focus());
+            typingArea.addEventListener('click', () => {
+                if (isPaused) togglePause();
+                else hiddenInput.focus();
+            });
             hiddenInput.addEventListener('input', handleInput);
             hiddenInput.addEventListener('keydown', handleKeydown);
-            document.getElementById('customText').addEventListener('keydown', (e) => {
-                if (e.ctrlKey && e.key === 'Enter') loadCustomText();
+            // Library modal char counter
+            document.getElementById('libraryTextInput').addEventListener('input', (e) => {
+                document.getElementById('libraryCharCount').textContent = e.target.value.length;
             });
+
             loadSettings();
             updateTimePrediction();
         }
@@ -530,7 +861,12 @@
         }
 
         function handleInput(e) {
-            if (isComplete) return;
+            if (isComplete || isPaused) return;
+
+            // Auto-save progress every 30 seconds for library items
+            if (currentLibraryId && typedLength % 50 === 0) {
+                saveProgress();
+            }
             initAudio();
             const value = hiddenInput.value;
             const prevLength = typedLength;
@@ -570,7 +906,7 @@
 
         function startTest() {
             isActive = true;
-            startTime = Date.now();
+            if (!startTime) startTime = Date.now();
             timerInterval = setInterval(() => {
                 updateTimer();
                 updateTimePrediction();
@@ -584,7 +920,15 @@
                 char.classList.remove('correct', 'incorrect', 'current');
                 if (i < typed.length) {
                     if (typed[i] === currentText[i]) char.classList.add('correct');
-                    else { char.classList.add('incorrect'); errors++; }
+                    else { 
+                        char.classList.add('incorrect'); 
+                        errors++;
+                        // Track error for heatmap
+                        const expectedChar = currentText[i].toLowerCase();
+                        if (expectedChar.match(/[a-z]/)) {
+                            errorHeatmap[expectedChar] = (errorHeatmap[expectedChar] || 0) + 1;
+                        }
+                    }
                 } else if (i === typed.length) {
                     char.classList.add('current');
                 }
@@ -594,8 +938,8 @@
 
         function updateStats(typed) {
             if (!startTime) return;
-            const timeElapsed = (Date.now() - startTime) / 1000 / 60;
-            const wpm = Math.round((typed.length / 5) / timeElapsed) || 0;
+            const timeElapsed = (Date.now() - startTime - totalPausedDuration) / 1000 / 60;
+            const wpm = timeElapsed > 0.01 ? Math.round((typed.length / 5) / timeElapsed) : 0;
             const accuracy = typed.length > 0 ? Math.round(((typed.length - errors) / typed.length) * 100) : 100;
 
             document.getElementById('wpm').textContent = wpm;
@@ -606,7 +950,7 @@
 
         function updateTimer() {
             if (!startTime) return;
-            const elapsed = Math.floor((Date.now() - startTime) / 1000);
+            const elapsed = Math.floor((Date.now() - startTime - totalPausedDuration) / 1000);
             const mins = Math.floor(elapsed / 60);
             const secs = elapsed % 60;
             document.getElementById('timer').textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
@@ -616,8 +960,9 @@
             isComplete = true;
             clearInterval(timerInterval);
             hiddenInput.blur();
+            saveProgress(); // Save final progress
 
-            const timeElapsed = (Date.now() - startTime) / 1000 / 60;
+            const timeElapsed = (Date.now() - startTime - totalPausedDuration) / 1000 / 60;
             const wpm = Math.round((currentText.length / 5) / timeElapsed);
             const cpm = Math.round(currentText.length / timeElapsed);
             const accuracy = Math.round(((currentText.length - errors) / currentText.length) * 100);
@@ -627,49 +972,477 @@
             document.getElementById('finalCpm').textContent = cpm;
             document.getElementById('finalChars').textContent = currentText.length;
             document.getElementById('finalErrors').textContent = errors;
+
+            renderHeatmap(); // Show error heatmap
+            renderHistory(); // Show session history
+
+            // Save session to history
+            const durationMinutes = Math.max(1, Math.round(timeElapsed));
+            saveSession({
+                wpm: wpm,
+                accuracy: accuracy,
+                cpm: cpm,
+                chars: currentText.length,
+                errors: errors,
+                textTitle: currentLibraryId ? library.find(l => l.id === currentLibraryId)?.title || 'Custom' : 'Preset',
+                date: new Date().toISOString(),
+                duration: Math.round(timeElapsed * 60) // in seconds
+            });
+
+            // Update daily goal progress
+            updateDailyProgress(durationMinutes);
+
             document.getElementById('resultsModal').classList.add('show');
+        }
+
+        function togglePause() {
+            if (!isActive || isComplete) return;
+            isPaused = !isPaused;
+            const pauseBtn = document.getElementById('pauseBtn');
+            const pauseOverlay = document.getElementById('pauseOverlay');
+            const hiddenInput = document.getElementById('hiddenInput');
+
+            if (isPaused) {
+                pausedTime = Date.now();
+                clearInterval(timerInterval);
+                pauseBtn.innerHTML = '<span>▶</span> Resume';
+                pauseOverlay.style.display = 'flex';
+                hiddenInput.blur();
+                saveProgress(); // Save progress when pausing
+            } else {
+                totalPausedDuration += Date.now() - pausedTime;
+                pauseBtn.innerHTML = '<span>⏸</span> Pause';
+                pauseOverlay.style.display = 'none';
+                hiddenInput.focus();
+                timerInterval = setInterval(() => {
+                    updateTimer();
+                    updateTimePrediction();
+                }, 1000);
+            }
+        }
+
+        // Library System Functions
+        function openLibraryModal() {
+            document.getElementById('libraryModal').classList.add('show');
+            document.getElementById('libraryTitleInput').focus();
+        }
+
+        function closeLibraryModal() {
+            document.getElementById('libraryModal').classList.remove('show');
+            document.getElementById('libraryTitleInput').value = '';
+            document.getElementById('libraryTextInput').value = '';
+            document.getElementById('libraryCharCount').textContent = '0';
+        }
+
+        function saveToLibrary() {
+            const title = document.getElementById('libraryTitleInput').value.trim();
+            const text = document.getElementById('libraryTextInput').value.trim();
+
+            if (!title) {
+                alert('Please enter a title for this text');
+                return;
+            }
+            if (text.length < 20) {
+                alert('Text must be at least 20 characters');
+                return;
+            }
+
+            const libraryItem = {
+                id: Date.now(),
+                title: title,
+                text: text,
+                charCount: text.length,
+                wordCount: text.split(/\s+/).length,
+                addedAt: new Date().toLocaleDateString(),
+                type: 'custom'
+            };
+
+            library.push(libraryItem);
+            saveLibrary();
+            renderLibrary();
+            closeLibraryModal();
+
+            // Switch to library tab if not already
+            showLibraryTab('library');
+        }
+
+        function deleteFromLibrary(id) {
+            if (!confirm('Delete this item from your library?')) return;
+            library = library.filter(item => item.id !== id);
+            saveLibrary();
+            renderLibrary();
+            if (currentLibraryId === id) {
+                currentLibraryId = null;
+                loadRandomArticle();
+            }
+        }
+
+        function loadFromLibrary(id) {
+            const item = library.find(i => i.id === id);
+            if (item) {
+                currentText = item.text;
+                currentLibraryId = id;
+                const resumePos = resumeFromProgress(id);
+                restartTest();
+                if (resumePos > 0) {
+                    // Set position and update display
+                    hiddenInput.value = currentText.substring(0, resumePos);
+                    typedLength = resumePos;
+                    updateDisplay(hiddenInput.value);
+                    updateStats(hiddenInput.value);
+                    // Update progress bar
+                    document.getElementById('progressFill').style.width = `${(typedLength / currentText.length) * 100}%`;
+                }
+                renderLibrary();
+            }
+        }
+
+        function saveLibrary() {
+            localStorage.setItem('mttyping_library', JSON.stringify(library));
+        }
+
+        function loadLibrary() {
+            const saved = localStorage.getItem('mttyping_library');
+            if (saved) {
+                library = JSON.parse(saved);
+            }
+            const savedProgress = localStorage.getItem('mttyping_progress');
+            if (savedProgress) {
+                progressData = JSON.parse(savedProgress);
+            }
+        }
+
+        function saveProgress() {
+            if (currentLibraryId && typedLength > 0) {
+                progressData[currentLibraryId] = {
+                    position: typedLength,
+                    total: currentText.length,
+                    percent: Math.round((typedLength / currentText.length) * 100),
+                    lastAccessed: new Date().toLocaleDateString()
+                };
+                localStorage.setItem('mttyping_progress', JSON.stringify(progressData));
+            }
+        }
+
+        function loadProgress(id) {
+            return progressData[id] || null;
+        }
+
+        function saveSession(session) {
+            sessionHistory.unshift(session); // Add to beginning
+            if (sessionHistory.length > 50) sessionHistory.pop(); // Keep last 50
+            localStorage.setItem('mttyping_history', JSON.stringify(sessionHistory));
+        }
+
+        function loadSessionHistory() {
+            const saved = localStorage.getItem('mttyping_history');
+            if (saved) {
+                sessionHistory = JSON.parse(saved);
+            }
+        }
+
+        function loadGoals() {
+            const saved = localStorage.getItem('mttyping_goals');
+            if (saved) {
+                dailyGoals = JSON.parse(saved);
+            }
+            const savedStreak = localStorage.getItem('mttyping_streak');
+            if (savedStreak) {
+                streakData = JSON.parse(savedStreak);
+            }
+            checkAndUpdateStreak();
+        }
+
+        function saveGoals() {
+            localStorage.setItem('mttyping_goals', JSON.stringify(dailyGoals));
+            localStorage.setItem('mttyping_streak', JSON.stringify(streakData));
+        }
+
+        function checkAndUpdateStreak() {
+            const today = new Date().toDateString();
+            const yesterday = new Date(Date.now() - 86400000).toDateString();
+
+            if (streakData.lastActive === today) {
+                // Already active today, streak continues
+            } else if (streakData.lastActive === yesterday) {
+                // Was active yesterday, streak continues if we do something today
+            } else if (streakData.lastActive && streakData.lastActive !== today) {
+                // Missed a day, reset streak
+                streakData.current = 0;
+            }
+        }
+
+        function updateDailyProgress(minutes) {
+            const today = new Date().toDateString();
+
+            if (dailyGoals.lastDate !== today) {
+                // New day, reset progress
+                dailyGoals.completed = 0;
+                dailyGoals.lastDate = today;
+            }
+
+            dailyGoals.completed += minutes;
+
+            // Update streak
+            if (dailyGoals.completed >= dailyGoals.target && streakData.lastActive !== today) {
+                streakData.current++;
+                streakData.lastActive = today;
+            } else if (dailyGoals.completed > 0) {
+                streakData.lastActive = today;
+            }
+
+            saveGoals();
+            renderGoals();
+        }
+
+        function getTodayProgress() {
+            const today = new Date().toDateString();
+            if (dailyGoals.lastDate !== today) {
+                return 0;
+            }
+            return dailyGoals.completed;
+        }
+
+        function openGoalsModal() {
+            document.getElementById('goalsModal').classList.add('show');
+            document.getElementById('modalStreak').textContent = streakData.current;
+            document.getElementById('customGoalTarget').value = dailyGoals.target;
+            updateGoalPresetButtons();
+        }
+
+        function closeGoalsModal() {
+            document.getElementById('goalsModal').classList.remove('show');
+        }
+
+        function setGoalTarget(minutes) {
+            document.getElementById('customGoalTarget').value = minutes;
+            updateGoalPresetButtons();
+        }
+
+        function updateGoalPresetButtons() {
+            const val = parseInt(document.getElementById('customGoalTarget').value);
+            document.querySelectorAll('.goal-preset-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.textContent.includes(val));
+            });
+        }
+
+        function saveGoalSettings() {
+            const newTarget = parseInt(document.getElementById('customGoalTarget').value);
+            if (newTarget >= 1 && newTarget <= 180) {
+                dailyGoals.target = newTarget;
+                saveGoals();
+                renderGoals();
+                closeGoalsModal();
+            }
+        }
+
+        function renderGoals() {
+            document.getElementById('streakCount').textContent = streakData.current;
+            document.getElementById('goalTarget').textContent = dailyGoals.target;
+            document.getElementById('goalProgress').textContent = getTodayProgress();
+
+            const progress = Math.min(100, (getTodayProgress() / dailyGoals.target) * 100);
+            document.getElementById('goalFill').style.width = `${progress}%`;
+
+            // Change color when goal reached
+            const fill = document.getElementById('goalFill');
+            if (progress >= 100) {
+                fill.style.background = 'linear-gradient(90deg, var(--success), #22c55e)';
+            } else {
+                fill.style.background = 'linear-gradient(90deg, var(--warning), var(--success))';
+            }
+        }
+
+        function getAverageWPM() {
+            if (sessionHistory.length === 0) return 0;
+            return Math.round(sessionHistory.reduce((a, s) => a + s.wpm, 0) / sessionHistory.length);
+        }
+
+        function getBestWPM() {
+            if (sessionHistory.length === 0) return 0;
+            return Math.max(...sessionHistory.map(s => s.wpm));
+        }
+
+        function resumeFromProgress(id) {
+            const progress = loadProgress(id);
+            if (progress && progress.position < progress.total) {
+                if (confirm(`Resume from ${progress.percent}% completed?`)) {
+                    return progress.position;
+                }
+            }
+            return 0;
+        }
+
+        let currentTab = 'library';
+
+        function showLibraryTab(tab) {
+            currentTab = tab;
+            document.querySelectorAll('.library-tabs .selector-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            renderLibrary();
+        }
+
+        function renderLibrary() {
+            const container = document.getElementById('libraryList');
+            container.innerHTML = '';
+
+            if (currentTab === 'library') {
+                if (library.length === 0) {
+                    container.innerHTML = '<div class="library-empty">Your library is empty. Click "+ Add Text" to save chapters!</div>';
+                    return;
+                }
+
+                library.forEach(item => {
+                    const isActive = currentLibraryId === item.id;
+                    const progress = loadProgress(item.id);
+                    const hasProgress = progress && progress.percent > 0 && progress.percent < 100;
+                    const div = document.createElement('div');
+                    div.className = `library-item ${isActive ? 'active' : ''}`;
+                    div.innerHTML = `
+                        <div class="library-item-title">${escapeHtml(item.title)} ${hasProgress ? '<span style="color:var(--accent)">(' + progress.percent + '%)</span>' : ''}</div>
+                        <div class="library-item-meta">
+                            <span class="library-category-badge custom">Custom</span>
+                            <div class="library-item-stats">
+                                <span>${item.wordCount} words</span>
+                                <span>${item.charCount} chars</span>
+                                <span>Added ${item.addedAt}</span>
+                            </div>
+                        </div>
+                        ${hasProgress ? `<div class="library-progress-bar"><div class="library-progress-fill" style="width:${progress.percent}%"></div></div>` : ''}
+                        <div class="library-item-actions">
+                            <button class="library-action-btn" onclick="event.stopPropagation(); loadFromLibrary(${item.id})">${hasProgress ? 'Resume' : 'Load'}</button>
+                            <button class="library-action-btn delete" onclick="event.stopPropagation(); deleteFromLibrary(${item.id})">Delete</button>
+                        </div>
+                    `;
+                    div.onclick = () => loadFromLibrary(item.id);
+                    container.appendChild(div);
+                });
+            } else {
+                // Preset articles - combine all categories
+                const allPresets = [];
+                Object.keys(articlesDB).forEach(cat => {
+                    articlesDB[cat].forEach((article, idx) => {
+                        allPresets.push({...article, category: cat, index: idx});
+                    });
+                });
+
+                allPresets.forEach(item => {
+                    const isActive = currentText === item.text && !currentLibraryId;
+                    const div = document.createElement('div');
+                    div.className = `library-item ${isActive ? 'active' : ''}`;
+                    div.innerHTML = `
+                        <div class="library-item-title">${escapeHtml(item.title)}</div>
+                        <div class="library-item-meta">
+                            <span class="library-category-badge preset">${item.category}</span>
+                            <div class="library-item-stats">
+                                <span>${item.text.split(/\s+/).length} words</span>
+                                <span>${item.text.length} chars</span>
+                            </div>
+                        </div>
+                    `;
+                    div.onclick = () => {
+                        currentText = item.text;
+                        currentLibraryId = null;
+                        restartTest();
+                        renderLibrary();
+                    };
+                    container.appendChild(div);
+                });
+            }
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function renderHeatmap() {
+            const container = document.getElementById('heatmapContainer');
+            const section = document.getElementById('heatmapSection');
+            const letters = 'abcdefghijklmnopqrstuvwxyz'.split('');
+
+            // Check if we have any errors
+            const totalErrors = Object.values(errorHeatmap).reduce((a, b) => a + b, 0);
+            if (totalErrors === 0) {
+                section.style.display = 'none';
+                return;
+            }
+
+            section.style.display = 'block';
+
+            // Find max for normalization
+            const maxErrors = Math.max(...Object.values(errorHeatmap));
+
+            container.innerHTML = letters.map(char => {
+                const count = errorHeatmap[char] || 0;
+                let level = '';
+                if (count > 0) {
+                    const ratio = count / maxErrors;
+                    if (ratio <= 0.25) level = 'level-1';
+                    else if (ratio <= 0.5) level = 'level-2';
+                    else if (ratio <= 0.75) level = 'level-3';
+                    else level = 'level-4';
+                }
+                return `<div class="heat-key ${count > 0 ? 'has-errors ' + level : ''}" title="${char.toUpperCase()}: ${count} errors">${char.toUpperCase()}</div>`;
+            }).join('');
+        }
+
+        function renderHistory() {
+            document.getElementById('historyBestWpm').textContent = getBestWPM();
+            document.getElementById('historyAvgWpm').textContent = getAverageWPM();
+            document.getElementById('historyTotal').textContent = sessionHistory.length;
+
+            const recentContainer = document.getElementById('recentSessions');
+            if (sessionHistory.length === 0) {
+                recentContainer.innerHTML = '<div style="text-align:center;color:var(--text-secondary);padding:1rem;font-size:0.85rem;">No sessions yet. Complete a test to see your history!</div>';
+                return;
+            }
+
+            recentContainer.innerHTML = sessionHistory.slice(0, 5).map(session => {
+                const date = new Date(session.date);
+                const timeStr = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                return `
+                    <div class="session-row">
+                        <div class="session-title" title="${escapeHtml(session.textTitle)}">${escapeHtml(session.textTitle)}</div>
+                        <div class="session-wpm">${session.wpm} WPM</div>
+                        <div class="session-accuracy">${session.accuracy}%</div>
+                        <div class="session-date">${timeStr}</div>
+                    </div>
+                `;
+            }).join('');
         }
 
         function restartTest() {
             clearInterval(timerInterval);
             isActive = false;
             isComplete = false;
+            isPaused = false;
             startTime = null;
+            pausedTime = 0;
+            totalPausedDuration = 0;
             typedLength = 0;
             errors = 0;
             wpmHistory = [];
+            errorHeatmap = {}; // Reset heatmap
             hiddenInput.value = '';
             document.getElementById('wpm').textContent = '0';
             document.getElementById('accuracy').textContent = '100%';
             document.getElementById('timer').textContent = '0:00';
             document.getElementById('progressFill').style.width = '0%';
+            document.getElementById('pauseBtn').innerHTML = '<span>⏸</span> Pause';
+            document.getElementById('pauseOverlay').style.display = 'none';
             renderText();
+            renderLibrary();
             hiddenInput.focus();
         }
 
-        // Article selection
-        function selectCategory(category) {
-            currentCategory = category;
-            document.querySelectorAll('.selector-tab').forEach(tab => tab.classList.remove('active'));
-            event.target.classList.add('active');
-            renderArticleList();
-        }
-
-        function renderArticleList() {
-            const list = document.getElementById('articleList');
-            const articles = articlesDB[currentCategory];
-            list.innerHTML = articles.map((article, index) => `
-                <div class="article-item ${article.text === currentText ? 'active' : ''}" onclick="loadArticle('${currentCategory}', ${index})">
-                    <span>${article.title}</span>
-                    <span class="article-category">${article.category}</span>
-                </div>
-            `).join('');
-        }
-
+        // Article selection (legacy support)
         function loadArticle(category, index) {
             currentText = articlesDB[category][index].text;
+            currentLibraryId = null;
             restartTest();
-            renderArticleList();
+            renderLibrary();
         }
 
         function loadRandomArticle() {
@@ -678,26 +1451,12 @@
             const articles = articlesDB[randomCat];
             const randomArticle = articles[Math.floor(Math.random() * articles.length)];
             currentText = randomArticle.text;
+            currentLibraryId = null;
             restartTest();
         }
 
         function toggleCustomText() {
-            const section = document.getElementById('uploadSection');
-            section.style.display = section.style.display === 'none' ? 'block' : 'none';
-            if (section.style.display === 'block') {
-                document.getElementById('customText').focus();
-            }
-        }
-
-        function loadCustomText() {
-            const text = document.getElementById('customText').value.trim();
-            if (text.length < 20) {
-                alert('Please enter at least 20 characters');
-                return;
-            }
-            currentText = text;
-            restartTest();
-            document.getElementById('uploadSection').style.display = 'none';
+            openLibraryModal();
         }
 
         // Settings
@@ -771,17 +1530,27 @@
         // Keyboard shortcuts
         document.addEventListener('keydown', (e) => {
             if (e.key === ' ' && document.activeElement !== hiddenInput && 
-                !document.getElementById('settingsModal').classList.contains('show')) {
-                e.preventDefault();
-                hiddenInput.focus();
+                !document.getElementById('settingsModal').classList.contains('show') &&
+                !document.getElementById('libraryModal').classList.contains('show')) {
+                if (isPaused) {
+                    e.preventDefault();
+                    togglePause();
+                } else if (!isActive || isComplete) {
+                    e.preventDefault();
+                    hiddenInput.focus();
+                }
             }
             if (e.key === 'Escape') {
-                if (document.getElementById('settingsModal').classList.contains('show')) closeSettings();
+                if (document.getElementById('libraryModal').classList.contains('show')) closeLibraryModal();
+                else if (document.getElementById('settingsModal').classList.contains('show')) closeSettings();
                 else if (document.getElementById('resultsModal').classList.contains('show')) closeResults();
             }
         });
 
         // Close modals on outside click
+        document.getElementById('libraryModal').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) closeLibraryModal();
+        });
         document.getElementById('settingsModal').addEventListener('click', (e) => {
             if (e.target === e.currentTarget) closeSettings();
         });
