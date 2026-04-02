@@ -2,7 +2,6 @@
 
 A comprehensive typing practice application with time prediction, 100+ articles (10/15/20 min), IELTS Writing Task 2 prompts, customizable themes, and typing sounds.
 
-![TypeMaster Pro Screenshot](screenshot.png)
 
 ## 🌟 Features
 
