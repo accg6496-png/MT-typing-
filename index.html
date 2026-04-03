@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MT Typing - Novel Chapter Practice with Library</title>
+    <title>TypeMaster Pro - Typing Practice with Time Prediction</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -118,6 +118,9 @@
         }
         .article-item:hover { border-color: var(--accent); transform: translateX(4px); }
         .article-item.active { background: var(--accent-glow); border-color: var(--accent); }
+        .article-item.completed { border-color: var(--success); opacity: 0.65; }
+        .article-item.completed .article-done-badge { display: inline-block; }
+        .article-done-badge { display: none; font-size: 0.7rem; background: var(--success); color: var(--bg-primary); border-radius: 4px; padding: 0.1rem 0.4rem; margin-left: 0.3rem; font-weight: 700; }
         .article-category { font-size: 0.75rem; padding: 0.2rem 0.5rem; background: var(--bg-tertiary); border-radius: 4px; color: var(--text-secondary); }
 
         .typing-area {
@@ -139,7 +142,7 @@
 
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
 
-        .hidden-input { position: absolute; opacity: 0; pointer-events: none; }
+
 
         .controls { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
 
@@ -159,100 +162,6 @@
         .kbd { background: var(--bg-tertiary); padding: 0.2rem 0.5rem; border-radius: 4px; font-family: monospace; font-size: 0.8rem; }
 
         /* Modals */
-        .goals-modal {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(8px);
-            display: none; align-items: center; justify-content: center;
-            z-index: 1003; opacity: 0; transition: opacity 0.3s ease;
-        }
-        [data-theme="light"] .goals-modal { background: rgba(241, 245, 249, 0.9); }
-        .goals-modal.show { display: flex; opacity: 1; }
-        .goals-modal-content {
-            background: var(--bg-secondary); border: 1px solid var(--bg-tertiary); 
-            border-radius: 20px; padding: 2rem; max-width: 500px; width: 90%;
-            transform: scale(0.9); transition: transform 0.3s ease;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-        }
-        .goals-modal.show .goals-modal-content { transform: scale(1); }
-        .goals-modal-title { font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--warning); text-align: center; }
-        .goals-form { display: flex; flex-direction: column; gap: 1.25rem; }
-        .goal-presets { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; }
-        .goal-preset-btn {
-            padding: 0.5rem; background: var(--bg-primary); border: 2px solid var(--bg-tertiary);
-            border-radius: 8px; cursor: pointer; color: var(--text-secondary); font-size: 0.85rem;
-            transition: all 0.2s ease;
-        }
-        .goal-preset-btn:hover { border-color: var(--accent); color: var(--accent); }
-        .goal-preset-btn.active { border-color: var(--warning); background: rgba(251, 191, 36, 0.2); color: var(--warning); }
-        .streak-info { font-size: 1.25rem; color: var(--text-primary); text-align: center; padding: 1rem; }
-        .streak-big { font-size: 2.5rem; font-weight: 700; color: var(--warning); }
-        .form-hint { font-size: 0.8rem; color: var(--text-secondary); text-align: center; margin-top: 0.5rem; }
-
-        .library-modal {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(8px);
-            display: none; align-items: center; justify-content: center;
-            z-index: 1002; opacity: 0; transition: opacity 0.3s ease;
-        }
-        [data-theme="light"] .library-modal { background: rgba(241, 245, 249, 0.9); }
-        .library-modal.show { display: flex; opacity: 1; }
-        .library-modal-content {
-            background: var(--bg-secondary); border: 1px solid var(--bg-tertiary); 
-            border-radius: 20px; padding: 2rem; max-width: 700px; width: 90%;
-            transform: scale(0.9); transition: transform 0.3s ease;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); max-height: 90vh; overflow-y: auto;
-        }
-        .library-modal.show .library-modal-content { transform: scale(1); }
-        .library-modal-title { font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--accent); text-align: center; }
-        .library-form { display: flex; flex-direction: column; gap: 1.25rem; }
-        .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
-        .form-label { font-weight: 600; color: var(--text-primary); font-size: 0.9rem; }
-        .form-input, .form-textarea {
-            background: var(--bg-primary); border: 2px solid var(--bg-tertiary); border-radius: 8px;
-            padding: 0.75rem 1rem; color: var(--text-primary); font-family: inherit; font-size: 0.95rem;
-            transition: border-color 0.2s ease;
-        }
-        .form-input:focus, .form-textarea:focus { outline: none; border-color: var(--accent); }
-        .form-textarea { min-height: 200px; resize: vertical; font-family: 'JetBrains Mono', monospace; line-height: 1.6; }
-        .char-count { text-align: right; font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.25rem; }
-        .form-actions { display: flex; gap: 1rem; justify-content: flex-end; margin-top: 0.5rem; }
-
-        /* Heatmap Styles */
-        .heatmap-section { margin: 1.5rem 0; padding: 1rem; background: var(--bg-primary); border-radius: 12px; }
-        .heatmap-title { font-size: 1rem; font-weight: 600; color: var(--text-primary); margin-bottom: 1rem; text-align: center; }
-        .heatmap-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.4rem; max-width: 400px; margin: 0 auto; }
-        .heat-key {
-            width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
-            border-radius: 6px; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; font-weight: 600;
-            background: var(--bg-tertiary); color: var(--text-secondary); transition: all 0.2s ease;
-        }
-        .heat-key.has-errors { color: white; }
-        .heat-key.level-1 { background: #22c55e; } /* Green - low errors */
-        .heat-key.level-2 { background: #eab308; } /* Yellow - medium */
-        .heat-key.level-3 { background: #f97316; } /* Orange - high */
-        .heat-key.level-4 { background: #ef4444; } /* Red - very high */
-        .heatmap-legend { display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-top: 1rem; font-size: 0.75rem; color: var(--text-secondary); }
-        .heat-gradient { width: 100px; height: 8px; background: linear-gradient(90deg, #22c55e, #eab308, #f97316, #ef4444); border-radius: 4px; }
-
-        /* History Section */
-        .history-section { margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--bg-tertiary); }
-        .history-title { font-size: 1rem; font-weight: 600; color: var(--text-primary); margin-bottom: 1rem; text-align: center; }
-        .history-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1rem; }
-        .history-stat { text-align: center; padding: 0.75rem; background: var(--bg-primary); border-radius: 8px; }
-        .history-value { font-size: 1.5rem; font-weight: 700; color: var(--accent); }
-        .history-label { font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.25rem; }
-        .recent-sessions { max-height: 150px; overflow-y: auto; }
-        .session-row {
-            display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 0.5rem;
-            padding: 0.5rem; font-size: 0.8rem; border-bottom: 1px solid var(--bg-tertiary);
-            align-items: center;
-        }
-        .session-row:last-child { border-bottom: none; }
-        .session-title { color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .session-wpm { color: var(--accent); font-weight: 600; text-align: center; }
-        .session-accuracy { color: var(--success); text-align: center; }
-        .session-date { color: var(--text-secondary); text-align: right; font-size: 0.7rem; }
-
         .results-modal, .settings-modal {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(8px);
@@ -307,100 +216,136 @@
         .volume-slider { width: 100%; -webkit-appearance: none; height: 6px; background: var(--bg-tertiary); border-radius: 3px; outline: none; }
         .volume-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; background: var(--accent); border-radius: 50%; cursor: pointer; }
 
-        /* Goals & Streak Panel */
-        .goals-panel {
-            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
-            border: 2px solid var(--warning); border-radius: 16px; padding: 1rem;
-            display: grid; grid-template-columns: auto 1fr auto; gap: 1rem; align-items: center;
-        }
-        .goals-item { display: flex; align-items: center; }
-        .streak-display { display: flex; align-items: center; gap: 0.5rem; }
-        .streak-icon { font-size: 1.5rem; animation: flame 2s infinite; }
-        @keyframes flame { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
-        .streak-count { font-size: 1.5rem; font-weight: 700; color: var(--warning); }
-        .streak-label { font-size: 0.85rem; color: var(--text-secondary); }
-        .daily-goal { width: 100%; }
-        .goal-header { display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.85rem; }
-        .goal-label { color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; }
-        .goal-value { color: var(--text-primary); font-weight: 600; }
-        .goal-bar { width: 100%; height: 8px; background: var(--bg-primary); border-radius: 4px; overflow: hidden; }
-        .goal-fill { height: 100%; background: linear-gradient(90deg, var(--warning), var(--success)); transition: width 0.5s ease; }
-        .goal-settings-btn {
-            background: var(--bg-primary); border: 1px solid var(--bg-tertiary);
-            padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem;
-            color: var(--text-secondary); transition: all 0.2s ease;
-        }
-        .goal-settings-btn:hover { border-color: var(--accent); color: var(--accent); }
-
         /* Library System */
-        .library-panel {
-            background: var(--bg-secondary); border: 1px solid var(--bg-tertiary); 
-            border-radius: 12px; padding: 1rem; display: flex; flex-direction: column; gap: 1rem;
+        .library-toolbar {
+            display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;
         }
-        .library-header {
-            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;
+        .library-search {
+            flex: 1; min-width: 140px; background: var(--bg-primary); border: 1px solid var(--bg-tertiary);
+            color: var(--text-primary); border-radius: 8px; padding: 0.45rem 0.75rem; font-size: 0.88rem;
+            outline: none; transition: border-color 0.2s;
         }
-        .library-header h3 { color: var(--accent); font-size: 1.1rem; }
-        .library-btn {
-            padding: 0.5rem 1rem; font-size: 0.85rem;
+        .library-search:focus { border-color: var(--accent); }
+        .library-search::placeholder { color: var(--text-secondary); }
+
+        .lib-btn {
+            padding: 0.45rem 0.9rem; font-size: 0.85rem; border-radius: 8px;
+            border: 1px solid var(--bg-tertiary); background: var(--bg-primary);
+            color: var(--text-secondary); cursor: pointer; transition: all 0.2s;
+            display: flex; align-items: center; gap: 0.35rem; white-space: nowrap;
         }
-        .library-tabs { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-        .library-content { max-height: 250px; overflow-y: auto; }
-        .library-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 0.75rem; }
-        .library-item {
-            padding: 1rem; background: var(--bg-primary); border: 2px solid var(--bg-tertiary);
-            border-radius: 10px; cursor: pointer; transition: all 0.2s ease;
-            display: flex; flex-direction: column; gap: 0.5rem; position: relative;
+        .lib-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--bg-primary); transform: none; box-shadow: none; }
+        .lib-btn.danger:hover { border-color: var(--error); color: var(--error); }
+
+        .library-list {
+            display: flex; flex-direction: column; gap: 0.5rem;
+            max-height: 220px; overflow-y: auto; padding-right: 2px;
         }
-        .library-item:hover { border-color: var(--accent); transform: translateY(-2px); }
-        .library-item.active { border-color: var(--accent); background: var(--accent-glow); }
-        .library-item-title { font-weight: 600; color: var(--text-primary); font-size: 0.95rem; }
-        .library-item-meta { 
-            display: flex; justify-content: space-between; align-items: center;
-            font-size: 0.75rem; color: var(--text-secondary);
+        .library-list:empty::after {
+            content: '📚 No texts saved yet. Paste text below and click "Save to Library".';
+            color: var(--text-secondary); font-size: 0.88rem; padding: 1rem 0;
+            text-align: center; display: block;
         }
-        .library-item-stats { display: flex; gap: 0.75rem; }
-        .library-item-actions {
-            display: flex; gap: 0.5rem; margin-top: 0.5rem;
+        .library-entry {
+            display: flex; align-items: center; gap: 0.6rem;
+            background: var(--bg-primary); border: 1px solid var(--bg-tertiary);
+            border-radius: 8px; padding: 0.6rem 0.75rem; cursor: pointer;
+            transition: all 0.2s; overflow: hidden;
         }
-        .library-action-btn {
-            padding: 0.25rem 0.5rem; font-size: 0.7rem; background: var(--bg-tertiary);
-            border: none; border-radius: 4px; cursor: pointer; color: var(--text-secondary);
-            transition: all 0.2s ease;
+        .library-entry:hover { border-color: var(--accent); transform: translateX(3px); }
+        .library-entry.active { background: var(--accent-glow); border-color: var(--accent); }
+        .library-entry-icon { font-size: 1.1rem; flex-shrink: 0; }
+        .library-entry-info { flex: 1; min-width: 0; }
+        .library-entry-name {
+            font-size: 0.9rem; font-weight: 600; color: var(--text-primary);
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
-        .library-action-btn:hover { background: var(--accent); color: var(--bg-primary); }
-        .library-action-btn.delete:hover { background: var(--error); }
-        .library-empty {
-            text-align: center; padding: 2rem; color: var(--text-secondary);
-            font-style: italic;
+        .library-entry-meta { font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.15rem; }
+        .library-entry-actions { display: flex; gap: 0.3rem; flex-shrink: 0; }
+        .lib-icon-btn {
+            background: none; border: none; padding: 0.25rem 0.4rem; border-radius: 5px;
+            cursor: pointer; font-size: 0.9rem; color: var(--text-secondary);
+            transition: all 0.15s; opacity: 0.6;
         }
-        .library-category-badge {
-            font-size: 0.7rem; padding: 0.15rem 0.4rem; background: var(--bg-tertiary);
-            border-radius: 4px; text-transform: uppercase; letter-spacing: 0.05em;
+        .lib-icon-btn:hover { opacity: 1; background: var(--bg-tertiary); transform: none; box-shadow: none; }
+        .lib-icon-btn.delete:hover { color: var(--error); }
+
+        .library-save-area { display: flex; flex-direction: column; gap: 0.6rem; }
+        .library-save-row { display: flex; gap: 0.5rem; }
+        .library-name-input {
+            flex: 1; background: var(--bg-primary); border: 1px solid var(--bg-tertiary);
+            color: var(--text-primary); border-radius: 8px; padding: 0.5rem 0.75rem; font-size: 0.88rem;
+            outline: none; transition: border-color 0.2s;
         }
-        .library-category-badge.preset { background: var(--success); color: var(--bg-primary); }
-        .library-category-badge.custom { background: var(--accent); color: var(--bg-primary); }
-        .library-progress-bar {
-            width: 100%; height: 4px; background: var(--bg-tertiary); border-radius: 2px; margin-top: 0.5rem; overflow: hidden;
+        .library-name-input:focus { border-color: var(--accent); }
+        .library-name-input::placeholder { color: var(--text-secondary); }
+        .lib-save-btn {
+            padding: 0.5rem 1rem; background: var(--accent); color: var(--bg-primary);
+            border: none; border-radius: 8px; font-size: 0.88rem; font-weight: 600;
+            cursor: pointer; white-space: nowrap; transition: all 0.2s;
         }
-        .library-progress-fill {
-            height: 100%; background: linear-gradient(90deg, var(--accent), var(--success)); transition: width 0.3s ease;
+        .lib-save-btn:hover { opacity: 0.85; transform: translateY(-1px); box-shadow: 0 3px 10px var(--accent-glow); }
+
+        .library-textarea {
+            width: 100%; background: var(--bg-primary); border: 1px solid var(--bg-tertiary);
+            color: var(--text-primary); border-radius: 8px; padding: 0.75rem;
+            font-size: 0.88rem; min-height: 110px; resize: vertical; outline: none;
+            transition: border-color 0.2s; font-family: inherit;
+        }
+        .library-textarea:focus { border-color: var(--accent); }
+        .library-textarea::placeholder { color: var(--text-secondary); }
+
+        .lib-count-badge {
+            background: var(--accent); color: var(--bg-primary); border-radius: 10px;
+            font-size: 0.7rem; font-weight: 700; padding: 0.1rem 0.45rem; margin-left: 0.3rem;
+            vertical-align: middle;
         }
 
-        /* Pause Overlay */
-        .pause-overlay {
-            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(8px);
-            display: flex; align-items: center; justify-content: center; z-index: 10;
-            border-radius: 16px; animation: fadeIn 0.3s ease;
+        /* Folder system */
+        .lib-folder { margin-bottom: 0.4rem; }
+        .lib-folder-header {
+            display: flex; align-items: center; gap: 0.5rem;
+            padding: 0.45rem 0.75rem; background: var(--bg-tertiary);
+            border-radius: 8px; cursor: pointer; user-select: none;
+            font-size: 0.85rem; font-weight: 700; color: var(--text-primary);
+            transition: background 0.2s;
         }
-        [data-theme="light"] .pause-overlay { background: rgba(241, 245, 249, 0.95); }
-        .pause-content { text-align: center; }
-        .pause-icon { font-size: 4rem; margin-bottom: 1rem; animation: pulse 2s infinite; }
-        .pause-text { font-size: 2rem; font-weight: 700; color: var(--accent); letter-spacing: 0.2em; margin-bottom: 1rem; }
-        .pause-hint { color: var(--text-secondary); font-size: 0.9rem; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .typing-area { position: relative; }
+        .lib-folder-header:hover { background: var(--accent-glow); }
+        .lib-folder-arrow { font-size: 0.75rem; transition: transform 0.2s; }
+        .lib-folder.open .lib-folder-arrow { transform: rotate(90deg); }
+        .lib-folder-name { flex: 1; }
+        .lib-folder-count { font-size: 0.72rem; color: var(--text-secondary); font-weight: 400; }
+        .lib-folder-children {
+            display: none; flex-direction: column; gap: 0.35rem;
+            margin-top: 0.35rem; padding-left: 1rem;
+        }
+        .lib-folder.open .lib-folder-children { display: flex; }
+        .lib-folder-rename-btn, .lib-folder-delete-btn {
+            background: none; border: none; padding: 0.15rem 0.3rem;
+            font-size: 0.8rem; cursor: pointer; opacity: 0.5; border-radius: 4px;
+            color: var(--text-secondary); transition: all 0.15s;
+        }
+        .lib-folder-rename-btn:hover { opacity: 1; background: var(--bg-primary); transform: none; box-shadow: none; }
+        .lib-folder-delete-btn:hover { opacity: 1; color: var(--error); background: var(--bg-primary); transform: none; box-shadow: none; }
+        .lib-folder-select {
+            flex: 1; background: var(--bg-primary); border: 1px solid var(--bg-tertiary);
+            color: var(--text-primary); border-radius: 8px; padding: 0.5rem 0.75rem;
+            font-size: 0.88rem; outline: none; cursor: pointer;
+        }
+        .lib-folder-select:focus { border-color: var(--accent); }
+        .lib-new-folder-btn {
+            padding: 0.5rem 0.75rem; background: var(--bg-tertiary); color: var(--text-primary);
+            border: 1px solid var(--bg-tertiary); border-radius: 8px; font-size: 0.85rem;
+            cursor: pointer; white-space: nowrap; transition: all 0.2s;
+        }
+        .lib-new-folder-btn:hover { border-color: var(--accent); color: var(--accent); transform: none; box-shadow: none; }
+
+        /* Rename inline */
+        .library-entry-name-input {
+            background: var(--bg-secondary); border: 1px solid var(--accent); color: var(--text-primary);
+            border-radius: 4px; padding: 0.1rem 0.4rem; font-size: 0.9rem; font-weight: 600;
+            width: 100%; outline: none;
+        }
 
         @media (max-width: 768px) {
             h1 { font-size: 1.75rem; }
@@ -408,54 +353,21 @@
             header { flex-direction: column; }
             .stats-bar { grid-template-columns: 1fr; }
             .theme-options { grid-template-columns: repeat(2, 1fr); }
-            .library-list { grid-template-columns: 1fr; }
+            .article-list { grid-template-columns: 1fr; }
             .prediction-panel { grid-template-columns: 1fr; }
-            .library-header { flex-direction: column; align-items: stretch; }
-            .library-modal-content { padding: 1.5rem; }
-            .form-actions { flex-direction: column; }
-            .form-actions button { width: 100%; justify-content: center; }
-            .history-stats { grid-template-columns: 1fr; }
-            .session-row { grid-template-columns: 1fr; gap: 0.25rem; }
-            .session-row > div { text-align: center; }
-            .heatmap-container { max-width: 300px; }
-            .heat-key { width: 24px; height: 24px; font-size: 0.7rem; }
         }
     </style>
 </head>
 <body>
+    <input type="text" id="hiddenInput" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="position:fixed;top:-9999px;left:-9999px;opacity:0;width:1px;height:1px;border:none;outline:none;">
     <div class="container">
         <header>
             <div class="header-left">
-                <h1>⚡ MT Typing</h1>
-                <p class="subtitle">Advanced typing practice with Library System for Novels</p>
+                <h1>⚡ TypeMaster Pro</h1>
+                <p class="subtitle">Advanced typing practice with time prediction & IELTS prep</p>
             </div>
             <button class="settings-btn" onclick="openSettings()" title="Settings">⚙️</button>
         </header>
-
-        <!-- Goals & Streak Panel -->
-        <div class="goals-panel" id="goalsPanel">
-            <div class="goals-item">
-                <div class="streak-display">
-                    <span class="streak-icon">🔥</span>
-                    <span class="streak-count" id="streakCount">0</span>
-                    <span class="streak-label">day streak</span>
-                </div>
-            </div>
-            <div class="goals-item">
-                <div class="daily-goal">
-                    <div class="goal-header">
-                        <span class="goal-label">Daily Goal</span>
-                        <span class="goal-value"><span id="goalProgress">0</span> / <span id="goalTarget">15</span> min</span>
-                    </div>
-                    <div class="goal-bar">
-                        <div class="goal-fill" id="goalFill" style="width: 0%"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="goals-item">
-                <button class="goal-settings-btn" onclick="openGoalsModal()">⚙️ Goals</button>
-            </div>
-        </div>
 
         <!-- Time Prediction Panel -->
         <div class="prediction-panel" id="predictionPanel">
@@ -496,48 +408,60 @@
             </div>
         </div>
 
-        <!-- Library System -->
-        <div class="library-panel" id="libraryPanel">
-            <div class="library-header">
-                <h3>📚 My Library</h3>
-                <button class="library-btn primary" onclick="openLibraryModal()">+ Add Text</button>
+        <!-- Article Selector -->
+        <div class="article-selector">
+            <div class="selector-tabs">
+                <button class="selector-tab active" onclick="selectCategory('10min')">10 Min Articles</button>
+                <button class="selector-tab" onclick="selectCategory('15min')">15 Min Articles</button>
+                <button class="selector-tab" onclick="selectCategory('20min')">20 Min Articles</button>
+                <button class="selector-tab" onclick="selectCategory('ielts')">IELTS Task 2</button>
+                <button class="selector-tab" id="libraryTab" onclick="selectCategory('library')">📚 Library<span class="lib-count-badge" id="libCountBadge">0</span></button>
             </div>
-            <div class="library-tabs">
-                <button class="selector-tab active" onclick="showLibraryTab('library')">My Library</button>
-                <button class="selector-tab" onclick="showLibraryTab('preset')">Preset Articles</button>
-            </div>
-            <div class="library-content" id="libraryContent">
+            <div class="article-list" id="articleList"></div>
+
+            <!-- Library Panel (hidden by default) -->
+            <div id="libraryPanel" style="display:none; flex-direction:column; gap:0.75rem;">
+                <div class="library-toolbar">
+                    <input class="library-search" id="libSearch" placeholder="🔍 Search library..." oninput="renderLibrary()" />
+                    <button class="lib-btn danger" onclick="clearLibrary()">🗑️ Clear All</button>
+                </div>
                 <div class="library-list" id="libraryList"></div>
+                <hr style="border:none;border-top:1px solid var(--bg-tertiary);margin:0.25rem 0;">
+                <div class="library-save-area">
+                    <div class="library-save-row">
+                        <input class="library-name-input" id="libNameInput" placeholder="Chapter title (e.g. Ch. 1 - The Beginning)" maxlength="80" />
+                        <button class="lib-save-btn" onclick="saveToLibrary()">＋ Save</button>
+                    </div>
+                    <div class="library-save-row">
+                        <select class="lib-folder-select" id="libFolderSelect"><option value="">📂 No Folder</option></select>
+                        <button class="lib-new-folder-btn" onclick="promptNewFolder()">＋ Folder</button>
+                    </div>
+                    <textarea class="library-textarea" id="libTextInput" placeholder="Paste your novel chapter, essay, or any text here…"></textarea>
+                </div>
             </div>
         </div>
 
         <div class="typing-area" id="typingArea">
-            <div class="pause-overlay" id="pauseOverlay" style="display:none;">
-                <div class="pause-content">
-                    <div class="pause-icon">⏸</div>
-                    <div class="pause-text">PAUSED</div>
-                    <div class="pause-hint">Press <kbd class="kbd">Space</kbd> or click to resume</div>
-                </div>
-            </div>
             <div class="text-display" id="textDisplay"></div>
-            <input type="text" class="hidden-input" id="hiddenInput" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+
             <div class="progress-bar">
                 <div class="progress-fill" id="progressFill"></div>
             </div>
         </div>
 
         <div class="keyboard-hint">
-            Click text area or press <kbd class="kbd">Space</kbd> to start • <kbd class="kbd">Tab</kbd> + <kbd class="kbd">Enter</kbd> to restart • <kbd class="kbd">Esc</kbd> to pause
+            Click text area or press <kbd class="kbd">Space</kbd> to start • <kbd class="kbd">Tab</kbd> + <kbd class="kbd">Enter</kbd> to restart
         </div>
 
         <div class="controls">
             <button class="primary" onclick="restartTest()"><span>↻</span> Restart</button>
-            <button id="pauseBtn" onclick="togglePause()"><span>⏸</span> Pause</button>
-            <button onclick="loadRandomArticle()"><span>🎲</span> Random</button>
-            <button onclick="openLibraryModal()"><span>📚</span> Library</button>
+            <button onclick="loadRandomArticle()"><span>🎲</span> Random Article</button>
+            <button onclick="toggleCustomText()"><span>✎</span> Custom Text</button>
         </div>
 
-        <!-- Library replaces custom text section -->
+        <div class="upload-section" id="uploadSection" style="display:none;">
+            <textarea class="custom-text" id="customText" placeholder="Paste your text here... Press Ctrl+Enter to load" style="display:block;width:100%;background:var(--bg-primary);border:1px solid var(--bg-tertiary);border-radius:8px;padding:1rem;color:var(--text-primary);min-height:150px;margin-top:1rem;"></textarea>
+        </div>
     </div>
 
     <!-- Results Modal -->
@@ -552,86 +476,7 @@
                 <div class="result-item"><div class="result-label">Characters</div><div class="result-value" id="finalChars">0</div></div>
                 <div class="result-item"><div class="result-label">Errors</div><div class="result-value" id="finalErrors">0</div></div>
             </div>
-            <div class="heatmap-section" id="heatmapSection" style="display:none;">
-                <div class="heatmap-title">⌨️ Key Error Heatmap</div>
-                <div class="heatmap-container" id="heatmapContainer"></div>
-                <div class="heatmap-legend">
-                    <span class="heat-low">Low</span>
-                    <span class="heat-gradient"></span>
-                    <span class="heat-high">High</span>
-                </div>
-            </div>
-            <div class="history-section" id="historySection">
-                <div class="history-title">📊 Your Progress</div>
-                <div class="history-stats">
-                    <div class="history-stat">
-                        <div class="history-value" id="historyBestWpm">0</div>
-                        <div class="history-label">Best WPM</div>
-                    </div>
-                    <div class="history-stat">
-                        <div class="history-value" id="historyAvgWpm">0</div>
-                        <div class="history-label">Average WPM</div>
-                    </div>
-                    <div class="history-stat">
-                        <div class="history-value" id="historyTotal">0</div>
-                        <div class="history-label">Sessions</div>
-                    </div>
-                </div>
-                <div class="recent-sessions" id="recentSessions"></div>
-            </div>
-            <button class="primary" onclick="closeResults()" style="width: 100%; justify-content: center; margin-top: 1rem;">Continue Practicing</button>
-        </div>
-    </div>
-
-    <!-- Goals Settings Modal -->
-    <div class="goals-modal" id="goalsModal">
-        <div class="goals-modal-content">
-            <h2 class="goals-modal-title">🎯 Daily Goals</h2>
-            <div class="goals-form">
-                <div class="form-group">
-                    <label class="form-label">Daily Practice Target (minutes)</label>
-                    <div class="goal-presets">
-                        <button class="goal-preset-btn" onclick="setGoalTarget(10)">10 min</button>
-                        <button class="goal-preset-btn" onclick="setGoalTarget(15)">15 min</button>
-                        <button class="goal-preset-btn" onclick="setGoalTarget(30)">30 min</button>
-                        <button class="goal-preset-btn" onclick="setGoalTarget(60)">60 min</button>
-                    </div>
-                    <input type="number" class="form-input" id="customGoalTarget" min="1" max="180" value="15" style="margin-top: 0.5rem;">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Current Streak</label>
-                    <div class="streak-info">
-                        <span class="streak-big" id="modalStreak">0</span> days 🔥
-                    </div>
-                    <p class="form-hint">Practice daily to keep your streak alive!</p>
-                </div>
-                <div class="form-actions">
-                    <button onclick="closeGoalsModal()">Cancel</button>
-                    <button class="primary" onclick="saveGoalSettings()">Save Goal</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Library Modal -->
-    <div class="library-modal" id="libraryModal">
-        <div class="library-modal-content">
-            <h2 class="library-modal-title">📚 Add to Library</h2>
-            <div class="library-form">
-                <div class="form-group">
-                    <label class="form-label">Title (e.g., "Novel Chapter 1")</label>
-                    <input type="text" class="form-input" id="libraryTitleInput" placeholder="Enter a name for this text..." maxlength="50">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Text Content</label>
-                    <textarea class="form-textarea" id="libraryTextInput" placeholder="Paste your chapter, article, or any text here..." maxlength="50000"></textarea>
-                    <div class="char-count"><span id="libraryCharCount">0</span> / 50000 characters</div>
-                </div>
-                <div class="form-actions">
-                    <button onclick="closeLibraryModal()">Cancel</button>
-                    <button class="primary" onclick="saveToLibrary()">💾 Save to Library</button>
-                </div>
-            </div>
+            <button class="primary" onclick="closeResults()" style="width: 100%; justify-content: center;">Continue Practicing</button>
         </div>
     </div>
 
@@ -686,51 +531,65 @@
         const articlesDB = {
             "10min": [
                 {"title": "The Internet Revolution", "text": "The internet has revolutionized communication, work, and daily life. Born from ARPANET in the 1960s, it grew into a global network connecting billions. Tim Berners-Lee invented the World Wide Web in 1989, making information accessible to everyone. Today we use it for shopping, education, social networking, and remote work. However, challenges include privacy concerns, misinformation, and digital addiction. The internet continues evolving with AI, blockchain, and the metaverse promising to reshape our digital experience.", "category": "Technology"},
-                {"title": "The Great Wall of China", "text": "The Great Wall stands as humanity's most impressive architectural achievement. Stretching over 13,000 miles, it was built over centuries to protect against northern invasions. Contrary to belief, it cannot be seen from space with the naked eye. The wall represents millions of workers' sacrifice. Today it attracts millions of tourists and symbolizes Chinese civilization. Most remaining sections were built during the Ming Dynasty using local materials from rammed earth to bricks and stones.", "category": "History"},
+                {"title": "The Great Wall of China", "text": "The Great Wall stands as humanity\'s most impressive architectural achievement. Stretching over 13,000 miles, it was built over centuries to protect against northern invasions. Contrary to belief, it cannot be seen from space with the naked eye. The wall represents millions of workers\' sacrifice. Today it attracts millions of tourists and symbolizes Chinese civilization. Most remaining sections were built during the Ming Dynasty using local materials from rammed earth to bricks and stones.", "category": "History"},
                 {"title": "Photosynthesis Process", "text": "Photosynthesis converts light energy into chemical energy. Using chlorophyll, plants transform carbon dioxide and water into glucose and oxygen. This occurs in chloroplasts within plant cells. The process is fundamental to life on Earth, producing oxygen and forming food chain bases. Scientists study photosynthesis to develop clean energy systems. Understanding it has advanced agriculture, helping farmers grow crops more efficiently to feed growing populations worldwide.", "category": "Science"},
                 {"title": "Color Psychology", "text": "Colors profoundly affect emotions and behaviors. Red increases heart rate and urgency, used in sale signs. Blue evokes trust, popular for corporate logos. Green represents health, used in environmental campaigns. Yellow grabs attention but can cause anxiety. Purple associates with royalty due to historical dye costs. Black signifies sophistication while white represents purity. Marketers leverage these associations to influence consumers. Interior designers use color theory to create specific moods in spaces.", "category": "Psychology"},
-                {"title": "Marie Curie", "text": "Marie Curie was the first woman to win a Nobel Prize and the only person to win in two scientific fields. Born in Poland in 1867, she moved to Paris for education. With husband Pierre, she discovered polonium and radium, coining the term radioactivity. Despite discrimination, she persisted, developing mobile X-ray units in WWI. Her dedication cost her life; she died from radiation exposure. Her legacy inspires scientists, particularly women in STEM fields worldwide.", "category": "Biography"}
+                {"title": "Marie Curie", "text": "Marie Curie was the first woman to win a Nobel Prize and the only person to win in two scientific fields. Born in Poland in 1867, she moved to Paris for education. With husband Pierre, she discovered polonium and radium, coining the term radioactivity. Despite discrimination, she persisted, developing mobile X-ray units in WWI. Her dedication cost her life; she died from radiation exposure. Her legacy inspires scientists, particularly women in STEM fields worldwide.", "category": "Biography"},
+                {"title": "Ocean Ecosystems", "text": "Oceans cover over 70 percent of Earth and sustain the majority of life on our planet. From shallow coral reefs to the crushing pressure of deep-sea trenches, marine ecosystems are extraordinarily diverse. Phytoplankton produce roughly half of all atmospheric oxygen through photosynthesis. Coral reefs, despite covering less than one percent of the ocean floor, support a quarter of all marine species. Human activities such as overfishing, pollution, and rising water temperatures now threaten these vital systems, requiring urgent global action.", "category": "Science"},
+                {"title": "The Renaissance", "text": "The Renaissance was a cultural movement that began in Italy during the 14th century and gradually spread across Europe. It marked the transition from the medieval period to the modern era, celebrating humanism, arts, and scientific inquiry. Artists like Leonardo da Vinci and Michelangelo created works that still define beauty today. The invention of the printing press accelerated the spread of ideas, fueling both the Reformation and early scientific revolution. The Renaissance fundamentally reshaped how people thought about themselves and their world.", "category": "History"},
+                {"title": "Sleep Science", "text": "Sleep is far more than rest. During deep sleep, the brain consolidates memories, clears metabolic waste, and repairs cells. Adults typically need between seven and nine hours per night, yet modern lifestyles frequently cut this short. Chronic sleep deprivation is linked to obesity, heart disease, and cognitive decline. The sleep cycle alternates between REM and non-REM stages, each serving distinct biological functions. Light from screens disrupts melatonin production, making quality sleep harder to achieve in the digital age.", "category": "Biology"},
+                {"title": "Artificial Intelligence Basics", "text": "Artificial intelligence refers to machines that simulate human-like reasoning and learning. Machine learning, a subset of AI, allows systems to improve from experience without being explicitly programmed. Neural networks inspired by the brain enable tasks like image recognition and language translation. AI now powers recommendation systems, medical diagnostics, and autonomous vehicles. However, concerns about bias, job displacement, and ethical decision-making are growing. Understanding AI has become an essential literacy skill for the 21st century.", "category": "Technology"},
+                {"title": "Volcanoes and Plate Tectonics", "text": "Volcanoes are openings in the Earth\'s crust through which molten rock, ash, and gases escape from deep underground. They form primarily along tectonic plate boundaries, where plates collide or pull apart. Famous eruptions like Krakatoa and Mount St. Helens reshaped landscapes and influenced global climates. Volcanic soil is among the most fertile on Earth, which is why many populations live near active volcanoes despite the risk. Understanding tectonic activity helps scientists forecast eruptions and protect vulnerable communities.", "category": "Science"}
             ],
             "15min": [
                 {"title": "Climate Change", "text": "Climate change refers to long-term shifts in temperatures and weather patterns. Human activities since the Industrial Revolution have become the dominant driver. Burning fossil fuels releases greenhouse gases that trap heat. Consequences include rising sea levels, extreme weather, disrupted ecosystems, and food security threats. The scientific consensus is overwhelming. The Paris Agreement aims to limit warming to below 2 degrees Celsius. Solutions include renewable energy, efficiency improvements, and forest protection. Individual actions matter but systemic changes are essential. The window for action is narrowing, making immediate efforts critical for future generations.", "category": "Environment"},
                 {"title": "Habit Formation", "text": "Habits are automatic behaviors formed through repetition, conserving mental energy. The habit loop consists of cue, routine, and reward. Understanding this enables changing unwanted habits by keeping cues and rewards while changing routines. Keystone habits like exercise trigger positive changes in other areas. It takes average 66 days to form new habits, though this varies. Willpower fatigues with use, making morning habit maintenance easier. Environmental cues significantly influence formation. Organizations use habit science for productivity. Mastering habits is essential for personal development and achieving long-term goals.", "category": "Psychology"},
-                {"title": "Moon Landing 1969", "text": "On July 20, 1969, Neil Armstrong became the first human on the moon, fulfilling Kennedy's challenge. Apollo 11 culminated the Space Race between the US and Soviet Union. Armstrong's words captured the moment's significance. Buzz Aldrin joined him while Michael Collins orbited above. They collected samples, planted the flag, and performed experiments. The mission required 400,000 people and billions of dollars. Skeptics question it, but evidence confirms it occurred. It demonstrated human cooperation and innovation capability, inspiring generations. The Artemis program now aims to return humans to the moon and reach Mars.", "category": "History"},
+                {"title": "Moon Landing 1969", "text": "On July 20, 1969, Neil Armstrong became the first human on the moon, fulfilling Kennedy\'s challenge. Apollo 11 culminated the Space Race between the US and Soviet Union. Armstrong\'s words captured the moment\'s significance. Buzz Aldrin joined him while Michael Collins orbited above. They collected samples, planted the flag, and performed experiments. The mission required 400,000 people and billions of dollars. Skeptics question it, but evidence confirms it occurred. It demonstrated human cooperation and innovation capability, inspiring generations. The Artemis program now aims to return humans to the moon and reach Mars.", "category": "History"},
                 {"title": "Democracy Origins", "text": "Democracy, meaning rule by the people, originated in Athens around 5th century BC. Cleisthenes established the system where citizens participated directly in decisions. Unlike modern representative democracies, Athenians voted directly on legislation. However, participation was limited to adult male citizens, excluding women, slaves, and foreigners. The system lasted 200 years before replacement. The Roman Republic adapted democratic elements into representative systems influencing later governments. Democracy disappeared in the Middle Ages, reemerging during the Enlightenment. American and French Revolutions spread democratic principles globally. Today various forms exist, from parliamentary to presidential systems.", "category": "History"},
-                {"title": "DNA Structure", "text": "DNA carries genetic instructions for all living organisms. Watson and Crick discovered its double helix structure in 1953, building on Franklin's X-ray data. DNA consists of four bases pairing to form a ladder-like structure. This revolutionized biology, explaining genetic information storage. The Human Genome Project mapped all human genes, opening medical possibilities. DNA testing now solves crimes, establishes paternity, and traces ancestry. CRISPR allows precise editing, promising cures but raising ethical concerns. DNA survives thousands of years, enabling ancient organism study. Understanding DNA transformed forensics, agriculture, and medicine. Personalized medicine based on genetics is becoming reality.", "category": "Science"}
+                {"title": "DNA Structure", "text": "DNA carries genetic instructions for all living organisms. Watson and Crick discovered its double helix structure in 1953, building on Franklin\'s X-ray data. DNA consists of four bases pairing to form a ladder-like structure. This revolutionized biology, explaining genetic information storage. The Human Genome Project mapped all human genes, opening medical possibilities. DNA testing now solves crimes, establishes paternity, and traces ancestry. CRISPR allows precise editing, promising cures but raising ethical concerns. DNA survives thousands of years, enabling ancient organism study. Understanding DNA transformed forensics, agriculture, and medicine. Personalized medicine based on genetics is becoming reality.", "category": "Science"},
+                {"title": "The Roman Empire", "text": "The Roman Empire was one of the largest and most influential civilizations in history, spanning from Britain to Mesopotamia at its height. Its legal systems, architectural achievements, and Latin language still shape modern societies. Roads built by Romans connected cities and enabled rapid troop movements. The fall of Rome in 476 AD is debated by historians, with causes ranging from economic trouble and military pressure to internal corruption. Rome\'s legacy lives on in governance structures, the Romance languages, and concepts of citizenship and law that underpin modern democracies.", "category": "History"},
+                {"title": "Human Brain and Neuroplasticity", "text": "The human brain contains roughly 86 billion neurons connected by trillions of synapses. Neuroplasticity is the brain\'s remarkable ability to reorganize itself by forming new neural connections throughout life. This means learning a new skill, recovering from injury, or changing habitual thinking is biologically possible at any age. Stress and poor sleep weaken plasticity while exercise, reading, and social connection strengthen it. Modern neuroscience has overturned the old belief that the adult brain is fixed, opening new possibilities for education, therapy, and rehabilitation.", "category": "Biology"},
+                {"title": "Space Exploration History", "text": "Humanity\'s journey into space began in earnest in 1957 when the Soviet Union launched Sputnik, the first artificial satellite. The race to the moon dominated the 1960s, culminating in the Apollo 11 landing. Space stations like Mir and the ISS later demonstrated that humans could live in orbit for extended periods. Robotic probes have now visited every planet in our solar system. The 21st century has seen private companies like SpaceX dramatically reduce launch costs. Mars missions, asteroid mining, and even interstellar probes are no longer purely theoretical aspirations.", "category": "Science"},
+                {"title": "Philosophy of Stoicism", "text": "Stoicism was founded in Athens around 300 BC and became enormously influential in ancient Rome. Philosophers like Marcus Aurelius, Seneca, and Epictetus taught that inner peace comes from focusing only on what is within our control: our judgments, intentions, and responses. External events, including illness, poverty, and other people\'s behavior, are beyond our control and should not disturb our tranquility. Stoic ideas are experiencing a modern revival as people seek practical tools for managing anxiety and adversity. The practice centers on daily reflection, accepting impermanence, and acting virtuously regardless of circumstances.", "category": "Philosophy"},
+                {"title": "Biodiversity and Extinction", "text": "Biodiversity refers to the variety of life on Earth, from microorganisms to mammals. Scientists estimate that around eight million species currently inhabit our planet, though only about two million have been formally described. Biodiversity supports healthy ecosystems by enabling nutrient cycling, pollination, water purification, and climate regulation. Human activity is currently driving species to extinction at a rate 100 to 1,000 times the natural background rate. Habitat destruction, invasive species, climate change, and pollution are the primary culprits. Protecting biodiversity is not merely an ethical question but a survival imperative for humanity itself.", "category": "Environment"}
             ],
             "20min": [
                 {"title": "Globalization Impact", "text": "Globalization refers to increasing interconnectedness through trade, technology, and migration. It has lifted billions from poverty, particularly in Asia, creating manufacturing jobs and expanding markets. Consumers benefit from lower prices and variety. However, it contributed to job losses in developed countries as manufacturing moved overseas. Cultural exchange enriches societies but raises homogenization concerns. Multinational corporations gained unprecedented power, sometimes exceeding governments. Global supply chains increase efficiency but create vulnerabilities seen during COVID-19. Environmental regulations vary, leading to pollution havens. Globalization facilitates idea spread including democracy but also terrorism. Managing it requires international cooperation on trade, climate, and health. The future likely involves regionalization rather than pure globalization.", "category": "Economics"},
                 {"title": "Memory Techniques", "text": "Memory techniques help encode information for easier recall. The method of loci involves visualizing information in familiar locations. Acronyms create memorable words from first letters. Chunking breaks information into manageable units. Spaced repetition reviews at increasing intervals for optimal retention. The peg system associates numbers with rhyming words. Elaborative encoding connects new information to existing knowledge. Sleep plays a crucial role in consolidation. Physical exercise and reduced stress improve memory. Memory champions perform extraordinary feats using these techniques. Digital devices reduce our need to remember, potentially affecting cognition. Understanding memory helps students study effectively and professionals retain information.", "category": "Psychology"},
-                {"title": "The Silk Road", "text": "The Silk Road was trade routes connecting China to the Mediterranean from 130 BC to 1453 AD. Named for silk trade, it facilitated exchange of goods, ideas, and cultures. Besides silk, merchants traded spices, metals, ceramics, and textiles. It enabled spread of Buddhism, Islam, and Christianity. Technologies like papermaking traveled west while grapes moved east. It was a network spanning 4,000 miles, not a single road. Marco Polo's travels introduced Europeans to Asian cultures. The Ottoman Empire rise and maritime trade ended its dominance. China's Belt and Road Initiative draws inspiration from this network. Archaeological sites provide insights into ancient civilizations. The Silk Road exemplifies how trade drives cultural exchange.", "category": "History"},
-                {"title": "Black Holes", "text": "Black holes are spacetime regions where gravity prevents escape, even for light. They form when massive stars collapse. The event horizon marks the boundary of no return. At the center lies a singularity where physics breaks down. Black holes can have masses millions of times our sun's. Hawking discovered they emit radiation and slowly evaporate. In 2019, the Event Horizon Telescope captured the first image. Supermassive black holes exist at galaxy centers, including our Milky Way. They challenge understanding of space, time, and information. They serve as laboratories for testing Einstein's theories. Despite their name, they're bright due to superheated infalling material.", "category": "Science"}
+                {"title": "The Silk Road", "text": "The Silk Road was trade routes connecting China to the Mediterranean from 130 BC to 1453 AD. Named for silk trade, it facilitated exchange of goods, ideas, and cultures. Besides silk, merchants traded spices, metals, ceramics, and textiles. It enabled spread of Buddhism, Islam, and Christianity. Technologies like papermaking traveled west while grapes moved east. It was a network spanning 4,000 miles, not a single road. Marco Polo\'s travels introduced Europeans to Asian cultures. The Ottoman Empire rise and maritime trade ended its dominance. China\'s Belt and Road Initiative draws inspiration from this network. Archaeological sites provide insights into ancient civilizations. The Silk Road exemplifies how trade drives cultural exchange.", "category": "History"},
+                {"title": "Black Holes", "text": "Black holes are spacetime regions where gravity prevents escape, even for light. They form when massive stars collapse. The event horizon marks the boundary of no return. At the center lies a singularity where physics breaks down. Black holes can have masses millions of times our sun\'s. Hawking discovered they emit radiation and slowly evaporate. In 2019, the Event Horizon Telescope captured the first image. Supermassive black holes exist at galaxy centers, including our Milky Way. They challenge understanding of space, time, and information. They serve as laboratories for testing Einstein\'s theories. Despite their name, they\'re bright due to superheated infalling material.", "category": "Science"},
+                {"title": "The Industrial Revolution", "text": "The Industrial Revolution began in Britain in the late 18th century and transformed the world within a few generations. Steam power, mechanized textile production, and iron manufacturing replaced hand labor. Cities swelled as workers moved from countryside to factories. Living conditions were initially brutal, with child labor and 16-hour workdays commonplace. Yet productivity soared and eventually wages rose, lifting living standards. Railways and telegraphs shrank distances. The revolution spread to Europe and America, laying the groundwork for modern capitalism. Its environmental consequences, particularly coal combustion, set in motion the carbon accumulation that drives today\'s climate crisis.", "category": "History"},
+                {"title": "Psychology of Decision Making", "text": "Human decision making is far less rational than economists once assumed. Daniel Kahneman\'s work identified two systems of thought: fast, intuitive System 1 and slow, deliberate System 2. Cognitive biases such as confirmation bias, availability heuristic, and loss aversion systematically distort judgment. We overestimate the likelihood of vivid events and underestimate cumulative risks. Framing effects show that presenting identical choices differently leads to different decisions. Organizations now use behavioral insights to design better defaults in healthcare, savings, and public policy. Understanding our cognitive limitations is the first step to making wiser choices in personal and professional life.", "category": "Psychology"},
+                {"title": "Quantum Physics Introduction", "text": "Quantum physics describes the behavior of matter and energy at the smallest scales, where classical physics breaks down. Particles exist in superpositions of states until measured, a phenomenon demonstrated in the famous double-slit experiment. Heisenberg\'s uncertainty principle states that position and momentum cannot both be precisely known simultaneously. Quantum entanglement links particles so that measuring one instantly affects its partner regardless of distance. These strange properties are not merely theoretical: transistors, lasers, and MRI machines all depend on quantum effects. Quantum computers promise to solve problems that would take classical computers millions of years.", "category": "Science"},
+                {"title": "The French Revolution", "text": "The French Revolution of 1789 was one of history\'s most transformative political upheavals. Triggered by financial crisis, food shortages, and deep social inequality, it dismantled the monarchy and challenged the concept of divine rule. The Declaration of the Rights of Man proclaimed liberty, equality, and fraternity as universal values. The revolution\'s radical phase unleashed the Reign of Terror, during which thousands were executed. Napoleon Bonaparte ultimately rose from revolutionary chaos to reshape Europe through military conquest. The revolution exported ideas of nationalism and popular sovereignty that destabilized monarchies across the continent for a century.", "category": "History"},
+                {"title": "Nutrition Science", "text": "Nutrition science studies how food components affect health, growth, and disease prevention. Macronutrients, including carbohydrates, proteins, and fats, provide energy and structural building blocks. Micronutrients like vitamins and minerals regulate biochemical processes in tiny amounts. The gut microbiome, trillions of bacteria living in the digestive tract, profoundly influences immunity, mood, and metabolism. Ultra-processed foods have been linked to inflammation, obesity, and chronic disease in large population studies. Dietary advice has shifted repeatedly over decades, reflecting the genuine complexity of nutrition research. A diet rich in whole foods, vegetables, and diverse fiber sources is consistently associated with better long-term outcomes.", "category": "Biology"}
             ],
             "ielts": [
                 {"title": "IELTS: Technology in Education", "text": "Some people believe that technology has made education more accessible and effective, while others argue that it has created more distractions and reduced learning quality. Discuss both views and give your own opinion. Give reasons for your answer and include relevant examples from your knowledge or experience.", "category": "Education"},
                 {"title": "IELTS: Urbanization Problems", "text": "In many cities, quality of life is declining due to overpopulation and pollution. What are the main causes of this problem? What measures could be taken to solve it? Give reasons for your answer and include relevant examples from your knowledge or experience.", "category": "Urban"},
                 {"title": "IELTS: Work-Life Balance", "text": "Some people think the best way to achieve work-life balance is to work shorter hours. Others believe doing a job you enjoy is more important. Discuss both views and give your own opinion. Give reasons for your answer and include relevant examples from your knowledge or experience.", "category": "Work"},
                 {"title": "IELTS: Climate Responsibility", "text": "Some argue individuals should take responsibility for reducing their carbon footprint, while others believe only governments and corporations can make significant difference in combating climate change. Discuss both views and give your own opinion.", "category": "Environment"},
-                {"title": "IELTS: Traditional Medicine", "text": "Some people prefer traditional medicine while others trust modern medicine more. Discuss both views and give your own opinion. Give reasons for your answer and include relevant examples from your knowledge or experience.", "category": "Health"}
+                {"title": "IELTS: Traditional Medicine", "text": "Some people prefer traditional medicine while others trust modern medicine more. Discuss both views and give your own opinion. Give reasons for your answer and include relevant examples from your knowledge or experience.", "category": "Health"},
+                {"title": "IELTS: Social Media Effects", "text": "Social media platforms have transformed the way people communicate and share information. While some argue that these platforms bring people together and democratize information, others claim they spread misinformation and cause mental health problems, especially among young people. Discuss both views and give your own opinion. Give reasons for your answer and include relevant examples from your knowledge or experience.", "category": "Society"},
+                {"title": "IELTS: University Education Value", "text": "Some people argue that a university education is essential for career success and personal development, while others believe that vocational training and practical experience are more valuable. Discuss both views and give your own opinion. Give reasons for your answer and include relevant examples from your knowledge or experience.", "category": "Education"},
+                {"title": "IELTS: International Aid", "text": "Some developed countries spend large amounts of money providing aid to developing nations. Critics argue that this money would be better spent addressing problems within the donor country. Others maintain that international aid is a moral obligation and benefits everyone in the long term. Discuss both views and give your own opinion.", "category": "Global"},
+                {"title": "IELTS: Animal Testing", "text": "The use of animals in scientific and medical research remains a deeply controversial issue. Supporters argue it has led to life-saving treatments and is still necessary for medical progress. Opponents believe it is cruel, unreliable, and should be replaced by modern alternatives. Discuss both views and give your own opinion. Include relevant examples from your knowledge or experience.", "category": "Ethics"},
+                {"title": "IELTS: Remote Work Future", "text": "The rise of remote work has fundamentally changed traditional workplace structures. Some believe working from home increases productivity and improves work-life balance, while others argue it harms collaboration, company culture, and career development. Discuss both views and give your own opinion. Give reasons for your answer and include relevant examples from your knowledge or experience.", "category": "Work"},
+                {"title": "IELTS: Overpopulation Challenges", "text": "Rapid population growth in some parts of the world is placing enormous pressure on natural resources, infrastructure, and food supplies. Some people think governments should introduce policies to control birth rates. Others argue this violates individual rights and that technology will provide the necessary solutions. Discuss both views and give your own opinion.", "category": "Society"},
+                {"title": "IELTS: Tourism Impact", "text": "International tourism has grown dramatically in recent decades, bringing economic benefits to many regions. However, critics argue that mass tourism damages local cultures, harms natural environments, and creates overdependence on a volatile industry. Discuss both the advantages and disadvantages of international tourism and give your own opinion on how its negative effects can be managed.", "category": "Global"}
             ]
         };
 
         // State variables
         let currentText = articlesDB["10min"][0].text;
-        let startTime = null, timerInterval = null, typedLength = 0, errors = 0;
+        let startTime = null, timerInterval = null, typedLength = 0, errors = 0, totalErrors = 0;
         let isActive = false, isComplete = false;
         let wpmHistory = [];
+        let completedTexts = new Set(JSON.parse(localStorage.getItem('typemaster_completed') || '[]'));
         let settings = { theme: 'dark', typingSound: false, typingSoundType: 'mechanical', errorSound: false, errorSoundType: 'buzz', volume: 0.5 };
-        let isPaused = false;
-        let pausedTime = 0;
-        let totalPausedDuration = 0;
-        let library = [];
-        let currentLibraryId = null;
-        let progressData = {}; // Stores progress per library item
-        let errorHeatmap = {}; // Tracks error frequency per character
-        let sessionHistory = []; // Tracks completed sessions
-        let dailyGoals = { target: 15, completed: 0, lastDate: null }; // Minutes per day
-        let streakData = { current: 0, lastActive: null }; // Daily streak tracking
         let audioContext = null;
         let currentCategory = '10min';
+
 
         // DOM elements
         const textDisplay = document.getElementById('textDisplay');
@@ -739,23 +598,15 @@
 
         // Initialize
         function init() {
-            loadLibrary();
-            loadSessionHistory();
-            loadGoals();
-            renderLibrary();
-            renderGoals();
             renderText();
-            typingArea.addEventListener('click', () => {
-                if (isPaused) togglePause();
-                else hiddenInput.focus();
-            });
+            renderArticleList();
+            updateLibCountBadge();
+            typingArea.addEventListener('click', () => hiddenInput.focus({ preventScroll: true }));
             hiddenInput.addEventListener('input', handleInput);
             hiddenInput.addEventListener('keydown', handleKeydown);
-            // Library modal char counter
-            document.getElementById('libraryTextInput').addEventListener('input', (e) => {
-                document.getElementById('libraryCharCount').textContent = e.target.value.length;
+            document.getElementById('customText').addEventListener('keydown', (e) => {
+                if (e.ctrlKey && e.key === 'Enter') loadCustomText();
             });
-
             loadSettings();
             updateTimePrediction();
         }
@@ -861,12 +712,7 @@
         }
 
         function handleInput(e) {
-            if (isComplete || isPaused) return;
-
-            // Auto-save progress every 30 seconds for library items
-            if (currentLibraryId && typedLength % 50 === 0) {
-                saveProgress();
-            }
+            if (isComplete) return;
             initAudio();
             const value = hiddenInput.value;
             const prevLength = typedLength;
@@ -881,7 +727,7 @@
                 const newChar = value[value.length - 1];
                 const expectedChar = currentText[value.length - 1];
                 if (newChar === expectedChar) playTypingSound();
-                else playErrorSound();
+                else { playErrorSound(); if (navigator.vibrate) navigator.vibrate(40); }
             }
 
             if (typedLength >= currentText.length) {
@@ -906,7 +752,7 @@
 
         function startTest() {
             isActive = true;
-            if (!startTime) startTime = Date.now();
+            startTime = Date.now();
             timerInterval = setInterval(() => {
                 updateTimer();
                 updateTimePrediction();
@@ -915,31 +761,25 @@
 
         function updateDisplay(typed) {
             const chars = textDisplay.querySelectorAll('.char');
+            const prevErrors = errors;
             errors = 0;
             chars.forEach((char, i) => {
                 char.classList.remove('correct', 'incorrect', 'current');
                 if (i < typed.length) {
                     if (typed[i] === currentText[i]) char.classList.add('correct');
-                    else { 
-                        char.classList.add('incorrect'); 
-                        errors++;
-                        // Track error for heatmap
-                        const expectedChar = currentText[i].toLowerCase();
-                        if (expectedChar.match(/[a-z]/)) {
-                            errorHeatmap[expectedChar] = (errorHeatmap[expectedChar] || 0) + 1;
-                        }
-                    }
+                    else { char.classList.add('incorrect'); errors++; }
                 } else if (i === typed.length) {
                     char.classList.add('current');
                 }
             });
+            if (errors > prevErrors) totalErrors += (errors - prevErrors);
             document.getElementById('progressFill').style.width = `${(typed.length / currentText.length) * 100}%`;
         }
 
         function updateStats(typed) {
             if (!startTime) return;
-            const timeElapsed = (Date.now() - startTime - totalPausedDuration) / 1000 / 60;
-            const wpm = timeElapsed > 0.01 ? Math.round((typed.length / 5) / timeElapsed) : 0;
+            const timeElapsed = (Date.now() - startTime) / 1000 / 60;
+            const wpm = Math.round((typed.length / 5) / timeElapsed) || 0;
             const accuracy = typed.length > 0 ? Math.round(((typed.length - errors) / typed.length) * 100) : 100;
 
             document.getElementById('wpm').textContent = wpm;
@@ -950,7 +790,7 @@
 
         function updateTimer() {
             if (!startTime) return;
-            const elapsed = Math.floor((Date.now() - startTime - totalPausedDuration) / 1000);
+            const elapsed = Math.floor((Date.now() - startTime) / 1000);
             const mins = Math.floor(elapsed / 60);
             const secs = elapsed % 60;
             document.getElementById('timer').textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
@@ -960,9 +800,8 @@
             isComplete = true;
             clearInterval(timerInterval);
             hiddenInput.blur();
-            saveProgress(); // Save final progress
 
-            const timeElapsed = (Date.now() - startTime - totalPausedDuration) / 1000 / 60;
+            const timeElapsed = (Date.now() - startTime) / 1000 / 60;
             const wpm = Math.round((currentText.length / 5) / timeElapsed);
             const cpm = Math.round(currentText.length / timeElapsed);
             const accuracy = Math.round(((currentText.length - errors) / currentText.length) * 100);
@@ -971,492 +810,96 @@
             document.getElementById('finalAccuracy').textContent = `${accuracy}%`;
             document.getElementById('finalCpm').textContent = cpm;
             document.getElementById('finalChars').textContent = currentText.length;
-            document.getElementById('finalErrors').textContent = errors;
-
-            renderHeatmap(); // Show error heatmap
-            renderHistory(); // Show session history
-
-            // Save session to history
-            const durationMinutes = Math.max(1, Math.round(timeElapsed));
-            saveSession({
-                wpm: wpm,
-                accuracy: accuracy,
-                cpm: cpm,
-                chars: currentText.length,
-                errors: errors,
-                textTitle: currentLibraryId ? library.find(l => l.id === currentLibraryId)?.title || 'Custom' : 'Preset',
-                date: new Date().toISOString(),
-                duration: Math.round(timeElapsed * 60) // in seconds
-            });
-
-            // Update daily goal progress
-            updateDailyProgress(durationMinutes);
-
+            document.getElementById('finalErrors').textContent = totalErrors;
+            // Mark article as completed
+            completedTexts.add(currentText.slice(0, 60));
+            localStorage.setItem('typemaster_completed', JSON.stringify([...completedTexts]));
+            renderArticleList();
             document.getElementById('resultsModal').classList.add('show');
-        }
-
-        function togglePause() {
-            if (!isActive || isComplete) return;
-            isPaused = !isPaused;
-            const pauseBtn = document.getElementById('pauseBtn');
-            const pauseOverlay = document.getElementById('pauseOverlay');
-            const hiddenInput = document.getElementById('hiddenInput');
-
-            if (isPaused) {
-                pausedTime = Date.now();
-                clearInterval(timerInterval);
-                pauseBtn.innerHTML = '<span>▶</span> Resume';
-                pauseOverlay.style.display = 'flex';
-                hiddenInput.blur();
-                saveProgress(); // Save progress when pausing
-            } else {
-                totalPausedDuration += Date.now() - pausedTime;
-                pauseBtn.innerHTML = '<span>⏸</span> Pause';
-                pauseOverlay.style.display = 'none';
-                hiddenInput.focus();
-                timerInterval = setInterval(() => {
-                    updateTimer();
-                    updateTimePrediction();
-                }, 1000);
-            }
-        }
-
-        // Library System Functions
-        function openLibraryModal() {
-            document.getElementById('libraryModal').classList.add('show');
-            document.getElementById('libraryTitleInput').focus();
-        }
-
-        function closeLibraryModal() {
-            document.getElementById('libraryModal').classList.remove('show');
-            document.getElementById('libraryTitleInput').value = '';
-            document.getElementById('libraryTextInput').value = '';
-            document.getElementById('libraryCharCount').textContent = '0';
-        }
-
-        function saveToLibrary() {
-            const title = document.getElementById('libraryTitleInput').value.trim();
-            const text = document.getElementById('libraryTextInput').value.trim();
-
-            if (!title) {
-                alert('Please enter a title for this text');
-                return;
-            }
-            if (text.length < 20) {
-                alert('Text must be at least 20 characters');
-                return;
-            }
-
-            const libraryItem = {
-                id: Date.now(),
-                title: title,
-                text: text,
-                charCount: text.length,
-                wordCount: text.split(/\s+/).length,
-                addedAt: new Date().toLocaleDateString(),
-                type: 'custom'
-            };
-
-            library.push(libraryItem);
-            saveLibrary();
-            renderLibrary();
-            closeLibraryModal();
-
-            // Switch to library tab if not already
-            showLibraryTab('library');
-        }
-
-        function deleteFromLibrary(id) {
-            if (!confirm('Delete this item from your library?')) return;
-            library = library.filter(item => item.id !== id);
-            saveLibrary();
-            renderLibrary();
-            if (currentLibraryId === id) {
-                currentLibraryId = null;
-                loadRandomArticle();
-            }
-        }
-
-        function loadFromLibrary(id) {
-            const item = library.find(i => i.id === id);
-            if (item) {
-                currentText = item.text;
-                currentLibraryId = id;
-                const resumePos = resumeFromProgress(id);
-                restartTest();
-                if (resumePos > 0) {
-                    // Set position and update display
-                    hiddenInput.value = currentText.substring(0, resumePos);
-                    typedLength = resumePos;
-                    updateDisplay(hiddenInput.value);
-                    updateStats(hiddenInput.value);
-                    // Update progress bar
-                    document.getElementById('progressFill').style.width = `${(typedLength / currentText.length) * 100}%`;
-                }
-                renderLibrary();
-            }
-        }
-
-        function saveLibrary() {
-            localStorage.setItem('mttyping_library', JSON.stringify(library));
-        }
-
-        function loadLibrary() {
-            const saved = localStorage.getItem('mttyping_library');
-            if (saved) {
-                library = JSON.parse(saved);
-            }
-            const savedProgress = localStorage.getItem('mttyping_progress');
-            if (savedProgress) {
-                progressData = JSON.parse(savedProgress);
-            }
-        }
-
-        function saveProgress() {
-            if (currentLibraryId && typedLength > 0) {
-                progressData[currentLibraryId] = {
-                    position: typedLength,
-                    total: currentText.length,
-                    percent: Math.round((typedLength / currentText.length) * 100),
-                    lastAccessed: new Date().toLocaleDateString()
-                };
-                localStorage.setItem('mttyping_progress', JSON.stringify(progressData));
-            }
-        }
-
-        function loadProgress(id) {
-            return progressData[id] || null;
-        }
-
-        function saveSession(session) {
-            sessionHistory.unshift(session); // Add to beginning
-            if (sessionHistory.length > 50) sessionHistory.pop(); // Keep last 50
-            localStorage.setItem('mttyping_history', JSON.stringify(sessionHistory));
-        }
-
-        function loadSessionHistory() {
-            const saved = localStorage.getItem('mttyping_history');
-            if (saved) {
-                sessionHistory = JSON.parse(saved);
-            }
-        }
-
-        function loadGoals() {
-            const saved = localStorage.getItem('mttyping_goals');
-            if (saved) {
-                dailyGoals = JSON.parse(saved);
-            }
-            const savedStreak = localStorage.getItem('mttyping_streak');
-            if (savedStreak) {
-                streakData = JSON.parse(savedStreak);
-            }
-            checkAndUpdateStreak();
-        }
-
-        function saveGoals() {
-            localStorage.setItem('mttyping_goals', JSON.stringify(dailyGoals));
-            localStorage.setItem('mttyping_streak', JSON.stringify(streakData));
-        }
-
-        function checkAndUpdateStreak() {
-            const today = new Date().toDateString();
-            const yesterday = new Date(Date.now() - 86400000).toDateString();
-
-            if (streakData.lastActive === today) {
-                // Already active today, streak continues
-            } else if (streakData.lastActive === yesterday) {
-                // Was active yesterday, streak continues if we do something today
-            } else if (streakData.lastActive && streakData.lastActive !== today) {
-                // Missed a day, reset streak
-                streakData.current = 0;
-            }
-        }
-
-        function updateDailyProgress(minutes) {
-            const today = new Date().toDateString();
-
-            if (dailyGoals.lastDate !== today) {
-                // New day, reset progress
-                dailyGoals.completed = 0;
-                dailyGoals.lastDate = today;
-            }
-
-            dailyGoals.completed += minutes;
-
-            // Update streak
-            if (dailyGoals.completed >= dailyGoals.target && streakData.lastActive !== today) {
-                streakData.current++;
-                streakData.lastActive = today;
-            } else if (dailyGoals.completed > 0) {
-                streakData.lastActive = today;
-            }
-
-            saveGoals();
-            renderGoals();
-        }
-
-        function getTodayProgress() {
-            const today = new Date().toDateString();
-            if (dailyGoals.lastDate !== today) {
-                return 0;
-            }
-            return dailyGoals.completed;
-        }
-
-        function openGoalsModal() {
-            document.getElementById('goalsModal').classList.add('show');
-            document.getElementById('modalStreak').textContent = streakData.current;
-            document.getElementById('customGoalTarget').value = dailyGoals.target;
-            updateGoalPresetButtons();
-        }
-
-        function closeGoalsModal() {
-            document.getElementById('goalsModal').classList.remove('show');
-        }
-
-        function setGoalTarget(minutes) {
-            document.getElementById('customGoalTarget').value = minutes;
-            updateGoalPresetButtons();
-        }
-
-        function updateGoalPresetButtons() {
-            const val = parseInt(document.getElementById('customGoalTarget').value);
-            document.querySelectorAll('.goal-preset-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.textContent.includes(val));
-            });
-        }
-
-        function saveGoalSettings() {
-            const newTarget = parseInt(document.getElementById('customGoalTarget').value);
-            if (newTarget >= 1 && newTarget <= 180) {
-                dailyGoals.target = newTarget;
-                saveGoals();
-                renderGoals();
-                closeGoalsModal();
-            }
-        }
-
-        function renderGoals() {
-            document.getElementById('streakCount').textContent = streakData.current;
-            document.getElementById('goalTarget').textContent = dailyGoals.target;
-            document.getElementById('goalProgress').textContent = getTodayProgress();
-
-            const progress = Math.min(100, (getTodayProgress() / dailyGoals.target) * 100);
-            document.getElementById('goalFill').style.width = `${progress}%`;
-
-            // Change color when goal reached
-            const fill = document.getElementById('goalFill');
-            if (progress >= 100) {
-                fill.style.background = 'linear-gradient(90deg, var(--success), #22c55e)';
-            } else {
-                fill.style.background = 'linear-gradient(90deg, var(--warning), var(--success))';
-            }
-        }
-
-        function getAverageWPM() {
-            if (sessionHistory.length === 0) return 0;
-            return Math.round(sessionHistory.reduce((a, s) => a + s.wpm, 0) / sessionHistory.length);
-        }
-
-        function getBestWPM() {
-            if (sessionHistory.length === 0) return 0;
-            return Math.max(...sessionHistory.map(s => s.wpm));
-        }
-
-        function resumeFromProgress(id) {
-            const progress = loadProgress(id);
-            if (progress && progress.position < progress.total) {
-                if (confirm(`Resume from ${progress.percent}% completed?`)) {
-                    return progress.position;
-                }
-            }
-            return 0;
-        }
-
-        let currentTab = 'library';
-
-        function showLibraryTab(tab) {
-            currentTab = tab;
-            document.querySelectorAll('.library-tabs .selector-tab').forEach(t => t.classList.remove('active'));
-            event.target.classList.add('active');
-            renderLibrary();
-        }
-
-        function renderLibrary() {
-            const container = document.getElementById('libraryList');
-            container.innerHTML = '';
-
-            if (currentTab === 'library') {
-                if (library.length === 0) {
-                    container.innerHTML = '<div class="library-empty">Your library is empty. Click "+ Add Text" to save chapters!</div>';
-                    return;
-                }
-
-                library.forEach(item => {
-                    const isActive = currentLibraryId === item.id;
-                    const progress = loadProgress(item.id);
-                    const hasProgress = progress && progress.percent > 0 && progress.percent < 100;
-                    const div = document.createElement('div');
-                    div.className = `library-item ${isActive ? 'active' : ''}`;
-                    div.innerHTML = `
-                        <div class="library-item-title">${escapeHtml(item.title)} ${hasProgress ? '<span style="color:var(--accent)">(' + progress.percent + '%)</span>' : ''}</div>
-                        <div class="library-item-meta">
-                            <span class="library-category-badge custom">Custom</span>
-                            <div class="library-item-stats">
-                                <span>${item.wordCount} words</span>
-                                <span>${item.charCount} chars</span>
-                                <span>Added ${item.addedAt}</span>
-                            </div>
-                        </div>
-                        ${hasProgress ? `<div class="library-progress-bar"><div class="library-progress-fill" style="width:${progress.percent}%"></div></div>` : ''}
-                        <div class="library-item-actions">
-                            <button class="library-action-btn" onclick="event.stopPropagation(); loadFromLibrary(${item.id})">${hasProgress ? 'Resume' : 'Load'}</button>
-                            <button class="library-action-btn delete" onclick="event.stopPropagation(); deleteFromLibrary(${item.id})">Delete</button>
-                        </div>
-                    `;
-                    div.onclick = () => loadFromLibrary(item.id);
-                    container.appendChild(div);
-                });
-            } else {
-                // Preset articles - combine all categories
-                const allPresets = [];
-                Object.keys(articlesDB).forEach(cat => {
-                    articlesDB[cat].forEach((article, idx) => {
-                        allPresets.push({...article, category: cat, index: idx});
-                    });
-                });
-
-                allPresets.forEach(item => {
-                    const isActive = currentText === item.text && !currentLibraryId;
-                    const div = document.createElement('div');
-                    div.className = `library-item ${isActive ? 'active' : ''}`;
-                    div.innerHTML = `
-                        <div class="library-item-title">${escapeHtml(item.title)}</div>
-                        <div class="library-item-meta">
-                            <span class="library-category-badge preset">${item.category}</span>
-                            <div class="library-item-stats">
-                                <span>${item.text.split(/\s+/).length} words</span>
-                                <span>${item.text.length} chars</span>
-                            </div>
-                        </div>
-                    `;
-                    div.onclick = () => {
-                        currentText = item.text;
-                        currentLibraryId = null;
-                        restartTest();
-                        renderLibrary();
-                    };
-                    container.appendChild(div);
-                });
-            }
-        }
-
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        function renderHeatmap() {
-            const container = document.getElementById('heatmapContainer');
-            const section = document.getElementById('heatmapSection');
-            const letters = 'abcdefghijklmnopqrstuvwxyz'.split('');
-
-            // Check if we have any errors
-            const totalErrors = Object.values(errorHeatmap).reduce((a, b) => a + b, 0);
-            if (totalErrors === 0) {
-                section.style.display = 'none';
-                return;
-            }
-
-            section.style.display = 'block';
-
-            // Find max for normalization
-            const maxErrors = Math.max(...Object.values(errorHeatmap));
-
-            container.innerHTML = letters.map(char => {
-                const count = errorHeatmap[char] || 0;
-                let level = '';
-                if (count > 0) {
-                    const ratio = count / maxErrors;
-                    if (ratio <= 0.25) level = 'level-1';
-                    else if (ratio <= 0.5) level = 'level-2';
-                    else if (ratio <= 0.75) level = 'level-3';
-                    else level = 'level-4';
-                }
-                return `<div class="heat-key ${count > 0 ? 'has-errors ' + level : ''}" title="${char.toUpperCase()}: ${count} errors">${char.toUpperCase()}</div>`;
-            }).join('');
-        }
-
-        function renderHistory() {
-            document.getElementById('historyBestWpm').textContent = getBestWPM();
-            document.getElementById('historyAvgWpm').textContent = getAverageWPM();
-            document.getElementById('historyTotal').textContent = sessionHistory.length;
-
-            const recentContainer = document.getElementById('recentSessions');
-            if (sessionHistory.length === 0) {
-                recentContainer.innerHTML = '<div style="text-align:center;color:var(--text-secondary);padding:1rem;font-size:0.85rem;">No sessions yet. Complete a test to see your history!</div>';
-                return;
-            }
-
-            recentContainer.innerHTML = sessionHistory.slice(0, 5).map(session => {
-                const date = new Date(session.date);
-                const timeStr = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                return `
-                    <div class="session-row">
-                        <div class="session-title" title="${escapeHtml(session.textTitle)}">${escapeHtml(session.textTitle)}</div>
-                        <div class="session-wpm">${session.wpm} WPM</div>
-                        <div class="session-accuracy">${session.accuracy}%</div>
-                        <div class="session-date">${timeStr}</div>
-                    </div>
-                `;
-            }).join('');
         }
 
         function restartTest() {
             clearInterval(timerInterval);
             isActive = false;
             isComplete = false;
-            isPaused = false;
             startTime = null;
-            pausedTime = 0;
-            totalPausedDuration = 0;
             typedLength = 0;
             errors = 0;
+            totalErrors = 0;
             wpmHistory = [];
-            errorHeatmap = {}; // Reset heatmap
             hiddenInput.value = '';
             document.getElementById('wpm').textContent = '0';
             document.getElementById('accuracy').textContent = '100%';
             document.getElementById('timer').textContent = '0:00';
             document.getElementById('progressFill').style.width = '0%';
-            document.getElementById('pauseBtn').innerHTML = '<span>⏸</span> Pause';
-            document.getElementById('pauseOverlay').style.display = 'none';
             renderText();
-            renderLibrary();
-            hiddenInput.focus();
+            hiddenInput.focus({ preventScroll: true });
         }
 
-        // Article selection (legacy support)
+        // Article selection
+        function selectCategory(category) {
+            currentCategory = category;
+            document.querySelectorAll('.selector-tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            const isLib = category === 'library';
+            document.getElementById('articleList').style.display = isLib ? 'none' : '';
+            const libPanel = document.getElementById('libraryPanel');
+            libPanel.style.display = isLib ? 'flex' : 'none';
+            if (isLib) { renderLibrary(); } else { renderArticleList(); }
+        }
+
+        function renderArticleList() {
+            const list = document.getElementById('articleList');
+            const articles = articlesDB[currentCategory];
+            if (!articles) return;
+            list.innerHTML = articles.map((article, index) => {
+                const isActive = article.text === currentText;
+                const isDone = completedTexts.has(article.text.slice(0, 60));
+                const cls = isActive ? 'active' : (isDone ? 'completed' : '');
+                return `<div class="article-item ${cls}" onclick="loadArticle('${currentCategory}', ${index})">
+                    <span>${article.title}<span class="article-done-badge">✓ Done</span></span>
+                    <span class="article-category">${article.category}</span>
+                </div>`;
+            }).join('');
+        }
+
         function loadArticle(category, index) {
             currentText = articlesDB[category][index].text;
-            currentLibraryId = null;
             restartTest();
-            renderLibrary();
+            renderArticleList();
         }
 
         function loadRandomArticle() {
-            const categories = Object.keys(articlesDB);
-            const randomCat = categories[Math.floor(Math.random() * categories.length)];
-            const articles = articlesDB[randomCat];
-            const randomArticle = articles[Math.floor(Math.random() * articles.length)];
-            currentText = randomArticle.text;
-            currentLibraryId = null;
+            // Collect all articles not yet completed (exclude library)
+            const all = [];
+            Object.entries(articlesDB).forEach(([cat, arts]) => {
+                arts.forEach((a, i) => {
+                    if (!completedTexts.has(a.text.slice(0, 60))) all.push({cat, i, a});
+                });
+            });
+            const pool = all.length > 0 ? all : Object.entries(articlesDB).flatMap(([cat, arts]) => arts.map((a,i)=>({cat,i,a})));
+            const pick = pool[Math.floor(Math.random() * pool.length)];
+            currentText = pick.a.text;
             restartTest();
         }
 
         function toggleCustomText() {
-            openLibraryModal();
+            const section = document.getElementById('uploadSection');
+            section.style.display = section.style.display === 'none' ? 'block' : 'none';
+            if (section.style.display === 'block') {
+                document.getElementById('customText').focus();
+            }
+        }
+
+        function loadCustomText() {
+            const text = document.getElementById('customText').value.trim();
+            if (text.length < 20) {
+                alert('Please enter at least 20 characters');
+                return;
+            }
+            currentText = text;
+            restartTest();
+            document.getElementById('uploadSection').style.display = 'none';
         }
 
         // Settings
@@ -1530,33 +973,225 @@
         // Keyboard shortcuts
         document.addEventListener('keydown', (e) => {
             if (e.key === ' ' && document.activeElement !== hiddenInput && 
-                !document.getElementById('settingsModal').classList.contains('show') &&
-                !document.getElementById('libraryModal').classList.contains('show')) {
-                if (isPaused) {
-                    e.preventDefault();
-                    togglePause();
-                } else if (!isActive || isComplete) {
-                    e.preventDefault();
-                    hiddenInput.focus();
-                }
+                !document.getElementById('settingsModal').classList.contains('show')) {
+                e.preventDefault();
+                hiddenInput.focus({ preventScroll: true });
             }
             if (e.key === 'Escape') {
-                if (document.getElementById('libraryModal').classList.contains('show')) closeLibraryModal();
-                else if (document.getElementById('settingsModal').classList.contains('show')) closeSettings();
+                if (document.getElementById('settingsModal').classList.contains('show')) closeSettings();
                 else if (document.getElementById('resultsModal').classList.contains('show')) closeResults();
             }
         });
 
         // Close modals on outside click
-        document.getElementById('libraryModal').addEventListener('click', (e) => {
-            if (e.target === e.currentTarget) closeLibraryModal();
-        });
         document.getElementById('settingsModal').addEventListener('click', (e) => {
             if (e.target === e.currentTarget) closeSettings();
         });
         document.getElementById('resultsModal').addEventListener('click', (e) => {
             if (e.target === e.currentTarget) closeResults();
         });
+
+
+        // ===================== LIBRARY SYSTEM =====================
+        const LIBRARY_KEY = 'typemaster_library';
+        const FOLDERS_KEY = 'typemaster_folders';
+
+        function loadLibrary() {
+            try { return JSON.parse(localStorage.getItem(LIBRARY_KEY)) || []; }
+            catch { return []; }
+        }
+        function loadFolders() {
+            try { return JSON.parse(localStorage.getItem(FOLDERS_KEY)) || []; }
+            catch { return []; }
+        }
+        function saveFoldersData(folders) {
+            localStorage.setItem(FOLDERS_KEY, JSON.stringify(folders));
+        }
+        function saveLibraryData(entries) {
+            localStorage.setItem(LIBRARY_KEY, JSON.stringify(entries));
+            updateLibCountBadge();
+        }
+        function updateLibCountBadge() {
+            const entries = loadLibrary();
+            const badge = document.getElementById('libCountBadge');
+            if (badge) badge.textContent = entries.length;
+        }
+
+        function promptNewFolder() {
+            const name = prompt('Folder name (e.g. Solo Leveling):');
+            if (!name || !name.trim()) return;
+            const folders = loadFolders();
+            const id = 'f' + Date.now();
+            folders.push({ id, name: name.trim() });
+            saveFoldersData(folders);
+            refreshFolderSelect();
+            // auto-select the new folder
+            const sel = document.getElementById('libFolderSelect');
+            if (sel) sel.value = id;
+        }
+
+        function refreshFolderSelect() {
+            const sel = document.getElementById('libFolderSelect');
+            if (!sel) return;
+            const current = sel.value;
+            const folders = loadFolders();
+            sel.innerHTML = '<option value="">📂 No Folder</option>' +
+                folders.map(f => `<option value="${f.id}">${f.name}</option>`).join('');
+            if (current) sel.value = current;
+        }
+
+        function saveToLibrary() {
+            const name = document.getElementById('libNameInput').value.trim();
+            const text = document.getElementById('libTextInput').value.trim();
+            const folderId = document.getElementById('libFolderSelect').value;
+            if (!name) { alert('Please enter a title for this text.'); return; }
+            if (text.length < 20) { alert('Please paste at least 20 characters of text.'); return; }
+            const entries = loadLibrary();
+            const id = Date.now().toString();
+            const wordCount = text.split(/\s+/).filter(Boolean).length;
+            entries.unshift({ id, name, text, wordCount, folderId: folderId || '', createdAt: new Date().toLocaleDateString() });
+            saveLibraryData(entries);
+            document.getElementById('libNameInput').value = '';
+            document.getElementById('libTextInput').value = '';
+            renderLibrary();
+        }
+
+        function loadFromLibrary(id) {
+            const entries = loadLibrary();
+            const entry = entries.find(e => e.id === id);
+            if (!entry) return;
+            currentText = entry.text;
+            restartTest();
+            renderLibrary();
+        }
+
+        function deleteFromLibrary(id, e) {
+            e.stopPropagation();
+            const entries = loadLibrary().filter(en => en.id !== id);
+            saveLibraryData(entries);
+            renderLibrary();
+        }
+
+        function deleteFolder(fid, e) {
+            e.stopPropagation();
+            const entries = loadLibrary();
+            const count = entries.filter(en => en.folderId === fid).length;
+            const msg = count > 0
+                ? `Delete folder and move its ${count} chapter(s) to No Folder?`
+                : 'Delete this empty folder?';
+            if (!confirm(msg)) return;
+            // unassign entries
+            entries.forEach(en => { if (en.folderId === fid) en.folderId = ''; });
+            saveLibraryData(entries);
+            const folders = loadFolders().filter(f => f.id !== fid);
+            saveFoldersData(folders);
+            refreshFolderSelect();
+            renderLibrary();
+        }
+
+        function renameFolder(fid, e) {
+            e.stopPropagation();
+            const folders = loadFolders();
+            const folder = folders.find(f => f.id === fid);
+            if (!folder) return;
+            const newName = prompt('Rename folder:', folder.name);
+            if (!newName || !newName.trim()) return;
+            folder.name = newName.trim();
+            saveFoldersData(folders);
+            refreshFolderSelect();
+            renderLibrary();
+        }
+
+        function toggleFolder(fid) {
+            const el = document.getElementById('folder-' + fid);
+            if (el) el.classList.toggle('open');
+        }
+
+        function clearLibrary() {
+            const entries = loadLibrary();
+            if (!entries.length) return;
+            if (!confirm(`Delete all ${entries.length} saved text(s)? This cannot be undone.`)) return;
+            saveLibraryData([]);
+            renderLibrary();
+        }
+
+        function startRename(id, e) {
+            e.stopPropagation();
+            const nameEl = document.querySelector(`[data-lib-name="${id}"]`);
+            if (!nameEl) return;
+            const current = nameEl.textContent;
+            const input = document.createElement('input');
+            input.className = 'library-entry-name-input';
+            input.value = current;
+            nameEl.replaceWith(input);
+            input.focus(); input.select();
+            const commit = () => {
+                const val = input.value.trim() || current;
+                const entries = loadLibrary();
+                const entry = entries.find(en => en.id === id);
+                if (entry) { entry.name = val; saveLibraryData(entries); }
+                renderLibrary();
+            };
+            input.addEventListener('blur', commit);
+            input.addEventListener('keydown', ev => {
+                if (ev.key === 'Enter') { ev.preventDefault(); input.blur(); }
+                if (ev.key === 'Escape') { input.value = current; input.blur(); }
+            });
+        }
+
+        function renderLibrary() {
+            const list = document.getElementById('libraryList');
+            if (!list) return;
+            refreshFolderSelect();
+            const query = (document.getElementById('libSearch')?.value || '').toLowerCase();
+            let entries = loadLibrary();
+            if (query) entries = entries.filter(en => en.name.toLowerCase().includes(query) || en.text.toLowerCase().includes(query));
+
+            const folders = loadFolders();
+            const entryHTML = (entry) => `
+                <div class="library-entry ${entry.text === currentText ? 'active' : ''}" onclick="loadFromLibrary('${entry.id}')">
+                    <span class="library-entry-icon">📖</span>
+                    <div class="library-entry-info">
+                        <div class="library-entry-name" data-lib-name="${entry.id}">${entry.name}</div>
+                        <div class="library-entry-meta">${entry.wordCount.toLocaleString()} words &bull; ${entry.createdAt}</div>
+                    </div>
+                    <div class="library-entry-actions" onclick="event.stopPropagation()">
+                        <button class="lib-icon-btn" title="Rename" onclick="startRename('${entry.id}', event)">✏️</button>
+                        <button class="lib-icon-btn delete" title="Delete" onclick="deleteFromLibrary('${entry.id}', event)">🗑️</button>
+                    </div>
+                </div>`;
+
+            let html = '';
+
+            // Render folders (only if not searching)
+            if (!query) {
+                folders.forEach(folder => {
+                    const children = entries.filter(en => en.folderId === folder.id);
+                    html += `<div class="lib-folder open" id="folder-${folder.id}">
+                        <div class="lib-folder-header" onclick="toggleFolder('${folder.id}')">
+                            <span class="lib-folder-arrow">▶</span>
+                            <span class="lib-folder-name">📁 ${folder.name}</span>
+                            <span class="lib-folder-count">${children.length} chapter${children.length !== 1 ? 's' : ''}</span>
+                            <button class="lib-folder-rename-btn" onclick="renameFolder('${folder.id}', event)" title="Rename folder">✏️</button>
+                            <button class="lib-folder-delete-btn" onclick="deleteFolder('${folder.id}', event)" title="Delete folder">🗑️</button>
+                        </div>
+                        <div class="lib-folder-children">
+                            ${children.length ? children.map(entryHTML).join('') : '<div style="color:var(--text-secondary);font-size:0.82rem;padding:0.4rem 0.5rem">No chapters yet</div>'}
+                        </div>
+                    </div>`;
+                });
+            }
+
+            // Render unfoldered entries (or all when searching)
+            const unfoldered = query ? entries : entries.filter(en => !en.folderId || !folders.find(f => f.id === en.folderId));
+            if (unfoldered.length) {
+                if (!query && folders.length) html += `<div style="font-size:0.78rem;color:var(--text-secondary);margin:0.3rem 0 0.2rem 0.2rem">📂 No Folder</div>`;
+                html += unfoldered.map(entryHTML).join('');
+            }
+
+            list.innerHTML = html || '';
+        }
+        // ===================== END LIBRARY ========================
 
         init();
     </script>
