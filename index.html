@@ -141,6 +141,9 @@
         .char.current { background: var(--accent); color: var(--bg-primary); border-radius: 2px; animation: pulse 1s infinite; }
 
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+        @keyframes errorShake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-4px)} 40%{transform:translateX(4px)} 60%{transform:translateX(-3px)} 80%{transform:translateX(3px)} }
+        @keyframes errorFlash { 0%,100%{border-color:var(--bg-tertiary)} 50%{border-color:var(--error);box-shadow:0 0 0 3px rgba(248,113,113,0.25)} }
+        .typing-area.error-flash { animation: errorFlash 0.25s ease; }
 
 
 
@@ -159,6 +162,23 @@
         .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--success)); width: 0%; transition: width 0.1s linear; }
 
         .keyboard-hint { text-align: center; color: var(--text-secondary); font-size: 0.85rem; margin-top: 1rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+        .btn-pause { background: var(--warning) !important; color: #000 !important; }
+        .btn-pause:hover { opacity: 0.85; }
+        .btn-resume { background: var(--success) !important; color: #000 !important; }
+        .paused-overlay {
+            position: absolute; inset: 0; background: rgba(15,23,42,0.7); border-radius: 14px;
+            display: none; align-items: center; justify-content: center;
+            font-size: 1.5rem; font-weight: 700; color: var(--text-primary); z-index: 5;
+        }
+        .paused-overlay.show { display: flex; }
+        .toast {
+            position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
+            background: var(--success); color: #000; padding: 0.6rem 1.4rem;
+            border-radius: 20px; font-weight: 600; font-size: 0.9rem;
+            z-index: 9999; opacity: 0; transition: opacity 0.3s;
+            pointer-events: none;
+        }
+        .toast.show { opacity: 1; }
         .kbd { background: var(--bg-tertiary); padding: 0.2rem 0.5rem; border-radius: 4px; font-family: monospace; font-size: 0.8rem; }
 
         /* Modals */
@@ -441,7 +461,8 @@
             </div>
         </div>
 
-        <div class="typing-area" id="typingArea">
+        <div class="typing-area" id="typingArea" style="position:relative;">
+            <div class="paused-overlay" id="pausedOverlay">⏸ Paused — click Resume to continue</div>
             <div class="text-display" id="textDisplay"></div>
 
             <div class="progress-bar">
@@ -455,9 +476,12 @@
 
         <div class="controls">
             <button class="primary" onclick="restartTest()"><span>↻</span> Restart</button>
-            <button onclick="loadRandomArticle()"><span>🎲</span> Random Article</button>
+            <button id="pauseBtn" onclick="togglePause()"><span>⏸</span> Pause</button>
+            <button onclick="saveProgress()"><span>💾</span> Save Progress</button>
+            <button onclick="loadRandomArticle()"><span>🎲</span> Random</button>
             <button onclick="toggleCustomText()"><span>✎</span> Custom Text</button>
         </div>
+        <div class="toast" id="toast"></div>
 
         <div class="upload-section" id="uploadSection" style="display:none;">
             <textarea class="custom-text" id="customText" placeholder="Paste your text here... Press Ctrl+Enter to load" style="display:block;width:100%;background:var(--bg-primary);border:1px solid var(--bg-tertiary);border-radius:8px;padding:1rem;color:var(--text-primary);min-height:150px;margin-top:1rem;"></textarea>
@@ -576,7 +600,20 @@
                 {"title": "IELTS: Animal Testing", "text": "The use of animals in scientific and medical research remains a deeply controversial issue. Supporters argue it has led to life-saving treatments and is still necessary for medical progress. Opponents believe it is cruel, unreliable, and should be replaced by modern alternatives. Discuss both views and give your own opinion. Include relevant examples from your knowledge or experience.", "category": "Ethics"},
                 {"title": "IELTS: Remote Work Future", "text": "The rise of remote work has fundamentally changed traditional workplace structures. Some believe working from home increases productivity and improves work-life balance, while others argue it harms collaboration, company culture, and career development. Discuss both views and give your own opinion. Give reasons for your answer and include relevant examples from your knowledge or experience.", "category": "Work"},
                 {"title": "IELTS: Overpopulation Challenges", "text": "Rapid population growth in some parts of the world is placing enormous pressure on natural resources, infrastructure, and food supplies. Some people think governments should introduce policies to control birth rates. Others argue this violates individual rights and that technology will provide the necessary solutions. Discuss both views and give your own opinion.", "category": "Society"},
-                {"title": "IELTS: Tourism Impact", "text": "International tourism has grown dramatically in recent decades, bringing economic benefits to many regions. However, critics argue that mass tourism damages local cultures, harms natural environments, and creates overdependence on a volatile industry. Discuss both the advantages and disadvantages of international tourism and give your own opinion on how its negative effects can be managed.", "category": "Global"}
+                {"title": "IELTS: Tourism Impact", "text": "International tourism has grown dramatically in recent decades, bringing economic benefits to many regions. However, critics argue that mass tourism damages local cultures, harms natural environments, and creates overdependence on a volatile industry. Discuss both the advantages and disadvantages of international tourism and give your own opinion on how its negative effects can be managed.", "category": "Global"},
+                {"title": "IELTS: Increasing Car Use", "text": "In many countries the number of cars on the road is increasing. What are the causes of this problem and what measures can be taken to reduce it? Give reasons for your answer and include any relevant examples from your own knowledge or experience.", "category": "Transport"},
+                {"title": "IELTS: Living Alone Trend", "text": "In many countries, more and more people are choosing to live alone. What are the causes of this trend and what are the effects on society? Give reasons for your answer and include any relevant examples from your own knowledge or experience.", "category": "Society"},
+                {"title": "IELTS: Museum Free Entry", "text": "Some people think that museums and art galleries should be free of charge for the public, while others believe that admission fees are necessary. Discuss both views and give your own opinion. Give reasons for your answer and include any relevant examples from your own knowledge or experience.", "category": "Culture"},
+                {"title": "IELTS: Old Buildings vs Development", "text": "Some people believe that it is more important to preserve old buildings rather than demolish them and build new ones. Others think that modern development is necessary and old buildings should be replaced. Discuss both views and give your own opinion.", "category": "Society"},
+                {"title": "IELTS: Children and Computers", "text": "Some people think that children today have too much freedom. Others think they do not have enough. Discuss both views and give your own opinion. Give reasons for your answer and include any relevant examples from your own knowledge or experience.", "category": "Education"},
+                {"title": "IELTS: Spending on Arts", "text": "Some people think that governments should spend money on improving roads and railways while others think money should be spent on improving public transport such as buses and trains. Discuss both views and give your own opinion.", "category": "Government"},
+                {"title": "IELTS: Genetic Engineering", "text": "Genetic engineering is an important issue in modern society. Some people think that it will improve people\'s lives in many ways. Others feel that it may be a threat to life on Earth. Discuss both views and give your own opinion. Give reasons for your answer and include relevant examples from your knowledge or experience.", "category": "Science"},
+                {"title": "IELTS: Advertising Influence", "text": "Some people say that advertising encourages us to buy things we do not really need. Others say that advertisements tell us about new products that may improve our lives. Discuss both views and give your own opinion. Include relevant examples from your own knowledge or experience.", "category": "Media"},
+                {"title": "IELTS: Sports Salaries", "text": "Professional sports people such as football players earn enormous salaries. Some people think this is fair, while others believe it is unfair when compared to other important jobs in society. Discuss both views and give your own opinion.", "category": "Society"},
+                {"title": "IELTS: Migration to Cities", "text": "Today, more people are migrating to cities than ever before. What problems does this cause and how can these problems be solved? Give reasons for your answer and include any relevant examples from your own knowledge or experience.", "category": "Urban"},
+                {"title": "IELTS: Punishment or Rehabilitation", "text": "Some people think that the best way to reduce crime is to give longer prison sentences. Others, however, believe there are better alternative ways of reducing crime. Discuss both views and give your own opinion.", "category": "Law"},
+                {"title": "IELTS: Women in the Workforce", "text": "In many countries, women now work outside the home in increasing numbers. What are the causes of this trend? Is this development a positive or negative trend? Give reasons for your answer and include any relevant examples from your own knowledge or experience.", "category": "Society"},
+                {"title": "IELTS: Endangered Languages", "text": "Every year several languages die out. Some people think that this is not important because life will be easier if there are fewer languages in the world. To what extent do you agree or disagree? Give reasons for your answer and include any relevant examples from your own knowledge or experience.", "category": "Culture"}
             ]
         };
 
@@ -727,7 +764,14 @@
                 const newChar = value[value.length - 1];
                 const expectedChar = currentText[value.length - 1];
                 if (newChar === expectedChar) playTypingSound();
-                else { playErrorSound(); if (navigator.vibrate) navigator.vibrate(40); }
+                else {
+                    playErrorSound();
+                    if (navigator.vibrate) navigator.vibrate(40);
+                    typingArea.classList.remove('error-flash');
+                    void typingArea.offsetWidth; // reflow to restart animation
+                    typingArea.classList.add('error-flash');
+                    setTimeout(() => typingArea.classList.remove('error-flash'), 250);
+                }
             }
 
             if (typedLength >= currentText.length) {
@@ -814,6 +858,7 @@
             // Mark article as completed
             completedTexts.add(currentText.slice(0, 60));
             localStorage.setItem('typemaster_completed', JSON.stringify([...completedTexts]));
+            localStorage.removeItem('typemaster_progress'); // clear saved progress on completion
             renderArticleList();
             document.getElementById('resultsModal').classList.add('show');
         }
@@ -1192,6 +1237,131 @@
             list.innerHTML = html || '';
         }
         // ===================== END LIBRARY ========================
+
+
+        // ── PAUSE & SAVE PROGRESS ──────────────────────────────────────
+        const PROGRESS_KEY = 'typemaster_progress';
+        let isPaused = false;
+        let pauseStart = null;
+
+        function togglePause() {
+            if (!isActive || isComplete) return;
+            if (!isPaused) {
+                isPaused = true;
+                pauseStart = Date.now();
+                clearInterval(timerInterval);
+                hiddenInput.blur();
+                document.getElementById('pausedOverlay').classList.add('show');
+                document.getElementById('pauseBtn').innerHTML = '<span>&#9654;</span> Resume';
+                document.getElementById('pauseBtn').className = 'btn-resume';
+            } else {
+                isPaused = false;
+                startTime += (Date.now() - pauseStart); // shift clock forward
+                pauseStart = null;
+                timerInterval = setInterval(() => { updateTimer(); updateTimePrediction(); }, 1000);
+                document.getElementById('pausedOverlay').classList.remove('show');
+                document.getElementById('pauseBtn').innerHTML = '<span>&#9646;&#9646;</span> Pause';
+                document.getElementById('pauseBtn').className = '';
+                hiddenInput.focus({ preventScroll: true });
+            }
+        }
+
+        function getElapsedMs() {
+            if (!startTime) return 0;
+            if (isPaused) return pauseStart - startTime;
+            return Date.now() - startTime;
+        }
+
+        function saveProgress() {
+            const typed = hiddenInput.value;
+            if (!typed || typed.length === 0) { showToast('Nothing typed yet!', '#f87171'); return; }
+            const progress = {
+                text: currentText,
+                typed: typed,
+                elapsedMs: getElapsedMs(),
+                totalErrors: totalErrors,
+                savedAt: new Date().toLocaleString()
+            };
+            localStorage.setItem(PROGRESS_KEY, JSON.stringify(progress));
+            showToast('\u2705 Progress saved! ' + typed.length + ' chars');
+        }
+
+        function applyProgress(p) {
+            // Set the text and reset cleanly
+            currentText = p.text;
+            clearInterval(timerInterval);
+            isActive = false; isComplete = false; isPaused = false; pauseStart = null;
+            typedLength = 0; errors = 0; totalErrors = p.totalErrors || 0;
+            wpmHistory = [];
+            hiddenInput.value = p.typed;
+            document.getElementById('wpm').textContent = '0';
+            document.getElementById('accuracy').textContent = '100%';
+            document.getElementById('timer').textContent = '0:00';
+            document.getElementById('progressFill').style.width = '0%';
+            document.getElementById('pausedOverlay').classList.remove('show');
+            renderText();
+            // Replay typed chars into display without starting timer
+            updateDisplay(p.typed);
+            typedLength = p.typed.length;
+            // Start timer offset by saved elapsed time
+            isActive = true;
+            startTime = Date.now() - (p.elapsedMs || 0);
+            timerInterval = setInterval(() => { updateTimer(); updateTimePrediction(); }, 1000);
+            updateStats(p.typed);
+            updateTimePrediction();
+            hiddenInput.focus({ preventScroll: true });
+            renderArticleList();
+            showToast('\u25b6 Resumed from save!');
+        }
+
+        function checkAndOfferResume() {
+            try {
+                const p = JSON.parse(localStorage.getItem(PROGRESS_KEY));
+                if (!p || !p.typed || p.typed.length === 0) return;
+                showResumeBanner(p);
+            } catch(e) {}
+        }
+
+        function showResumeBanner(p) {
+            let banner = document.getElementById('resumeBanner');
+            if (!banner) {
+                banner = document.createElement('div');
+                banner.id = 'resumeBanner';
+                banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:9998;background:var(--accent);color:var(--bg-primary);padding:0.7rem 1rem;display:flex;align-items:center;justify-content:center;gap:1rem;font-weight:600;font-size:0.92rem;flex-wrap:wrap;';
+                document.body.prepend(banner);
+            }
+            banner.innerHTML = '\uD83D\uDCBE Saved progress: ' + p.typed.length + ' chars typed on \"' + p.text.slice(0,40) + '...\" (' + p.savedAt + ')'
+                + ' <button onclick="resumeSaved()" style="background:#000;color:#fff;border:none;border-radius:6px;padding:0.3rem 0.8rem;cursor:pointer;font-weight:700;">Resume</button>'
+                + ' <button onclick="discardSaved()" style="background:rgba(0,0,0,0.2);color:inherit;border:none;border-radius:6px;padding:0.3rem 0.8rem;cursor:pointer;">Discard</button>';
+            banner.style.display = 'flex';
+        }
+
+        function resumeSaved() {
+            try {
+                const p = JSON.parse(localStorage.getItem(PROGRESS_KEY));
+                if (p) applyProgress(p);
+                document.getElementById('resumeBanner').style.display = 'none';
+            } catch(e) {}
+        }
+
+        function discardSaved() {
+            localStorage.removeItem(PROGRESS_KEY);
+            const b = document.getElementById('resumeBanner');
+            if (b) b.style.display = 'none';
+        }
+
+        function showToast(msg, color) {
+            const t = document.getElementById('toast');
+            if (!t) return;
+            t.textContent = msg;
+            t.style.background = color || 'var(--success)';
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2500);
+        }
+
+        // Show resume banner on page load if saved progress exists
+        window.addEventListener('load', () => { setTimeout(checkAndOfferResume, 400); });
+        // ── END PAUSE & SAVE ───────────────────────────────────────────
 
         init();
     </script>
