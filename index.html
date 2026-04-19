@@ -168,6 +168,75 @@ body{padding-top:22px;}
 .char-box.wrong{border-color:var(--error);background:rgba(239,68,68,0.15);color:var(--error);}
 .char-box.current{border-color:var(--warning);box-shadow:0 0 0 2px rgba(245,158,11,0.3);animation:cursorBlink 0.9s infinite;}@keyframes cursorBlink{0%,100%{box-shadow:0 0 0 2px rgba(245,158,11,0.3)}50%{box-shadow:0 0 0 3px rgba(245,158,11,0.6)}}
 @media(max-width:768px){h1{font-size:1.6rem;}.prediction-panel{grid-template-columns:repeat(2,1fr);}.prediction-value{font-size:1.2rem;}.stats-bar{grid-template-columns:repeat(2,1fr);}.theme-options{grid-template-columns:repeat(2,1fr);}.article-list{grid-template-columns:1fr;}.typing-area{padding:1rem;min-height:160px;}.text-display{font-size:1rem;}.char-box{width:30px;height:38px;font-size:1rem;}}
+/* Mixed Quiz color theme */
+:root{--mixed:#f59e0b;--mixed-glow:rgba(245,158,11,0.18);--ielts:#8b5cf6;--ielts-glow:rgba(139,92,246,0.2);}
+/* IELTS Mode background */
+.ielts-mode{background-image:radial-gradient(ellipse at 25% 15%,rgba(139,92,246,0.18) 0%,transparent 55%),radial-gradient(ellipse at 75% 85%,rgba(139,92,246,0.10) 0%,transparent 50%)!important;}
+/* Section Switcher */
+.sec-switcher{display:grid;grid-template-columns:1fr 1fr;background:var(--bg-secondary);border:1px solid var(--bg-tertiary);border-radius:12px;padding:0.35rem;gap:0.35rem;}
+.sec-tab{padding:0.6rem 0.5rem;border:none;background:transparent;color:var(--text-secondary);border-radius:8px;cursor:pointer;font-weight:700;font-size:0.88rem;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:0.45rem;}
+.sec-tab.active{background:var(--bg-tertiary);color:var(--text-primary);}
+.sec-tab.ielts-active{background:linear-gradient(135deg,#8b5cf6,#6d28d9);color:#fff;box-shadow:0 2px 12px rgba(139,92,246,0.35);}
+/* IELTS Stats Panel */
+.ielts-stats-panel{display:grid;grid-template-columns:repeat(4,1fr);gap:0.6rem;}
+.ielts-stat-card{background:var(--bg-secondary);border:1px solid rgba(139,92,246,0.25);border-radius:10px;padding:0.7rem;text-align:center;position:relative;overflow:hidden;}
+.ielts-stat-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(139,92,246,0.05),transparent);pointer-events:none;}
+.ielts-stat-label{font-size:0.65rem;text-transform:uppercase;letter-spacing:0.07em;color:var(--ielts);margin-bottom:0.2rem;font-weight:700;}
+.ielts-stat-value{font-size:1.35rem;font-weight:900;color:var(--ielts);}
+/* IELTS Sub-tabs */
+.ielts-sub-tab{padding:0.42rem 0.8rem;border:1px solid rgba(139,92,246,0.25);background:var(--bg-primary);color:rgba(139,92,246,0.75);border-radius:8px;cursor:pointer;font-size:0.82rem;transition:all 0.15s;font-weight:600;white-space:nowrap;}
+.ielts-sub-tab:hover{border-color:var(--ielts);color:var(--ielts);background:rgba(139,92,246,0.06);}
+.ielts-sub-tab.active{background:var(--ielts);color:#fff;border-color:var(--ielts);box-shadow:0 2px 10px rgba(139,92,246,0.3);}
+/* IELTS Topic List */
+.ielts-topic-item{padding:0.65rem 0.85rem;background:var(--bg-primary);border:1px solid rgba(139,92,246,0.18);border-radius:9px;cursor:pointer;font-size:0.85rem;transition:all 0.15s;display:flex;justify-content:space-between;align-items:center;gap:0.5rem;margin-bottom:0.3rem;}
+.ielts-topic-item:hover{border-color:var(--ielts);transform:translateX(3px);background:rgba(139,92,246,0.04);}
+.ielts-topic-item.active{background:rgba(139,92,246,0.1);border-color:var(--ielts);}
+.ielts-topic-item.completed{border-color:var(--success);opacity:0.75;}
+/* IELTS Answer Panel (above typing area) */
+.ielts-answer-panel{background:var(--bg-secondary);border:2px solid var(--ielts);border-radius:14px;padding:1.25rem;display:none;flex-direction:column;gap:0.75rem;position:relative;}
+.ielts-answer-panel::before{content:'IELTS';position:absolute;top:-1px;right:1rem;background:var(--ielts);color:#fff;font-size:0.65rem;font-weight:800;padding:0.1rem 0.55rem;border-radius:0 0 6px 6px;letter-spacing:0.08em;}
+.ielts-answer-panel.show{display:flex;}
+/* IELTS Content Panel (vocab/grammar/collocations inline) */
+.ielts-content-panel{background:var(--bg-secondary);border:1px solid rgba(139,92,246,0.2);border-radius:14px;padding:1rem;max-height:65vh;overflow-y:auto;}
+/* IELTS Vocab Grid */
+.ielts-vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:0.5rem;margin-top:0.5rem;}
+.ielts-vocab-card{background:var(--bg-primary);border:1px solid rgba(139,92,246,0.18);border-radius:10px;padding:0.75rem;cursor:default;transition:all 0.15s;}
+.ielts-vocab-card:hover{border-color:var(--ielts);box-shadow:0 3px 12px rgba(139,92,246,0.15);}
+.ielts-vocab-word{font-size:0.95rem;font-weight:800;color:var(--ielts);}
+.ielts-vocab-pos{font-size:0.67rem;color:var(--text-secondary);font-style:italic;margin-top:0.05rem;}
+.ielts-vocab-def{font-size:0.75rem;color:var(--text-secondary);margin-top:0.3rem;line-height:1.5;}
+/* IELTS-mode typing area purple glow */
+.ielts-mode .typing-area:focus-within{border-color:var(--ielts)!important;box-shadow:0 0 0 3px var(--ielts-glow)!important;}
+.ielts-mode .char.current{background:var(--ielts)!important;}
+/* IELTS grammar collapsible */
+.ielts-grammar-item{background:var(--bg-primary);border:1px solid rgba(139,92,246,0.18);border-radius:10px;margin-bottom:0.45rem;overflow:hidden;}
+.ielts-grammar-header{padding:0.75rem 1rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:background 0.15s;}
+.ielts-grammar-header:hover{background:rgba(139,92,246,0.06);}
+.ielts-grammar-body{padding:0 1rem 0.75rem;display:none;}
+.ielts-grammar-body.open{display:block;}
+@media(max-width:768px){.ielts-stats-panel{grid-template-columns:repeat(2,1fr);}.sec-tab{font-size:0.8rem;}.ielts-sub-tab{font-size:0.75rem;padding:0.35rem 0.6rem;}}
+.mixed-badge{display:inline-flex;align-items:center;gap:0.3rem;background:linear-gradient(135deg,#f59e0b,#ef4444);color:#fff;border-radius:6px;padding:0.15rem 0.55rem;font-size:0.7rem;font-weight:800;letter-spacing:0.04em;}
+.mixed-card{background:linear-gradient(135deg,rgba(245,158,11,0.08),rgba(239,68,68,0.08));border:2px solid var(--mixed);border-radius:14px;padding:1.25rem;}
+.diff-btn{flex:1;padding:0.65rem 0.4rem;border-radius:10px;border:2px solid var(--bg-tertiary);background:var(--bg-primary);color:var(--text-secondary);cursor:pointer;font-weight:700;font-size:0.82rem;transition:all 0.15s;text-align:center;}
+.diff-btn:hover{transform:translateY(-2px);}
+.diff-easy:hover,.diff-easy.active{border-color:#22c55e;background:rgba(34,197,94,0.12);color:#22c55e;}
+.diff-medium:hover,.diff-medium.active{border-color:#f59e0b;background:rgba(245,158,11,0.12);color:#f59e0b;}
+.diff-hard:hover,.diff-hard.active{border-color:#ef4444;background:rgba(239,68,68,0.12);color:#ef4444;}
+/* Cursor style variants */
+.cursor-line .char.current{background:transparent;border-left:3px solid var(--accent);color:var(--text-primary);border-radius:0;animation:cursorLineBlink 1s infinite;}
+@keyframes cursorLineBlink{0%,100%{border-left-color:var(--accent)}50%{border-left-color:transparent}}
+.cursor-underline .char.current{background:transparent;border-bottom:3px solid var(--accent);color:var(--text-primary);border-radius:0;animation:cursorULBlink 1s infinite;}
+@keyframes cursorULBlink{0%,100%{border-bottom-color:var(--accent)}50%{border-bottom-color:transparent}}
+/* Animation toggle */
+.no-anim *{transition:none!important;animation:none!important;}
+/* Slider range */
+.range-slider{width:100%;-webkit-appearance:none;height:5px;background:var(--bg-tertiary);border-radius:3px;outline:none;}
+.range-slider::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;background:var(--accent);border-radius:50%;cursor:pointer;}
+/* Settings section two-col grid */
+.settings-two-col{display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;}
+/* Mixed quiz streak fire */
+.streak-fire{display:inline-block;animation:streakPop 0.4s ease;}
+@keyframes streakPop{0%{transform:scale(1)}50%{transform:scale(1.5)}100%{transform:scale(1)}}
 </style>
 </head>
 <body>
@@ -184,11 +253,19 @@ body{padding-top:22px;}
   <header>
     <div class="header-left">
       <h1>TypeMaster Pro</h1>
-      <p class="subtitle">Typing practice · IELTS vocabulary · Grammar · Collocations</p>
+      <p class="subtitle" id="appSubtitle">⌨️ Typing practice · Short &amp; long articles · Library</p>
     </div>
     <button class="settings-btn" onclick="openSettings()">⚙️</button>
   </header>
 
+  <!-- SECTION SWITCHER -->
+  <div class="sec-switcher">
+    <button class="sec-tab active" id="secTabTyping" onclick="switchSection('typing')">⌨️ General Typing</button>
+    <button class="sec-tab" id="secTabIELTS" onclick="switchSection('ielts')">📚 IELTS Hub</button>
+  </div>
+
+  <!-- GENERAL TYPING STATS (hidden in IELTS mode) -->
+  <div id="typingStatsPanels">
   <div class="prediction-panel">
     <div class="prediction-item"><div class="prediction-label">Est. Time</div><div class="prediction-value" id="estimatedTime">--:--</div><div class="prediction-sub">to complete</div></div>
     <div class="prediction-item"><div class="prediction-label">Your Speed</div><div class="prediction-value" id="currentSpeed">0</div><div class="prediction-sub">WPM avg</div></div>
@@ -202,13 +279,29 @@ body{padding-top:22px;}
     <div class="stat-card"><div class="stat-label">Time</div><div class="stat-value" id="timer">0:00</div></div>
     <div class="stat-card"><div class="stat-label">Errors</div><div class="stat-value" id="errorCount" style="color:var(--error);">0</div></div>
   </div>
+  </div><!-- end typingStatsPanels -->
+
+  <!-- IELTS HUB STATS (shown in IELTS mode) -->
+  <div class="ielts-stats-panel" id="ieltsStatsPanel" style="display:none;">
+    <div class="ielts-stat-card"><div class="ielts-stat-label">✍️ Essays Done</div><div class="ielts-stat-value" id="ieltsStatEssays">0</div></div>
+    <div class="ielts-stat-card"><div class="ielts-stat-label">📖 Vocab Words</div><div class="ielts-stat-value" id="ieltsStatVocab">0</div></div>
+    <div class="ielts-stat-card"><div class="ielts-stat-label">📊 Quiz Avg</div><div class="ielts-stat-value" id="ieltsStatQuiz">--</div></div>
+    <div class="ielts-stat-card"><div class="ielts-stat-label">🔥 Streak</div><div class="ielts-stat-value" id="ieltsStatStreak">0</div></div>
+  </div>
 
   <div class="article-selector">
-    <div class="selector-tabs">
+    <!-- General Typing tabs (hidden in IELTS mode) -->
+    <div class="selector-tabs" id="typingTabs">
       <button class="selector-tab active" onclick="selectCategory('short',this)">Short</button>
       <button class="selector-tab" onclick="selectCategory('long',this)">Long</button>
-      <button class="selector-tab" onclick="selectCategory('ielts',this)">IELTS</button>
       <button class="selector-tab" onclick="selectCategory('library',this)">Library<span class="lib-count-badge" id="libCountBadge">0</span></button>
+    </div>
+    <!-- IELTS Hub tabs (shown in IELTS mode) -->
+    <div id="ieltsTabs" style="display:none;gap:0.4rem;flex-wrap:wrap;">
+      <button class="ielts-sub-tab active" id="ieltsTab_writing" onclick="selectIELTSTab('writing')">✍️ Writing Topics</button>
+      <button class="ielts-sub-tab" id="ieltsTab_vocab" onclick="selectIELTSTab('vocab')">📖 Vocabulary</button>
+      <button class="ielts-sub-tab" id="ieltsTab_grammar" onclick="selectIELTSTab('grammar')">📝 Grammar</button>
+      <button class="ielts-sub-tab" id="ieltsTab_collocations" onclick="selectIELTSTab('collocations')">🔗 Collocations</button>
     </div>
     <div id="subTabsContainer" style="display:flex;gap:0.4rem;flex-wrap:wrap;"></div>
     <div class="article-list" id="articleList"></div>
@@ -227,17 +320,35 @@ body{padding-top:22px;}
         <textarea class="library-textarea" id="libTextInput" placeholder="Paste text here..."></textarea>
       </div>
     </div>
+    <!-- IELTS inline content (Vocab / Grammar / Collocations) -->
+    <div id="ieltsContentPanel" class="ielts-content-panel" style="display:none;"></div>
+  </div>
+
+  <!-- IELTS ANSWER PANEL (shown above typing area in IELTS mode) -->
+  <div class="ielts-answer-panel" id="ieltsAnswerPanel">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem;">
+      <div>
+        <div style="font-weight:800;color:var(--ielts);font-size:0.95rem;" id="ieltsAnswerTitle">Model Answer</div>
+        <span style="font-size:0.72rem;background:var(--ielts);color:#fff;padding:0.12rem 0.5rem;border-radius:5px;font-weight:700;">Band 8+</span>
+      </div>
+      <div style="display:flex;gap:0.4rem;">
+        <button id="ieltsAnswerToggleBtn" onclick="toggleIELTSAnswer()" style="background:rgba(139,92,246,0.12);color:var(--ielts);border:1px solid var(--ielts);border-radius:7px;padding:0.35rem 0.7rem;cursor:pointer;font-size:0.8rem;font-weight:700;">▼ Show</button>
+        <button onclick="typeIELTSAnswer()" style="background:var(--ielts);color:#fff;border:none;border-radius:7px;padding:0.35rem 0.85rem;cursor:pointer;font-size:0.8rem;font-weight:700;">⌨️ Type This</button>
+      </div>
+    </div>
+    <div class="answer-body" id="ieltsAnswerBody" style="display:none;"></div>
   </div>
 
   <div class="typing-area" id="typingArea">
-    <div class="paused-overlay" id="pausedOverlay">⏸ Paused — Press P or click Resume</div>
+    <div class="paused-overlay" id="pausedOverlay">⏸ Paused — Press <b>F1</b> or click Resume</div>
     <div class="text-display" id="textDisplay"></div>
 
   </div>
 
-  <div class="keyboard-hint">Click area or <kbd class="kbd">Space</kbd> to start · <kbd class="kbd">Tab</kbd> to restart · <kbd class="kbd">F1</kbd> or <kbd class="kbd">P</kbd> to pause</div>
+  <div class="keyboard-hint">Click area or <kbd class="kbd">Space</kbd> to start · <kbd class="kbd">Tab</kbd> to restart · <kbd class="kbd">F1</kbd> pause/resume · <kbd class="kbd">1–4</kbd> select option</div>
 
-  <div class="controls">
+  <!-- GENERAL TYPING CONTROLS -->
+  <div class="controls" id="typingControls">
     <button class="primary" onclick="restartTest()">Restart</button>
     <button id="pauseBtn" onclick="togglePause()">Pause</button>
     <button onclick="saveProgress()">Save</button>
@@ -245,6 +356,13 @@ body{padding-top:22px;}
     <button id="answerToggleBtn" onclick="toggleAnswer()" style="display:none;background:var(--success);color:#fff;">Answer</button>
     <button onclick="openVocabGame()" style="background:rgba(189,147,249,0.15);color:#bd93f9;border:1px solid #bd93f9;">Vocab</button>
     <button onclick="openGrammar()" style="background:rgba(245,158,11,0.12);color:var(--warning);border:1px solid var(--warning);">Grammar</button>
+  </div>
+  <!-- IELTS CONTROLS (shown in IELTS mode) -->
+  <div class="controls" id="ieltsControls" style="display:none;">
+    <button class="primary" onclick="restartTest()">↺ Restart</button>
+    <button id="ieltsPauseBtn" onclick="togglePause()" style="background:var(--bg-tertiary);">Pause</button>
+    <button onclick="saveProgress()">💾 Save</button>
+    <button onclick="openVocabGame()" style="background:rgba(139,92,246,0.15);color:var(--ielts);border:1px solid var(--ielts);">🎯 Quiz</button>
   </div>
   <div class="toast" id="toast"></div>
 
@@ -351,7 +469,7 @@ body{padding-top:22px;}
       </div>
     </div>
     <div class="settings-section">
-      <label class="settings-label">Article Text Color</label>
+      <label class="settings-label">📝 Article Text Color</label>
       <div style="display:flex;gap:0.35rem;flex-wrap:wrap;" id="articleTextColorPicker"></div>
       <div style="margin-top:0.5rem;display:flex;gap:0.5rem;align-items:center;">
         <label style="font-size:0.78rem;color:var(--text-secondary);">Custom:</label>
@@ -359,7 +477,41 @@ body{padding-top:22px;}
         <button onclick="resetArticleTextColor()" style="padding:0.25rem 0.6rem;font-size:0.75rem;">Reset</button>
       </div>
     </div>
-    <button class="primary" onclick="closeSettings()" style="width:100%;">Save & Close</button>
+    <div class="settings-section">
+      <label class="settings-label">🔡 Font Size &amp; Line Height</label>
+      <div style="display:flex;flex-direction:column;gap:0.55rem;">
+        <div>
+          <label style="display:flex;justify-content:space-between;margin-bottom:0.35rem;font-size:0.82rem;"><span>Font Size</span><span id="fontSizeValue">16px</span></label>
+          <input type="range" class="range-slider" id="fontSizeSlider" min="12" max="24" value="16" oninput="updateFontSize(this.value)">
+        </div>
+        <div>
+          <label style="display:flex;justify-content:space-between;margin-bottom:0.35rem;font-size:0.82rem;"><span>Line Height</span><span id="lineHeightValue">1.7</span></label>
+          <input type="range" class="range-slider" id="lineHeightSlider" min="14" max="22" value="17" oninput="updateLineHeight(this.value)">
+        </div>
+      </div>
+    </div>
+    <div class="settings-section">
+      <label class="settings-label">🖊️ Cursor Style</label>
+      <div style="display:flex;gap:0.4rem;">
+        <button id="cursorBtnBlock" onclick="setCursorStyle('block')" style="flex:1;padding:0.45rem;border-radius:8px;border:2px solid var(--accent);background:var(--accent-glow);color:var(--accent);cursor:pointer;font-weight:700;font-size:0.8rem;">█ Block</button>
+        <button id="cursorBtnLine" onclick="setCursorStyle('line')" style="flex:1;padding:0.45rem;border-radius:8px;border:2px solid var(--bg-tertiary);background:var(--bg-primary);color:var(--text-secondary);cursor:pointer;font-weight:700;font-size:0.8rem;">| Line</button>
+        <button id="cursorBtnUnderline" onclick="setCursorStyle('underline')" style="flex:1;padding:0.45rem;border-radius:8px;border:2px solid var(--bg-tertiary);background:var(--bg-primary);color:var(--text-secondary);cursor:pointer;font-weight:700;font-size:0.8rem;">_ Under</button>
+      </div>
+    </div>
+    <div class="settings-section">
+      <label class="settings-label">⚡ Behaviour</label>
+      <div style="display:flex;flex-direction:column;gap:0.5rem;">
+        <div class="sound-option-row">
+          <span style="font-size:0.88rem;">Smooth Animations</span>
+          <div class="toggle-switch active" id="animToggle" onclick="toggleAnimSetting()"><div class="toggle-slider"></div></div>
+        </div>
+        <div class="sound-option-row">
+          <span style="font-size:0.88rem;">Auto-Save (every 50 chars)</span>
+          <div class="toggle-switch active" id="autoSaveToggle" onclick="toggleAutoSave()"><div class="toggle-slider"></div></div>
+        </div>
+      </div>
+    </div>
+    <button class="primary" onclick="closeSettings()" style="width:100%;">💾 Save &amp; Close</button>
   </div>
 </div>
 
@@ -872,7 +1024,7 @@ let startTime=null,timerInterval=null,typedLength=0,errors=0,totalErrors=0;
 let isActive=false,isComplete=false,isPaused=false,pauseStart=null;
 let wpmHistory=[];
 let completedTexts=new Set(JSON.parse(localStorage.getItem('typemaster_completed')||'[]'));
-let settings={theme:'dark',typingSound:false,typingSoundType:'mechanical',errorSound:false,errorSoundType:'buzz',volume:0.5};
+let settings={theme:'dark',typingSound:false,typingSoundType:'mechanical',errorSound:false,errorSoundType:'buzz',volume:0.5,fontSize:16,lineHeight:1.7,cursorStyle:'block',animations:true,autoSave:true};
 let audioContext=null;
 let currentMainCat='short',currentDuration='1min';
 
@@ -898,6 +1050,10 @@ function init(){
   initArticleTextColorPicker();
   initGlowPicker();
   loadGlowSettings();rebuildGlowCSS();
+  applyFontSizeCSS(settings.fontSize);
+  applyLineHeightCSS(settings.lineHeight);
+  applyCursorStyle(settings.cursorStyle);
+  applyAnimationSetting();
 }
 
 // ============================================================
@@ -936,6 +1092,11 @@ function handleInput(){
   }
   if(typedLength>=currentText.length){completeTest();return;}
   updateDisplay(val);updateStats(val);updateTimePrediction();
+  // Auto-save every 50 characters
+  if(settings.autoSave && typedLength>0 && typedLength%50===0){
+    const elMs=startTime?Date.now()-startTime:0;
+    localStorage.setItem(PROGRESS_KEY,JSON.stringify({text:currentText,typed:val,elapsedMs:elMs,totalErrors,savedAt:new Date().toLocaleString()}));
+  }
 }
 function handleKeydown(e){
   if(e.key==='Tab'){e.preventDefault();restartTest();}
@@ -1012,7 +1173,8 @@ function completeTest(){
   completedTexts.add(currentText.slice(0,60));
   localStorage.setItem('typemaster_completed',JSON.stringify([...completedTexts]));
   localStorage.removeItem('typemaster_progress');
-  renderArticleList();
+  if(activeSection==='ielts'){renderIELTSTopicList();updateIELTSStats();}
+  else{renderArticleList();}
   document.getElementById('resultsModal').classList.add('show');
 }
 function restartTest(){
@@ -1165,11 +1327,13 @@ function togglePause(){
     isPaused=true;pauseStart=Date.now();clearInterval(timerInterval);hiddenInput.blur();
     document.getElementById('pausedOverlay').classList.add('show');
     document.getElementById('pauseBtn').textContent='Resume';document.getElementById('pauseBtn').className='btn-resume';
+    const ipb=document.getElementById('ieltsPauseBtn');if(ipb){ipb.textContent='Resume';ipb.className='btn-resume';}
   }else{
     isPaused=false;startTime+=(Date.now()-pauseStart);pauseStart=null;
     timerInterval=setInterval(()=>{updateTimer();updateTimePrediction();},1000);
     document.getElementById('pausedOverlay').classList.remove('show');
     document.getElementById('pauseBtn').textContent='Pause';document.getElementById('pauseBtn').className='';
+    const ipb=document.getElementById('ieltsPauseBtn');if(ipb){ipb.textContent='Pause';ipb.className='';}
     hiddenInput.focus({preventScroll:true});
   }
 }
@@ -1210,11 +1374,71 @@ function loadSettings(){
   if(settings.errorSound)document.getElementById('errorSoundToggle').classList.add('active');
   setTypingSound(settings.typingSoundType);setErrorSound(settings.errorSoundType);
   updateVolume(settings.volume*100);document.getElementById('volumeSlider').value=settings.volume*100;
-  // restore saved font
   const savedFont=localStorage.getItem('typemaster_font');
   if(savedFont){currentFont=savedFont;applyFont(savedFont);}
+  applyFontSizeCSS(settings.fontSize);
+  const fss=document.getElementById('fontSizeSlider');if(fss)fss.value=settings.fontSize;
+  const fsv=document.getElementById('fontSizeValue');if(fsv)fsv.textContent=settings.fontSize+'px';
+  applyLineHeightCSS(settings.lineHeight);
+  const lhs=document.getElementById('lineHeightSlider');if(lhs)lhs.value=Math.round(settings.lineHeight*10);
+  const lhv=document.getElementById('lineHeightValue');if(lhv)lhv.textContent=settings.lineHeight;
+  applyCursorStyle(settings.cursorStyle);
+  const at=document.getElementById('animToggle');if(at)at.classList.toggle('active',settings.animations);
+  const ast=document.getElementById('autoSaveToggle');if(ast)ast.classList.toggle('active',settings.autoSave);
+  applyAnimationSetting();
 }
-function closeResults(){document.getElementById('resultsModal').classList.remove('show');restartTest();}
+
+function updateFontSize(v){
+  settings.fontSize=parseInt(v);
+  document.getElementById('fontSizeValue').textContent=v+'px';
+  applyFontSizeCSS(settings.fontSize);
+}
+function applyFontSizeCSS(size){
+  document.getElementById('textDisplay').style.fontSize=size+'px';
+}
+function updateLineHeight(v){
+  const lh=(parseInt(v)/10).toFixed(1);
+  settings.lineHeight=parseFloat(lh);
+  document.getElementById('lineHeightValue').textContent=lh;
+  applyLineHeightCSS(settings.lineHeight);
+}
+function applyLineHeightCSS(lh){
+  document.getElementById('textDisplay').style.lineHeight=lh;
+}
+function setCursorStyle(style){
+  settings.cursorStyle=style;
+  applyCursorStyle(style);
+  ['block','line','underline'].forEach(s=>{
+    const b=document.getElementById('cursorBtn'+s.charAt(0).toUpperCase()+s.slice(1));
+    if(!b)return;
+    if(s===style){b.style.borderColor='var(--accent)';b.style.background='var(--accent-glow)';b.style.color='var(--accent)';}
+    else{b.style.borderColor='var(--bg-tertiary)';b.style.background='var(--bg-primary)';b.style.color='var(--text-secondary)';}
+  });
+}
+function applyCursorStyle(style){
+  const ta=document.getElementById('typingArea');
+  ta.classList.remove('cursor-line','cursor-underline');
+  if(style==='line')ta.classList.add('cursor-line');
+  else if(style==='underline')ta.classList.add('cursor-underline');
+}
+function toggleAnimSetting(){
+  settings.animations=!settings.animations;
+  document.getElementById('animToggle').classList.toggle('active',settings.animations);
+  applyAnimationSetting();
+}
+function applyAnimationSetting(){
+  document.body.classList.toggle('no-anim',!settings.animations);
+}
+function toggleAutoSave(){
+  settings.autoSave=!settings.autoSave;
+  document.getElementById('autoSaveToggle').classList.toggle('active',settings.autoSave);
+  showToast(settings.autoSave?'Auto-save ON':'Auto-save OFF');
+}
+function closeResults(){
+  document.getElementById('resultsModal').classList.remove('show');
+  restartTest();
+  if(activeSection==='ielts')renderIELTSTopicList();
+}
 
 // ============================================================
 //  LIBRARY
@@ -1414,11 +1638,15 @@ function showToast(msg,color){const t=document.getElementById('toast');t.textCon
 //  KEYBOARD SHORTCUTS
 // ============================================================
 document.addEventListener('keydown',e=>{
-  const anyModal=document.getElementById('settingsModal').classList.contains('show')||document.getElementById('vocabModal').classList.contains('show')||document.getElementById('grammarModal').classList.contains('show');
+  const settingsOpen=document.getElementById('settingsModal').classList.contains('show');
+  const vocabOpen=document.getElementById('vocabModal').classList.contains('show');
+  const grammarOpen=document.getElementById('grammarModal').classList.contains('show');
+  const anyModal=settingsOpen||vocabOpen||grammarOpen;
   if(e.key===' '&&document.activeElement!==hiddenInput&&!anyModal){e.preventDefault();hiddenInput.focus({preventScroll:true});}
   if(e.key==='Escape'){closeSettings();closeResults();closeVocabModal();closeGrammarModal();}
+  // F1 toggles pause anywhere (even in modals, close modals first if needed)
+  if(e.key==='F1'){e.preventDefault();if(anyModal){closeSettings();closeResults();closeVocabModal();closeGrammarModal();}else{togglePause();}}
   if((e.key==='p'||e.key==='P')&&document.activeElement!==hiddenInput&&!anyModal){e.preventDefault();togglePause();}
-  if(e.key==='F1'&&!anyModal){e.preventDefault();togglePause();}
 });
 ['settingsModal','resultsModal'].forEach(id=>document.getElementById(id).addEventListener('click',e=>{if(e.target===e.currentTarget){closeSettings();closeResults();}}));
 
@@ -1430,7 +1658,11 @@ let vocabState={mode:'menu',cardIdx:0,score:0,streak:0,shuffled:[],currentAnswer
 let vocabTab='vocab';
 
 function openVocabModal(){document.getElementById('vocabModal').classList.add('show');vocabTab='vocab';renderVocabMenu();}
-function closeVocabModal(){_clearVocabKeyHandler();document.getElementById('vocabModal').classList.remove('show');}
+function closeVocabModal(){
+  _clearVocabKeyHandler();
+  if(mixedQuizState._kh){document.removeEventListener('keydown',mixedQuizState._kh);mixedQuizState._kh=null;}
+  document.getElementById('vocabModal').classList.remove('show');
+}
 function openVocabGame(){openVocabModal();}
 document.getElementById('vocabModal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeVocabModal();});
 
@@ -1438,14 +1670,15 @@ function renderVocabMenu(){
   const box=document.getElementById('vocabBox');
   box.innerHTML=`
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;">
-      <h2 style="color:var(--accent);font-size:1.2rem;">Vocab & Collocations</h2>
-      <button onclick="closeVocabModal()" style="background:none;border:none;font-size:1.1rem;cursor:pointer;color:var(--text-secondary);">Close</button>
+      <h2 style="color:var(--accent);font-size:1.2rem;">📚 Vocab & Collocations</h2>
+      <button onclick="closeVocabModal()" style="background:none;border:none;font-size:1.1rem;cursor:pointer;color:var(--text-secondary);">✕</button>
     </div>
-    <div style="display:flex;gap:0.4rem;margin-bottom:1rem;">
-      <button onclick="vocabTab='vocab';renderVocabMenu()" style="flex:1;padding:0.5rem;border-radius:8px;border:2px solid ${vocabTab==='vocab'?'var(--accent)':'var(--bg-tertiary)'};background:${vocabTab==='vocab'?'var(--accent-glow)':'var(--bg-primary)'};color:${vocabTab==='vocab'?'var(--accent)':'var(--text-secondary)'};cursor:pointer;font-weight:600;font-size:0.85rem;">Vocabulary</button>
-      <button onclick="vocabTab='collocations';renderVocabMenu()" style="flex:1;padding:0.5rem;border-radius:8px;border:2px solid ${vocabTab==='collocations'?'var(--warning)':'var(--bg-tertiary)'};background:${vocabTab==='collocations'?'rgba(245,158,11,0.12)':'var(--bg-primary)'};color:${vocabTab==='collocations'?'var(--warning)':'var(--text-secondary)'};cursor:pointer;font-weight:600;font-size:0.85rem;">Collocations</button>
+    <div style="display:flex;gap:0.4rem;margin-bottom:1rem;flex-wrap:wrap;">
+      <button onclick="vocabTab='vocab';renderVocabMenu()" style="flex:1;padding:0.5rem;border-radius:8px;border:2px solid ${vocabTab==='vocab'?'var(--accent)':'var(--bg-tertiary)'};background:${vocabTab==='vocab'?'var(--accent-glow)':'var(--bg-primary)'};color:${vocabTab==='vocab'?'var(--accent)':'var(--text-secondary)'};cursor:pointer;font-weight:600;font-size:0.82rem;">📖 Vocab</button>
+      <button onclick="vocabTab='collocations';renderVocabMenu()" style="flex:1;padding:0.5rem;border-radius:8px;border:2px solid ${vocabTab==='collocations'?'var(--warning)':'var(--bg-tertiary)'};background:${vocabTab==='collocations'?'rgba(245,158,11,0.12)':'var(--bg-primary)'};color:${vocabTab==='collocations'?'var(--warning)':'var(--text-secondary)'};cursor:pointer;font-weight:600;font-size:0.82rem;">🔗 Collocations</button>
+      <button onclick="vocabTab='mixed';renderVocabMenu()" style="flex:1;padding:0.5rem;border-radius:8px;border:2px solid ${vocabTab==='mixed'?'#ef4444':'var(--bg-tertiary)'};background:${vocabTab==='mixed'?'rgba(239,68,68,0.1)':'var(--bg-primary)'};color:${vocabTab==='mixed'?'#ef4444':'var(--text-secondary)'};cursor:pointer;font-weight:700;font-size:0.82rem;">🎯 Mixed</button>
     </div>
-    ${vocabTab==='vocab'?renderVocabMenuContent():renderCollocationContent()}
+    ${vocabTab==='vocab'?renderVocabMenuContent():vocabTab==='collocations'?renderCollocationContent():renderMixedMenuContent()}
   `;
 }
 
@@ -1495,7 +1728,7 @@ function renderVocabSessionResult(){
   const mode=vocabState.mode;
   box.innerHTML=`
     <div style="text-align:center;padding:0.5rem;">
-      <div style="font-size:1.75rem;margin-bottom:0.4rem;">${pct>=80?'Trophy':pct>=60?'Thumbs up':'Book'}</div>
+      <div style="font-size:1.75rem;margin-bottom:0.4rem;">${pct>=80?'🏆':pct>=60?'👍':'📖'}</div>
       <div style="font-size:2rem;font-weight:800;color:var(--accent);">${vocabState.score}/${total}</div>
       <div style="color:var(--text-secondary);font-size:0.85rem;margin-bottom:1rem;">${pct>=80?'Excellent work!':pct>=60?'Good effort - review the words you missed.':'Keep practising!'}</div>
       <div style="display:flex;flex-direction:column;gap:0.4rem;">
@@ -1623,7 +1856,7 @@ function renderVocabQuizUI(prompt, choices, answer, answerShown){
     +'<button id="showAnswerBtn" style="flex:1;background:var(--warning);color:#000;border:none;border-radius:8px;padding:0.5rem;cursor:pointer;font-weight:600;font-size:0.82rem;">Show Answer</button>'
     +'<button onclick="renderVocabMenu()" style="background:var(--bg-tertiary);color:var(--text-primary);border:none;border-radius:8px;padding:0.5rem 0.85rem;cursor:pointer;font-size:0.82rem;">Menu</button>'
     +'</div>'
-    +'<div style="font-size:0.68rem;color:var(--text-secondary);text-align:center;margin-top:0.35rem;">↑↓ move · 1-2-3-4 or Enter to select · type the word on the option</div>';
+    +'<div style="font-size:0.68rem;color:var(--text-secondary);text-align:center;margin-top:0.35rem;">Press <b>1–4</b> to select option instantly · type the word to confirm</div>';
 
   _vocabHighlight(choices.length);
 
@@ -1640,16 +1873,22 @@ function renderVocabQuizUI(prompt, choices, answer, answerShown){
   });
   document.getElementById('showAnswerBtn').addEventListener('click',function(){revealVocabAnswer(choices,answer);});
 
-  // Arrow + Enter + 1-2-3-4 keyboard navigation
+  // Number keys 1-4: direct option select (switches immediately even if typing another option)
   vocabState._keyHandler=function(e){
     if(!document.getElementById('vocabModal').classList.contains('show'))return;
-    if(vocabState._typing!==-1)return; // typing mode — don't intercept
-    if(e.key==='ArrowDown'||e.key==='ArrowRight'){e.preventDefault();_vFocusIdx=Math.min(_vFocusIdx+1,choices.length-1);_vocabHighlight(choices.length);}
-    else if(e.key==='ArrowUp'||e.key==='ArrowLeft'){e.preventDefault();_vFocusIdx=Math.max(_vFocusIdx-1,0);_vocabHighlight(choices.length);}
-    else if(e.key==='Enter'&&!vocabState._choiceLocked){_vocabSelectOption(_vFocusIdx,choices,answer);}
+    if(e.key==='Enter'&&!vocabState._choiceLocked&&vocabState._typing===-1){_vocabSelectOption(_vFocusIdx,choices,answer);}
     else if(!vocabState._choiceLocked){
-      const numIdx={'1':0,'2':1,'3':2,'4':3}[e.key];
-      if(numIdx!==undefined&&numIdx<choices.length){e.preventDefault();_vFocusIdx=numIdx;_vocabHighlight(choices.length);_vocabSelectOption(numIdx,choices,answer);}
+      const numIdx={'1':0,'2':1,'3':2,'4':3,'5':4}[e.key];
+      if(numIdx!==undefined&&numIdx<choices.length){
+        e.preventDefault();
+        // If typing on a different option, cancel it and switch
+        if(vocabState._typing!==-1&&vocabState._typing!==numIdx){
+          _cancelCurrentVocabTyping(choices);
+        }
+        if(vocabState._typing===-1){
+          _vFocusIdx=numIdx;_vocabHighlight(choices.length);_vocabSelectOption(numIdx,choices,answer);
+        }
+      }
     }
   };
   document.addEventListener('keydown',vocabState._keyHandler);
@@ -1773,37 +2012,50 @@ function _vocabSelectOption(idx, choices, answer){
   });
   inp.addEventListener('keydown',function(e){
     if(e.key==='Escape'){
-      // Cancel selection and return to choice view
-      vocabState._typing=-1;
-      _vFocusIdx=idx;
-      // Hide typing section
-      const typingDiv=el.querySelector('.vchoice-typing');
-      if(typingDiv)typingDiv.style.display='none';
-      inp.value='';
-      // Reset styling
-      el.style.borderColor='var(--bg-tertiary)';
-      el.style.background='var(--bg-primary)';
-      // Restore other options opacity
-      choices.forEach(function(_,i){
-        var other=document.getElementById('vchoice'+i);
-        if(other)other.style.opacity='1';
-      });
-      // Re-enable keyboard navigation
-      _vocabHighlight(choices.length);
-      vocabState._keyHandler=function(e){
-        if(!document.getElementById('vocabModal').classList.contains('show'))return;
-        if(vocabState._typing!==-1)return;
-        if(e.key==='ArrowDown'||e.key==='ArrowRight'){e.preventDefault();_vFocusIdx=Math.min(_vFocusIdx+1,choices.length-1);_vocabHighlight(choices.length);}
-        else if(e.key==='ArrowUp'||e.key==='ArrowLeft'){e.preventDefault();_vFocusIdx=Math.max(_vFocusIdx-1,0);_vocabHighlight(choices.length);}
-        else if(e.key==='Enter'&&!vocabState._choiceLocked){_vocabSelectOption(_vFocusIdx,choices,answer);}
-        else if(!vocabState._choiceLocked){
-          const numIdx={'1':0,'2':1,'3':2,'4':3}[e.key];
-          if(numIdx!==undefined&&numIdx<choices.length){e.preventDefault();_vFocusIdx=numIdx;_vocabHighlight(choices.length);_vocabSelectOption(numIdx,choices,answer);}
-        }
-      };
-      document.addEventListener('keydown',vocabState._keyHandler);
+      _cancelCurrentVocabTyping(choices);
+      // Re-enable keyboard navigation after cancel
+      _setupVocabKeyHandler(choices,answer);
     }
   });
+}
+
+function _cancelCurrentVocabTyping(choices){
+  const idx=vocabState._typing;
+  if(idx===-1)return;
+  const el=document.getElementById('vchoice'+idx);
+  if(el){
+    const typingDiv=el.querySelector('.vchoice-typing');
+    if(typingDiv)typingDiv.style.display='none';
+    const inp=el.querySelector('.vchoice-input');
+    if(inp)inp.value='';
+    el.style.borderColor='var(--bg-tertiary)';
+    el.style.background='var(--bg-primary)';
+  }
+  choices.forEach(function(_,i){
+    var other=document.getElementById('vchoice'+i);
+    if(other)other.style.opacity='1';
+  });
+  vocabState._typing=-1;
+  _vFocusIdx=idx;
+  _clearVocabKeyHandler();
+  _vocabHighlight(choices.length);
+}
+
+function _setupVocabKeyHandler(choices,answer){
+  _clearVocabKeyHandler();
+  vocabState._keyHandler=function(e){
+    if(!document.getElementById('vocabModal').classList.contains('show'))return;
+    if(e.key==='Enter'&&!vocabState._choiceLocked&&vocabState._typing===-1){_vocabSelectOption(_vFocusIdx,choices,answer);}
+    else if(!vocabState._choiceLocked){
+      const numIdx={'1':0,'2':1,'3':2,'4':3,'5':4}[e.key];
+      if(numIdx!==undefined&&numIdx<choices.length){
+        e.preventDefault();
+        if(vocabState._typing!==-1&&vocabState._typing!==numIdx){_cancelCurrentVocabTyping(choices);}
+        if(vocabState._typing===-1){_vFocusIdx=numIdx;_vocabHighlight(choices.length);_vocabSelectOption(numIdx,choices,answer);}
+      }
+    }
+  };
+  document.addEventListener('keydown',vocabState._keyHandler);
 }
 
 function _clearVocabKeyHandler(){
@@ -1811,6 +2063,243 @@ function _clearVocabKeyHandler(){
     document.removeEventListener('keydown',vocabState._keyHandler);
     vocabState._keyHandler=null;
   }
+}
+
+// ============================================================
+//  MIXED QUIZ (Vocab + Grammar combined)
+// ============================================================
+let mixedQuizState={
+  questions:[],idx:0,score:0,streak:0,bestStreak:0,
+  difficulty:'medium',numChoices:4,
+  locked:false,answered:false
+};
+
+function renderMixedMenuContent(){
+  const d=mixedQuizState.difficulty;
+  return`
+  <div style="margin-bottom:0.75rem;">
+    <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.6rem;">
+      <span class="mixed-badge">🎯 MIXED</span>
+      <span style="font-size:0.8rem;color:var(--text-secondary);">Vocab + Grammar · 15 questions</span>
+    </div>
+    <p style="color:var(--text-secondary);font-size:0.8rem;margin-bottom:0.85rem;">Randomly mixes vocabulary definitions, collocations, and grammar questions all in one session!</p>
+  </div>
+  <div style="margin-bottom:0.85rem;">
+    <div style="font-size:0.8rem;font-weight:700;color:var(--text-secondary);margin-bottom:0.45rem;text-transform:uppercase;letter-spacing:0.06em;">Difficulty</div>
+    <div style="display:flex;gap:0.4rem;">
+      <button class="diff-btn diff-easy${d==='easy'?' active':''}" onclick="setMixedDifficulty('easy',this)">🟢 Easy<br><span style="font-size:0.68rem;font-weight:400;">3 choices</span></button>
+      <button class="diff-btn diff-medium${d==='medium'?' active':''}" onclick="setMixedDifficulty('medium',this)">🟡 Medium<br><span style="font-size:0.68rem;font-weight:400;">4 choices</span></button>
+      <button class="diff-btn diff-hard${d==='hard'?' active':''}" onclick="setMixedDifficulty('hard',this)">🔴 Hard<br><span style="font-size:0.68rem;font-weight:400;">5 choices</span></button>
+    </div>
+  </div>
+  <button onclick="startMixedQuiz()" style="width:100%;background:linear-gradient(135deg,#f59e0b,#ef4444);color:#fff;border:none;border-radius:10px;padding:0.75rem;font-weight:800;font-size:1rem;cursor:pointer;letter-spacing:0.02em;">🚀 Start Mixed Quiz</button>
+  `;
+}
+
+function setMixedDifficulty(diff){
+  mixedQuizState.difficulty=diff;
+  const choices={easy:3,medium:4,hard:5};
+  mixedQuizState.numChoices=choices[diff];
+  renderVocabMenu(); // re-render to update active button
+}
+
+function buildMixedQuestions(numChoices){
+  const qs=[];
+  const TOTAL=15;
+  // Vocab: definition questions
+  const vocabPool=shuffle(vocabData.slice());
+  vocabPool.slice(0,6).forEach(v=>{
+    const distractors=getVocabDistractors(v.word,vocabData,numChoices-1);
+    const choices=shuffle([v.word,...distractors]);
+    qs.push({type:'vocab-def',prompt:`What word means: <b>${v.definition}</b>`,answer:v.word,choices,category:'📖 Vocab · Definition'});
+  });
+  // Vocab: collocation questions
+  vocabPool.slice(6,10).forEach(v=>{
+    const c=v.collocations[Math.floor(Math.random()*v.collocations.length)];
+    const idx=c.toLowerCase().indexOf(v.word.toLowerCase());
+    const blanked=idx!==-1?c.slice(0,idx)+'<b>_____</b>'+c.slice(idx+v.word.length):c;
+    const distractors=getVocabDistractors(v.word,vocabData,numChoices-1);
+    const choices=shuffle([v.word,...distractors]);
+    qs.push({type:'vocab-coll',prompt:`Fill the collocation: <i>${blanked}</i>`,answer:v.word,choices,category:'🔗 Vocab · Collocation'});
+  });
+  // Grammar questions
+  const grammarQs=buildGrammarMCQPool(numChoices);
+  shuffle(grammarQs).slice(0,TOTAL-10).forEach(q=>qs.push(q));
+  return shuffle(qs).slice(0,TOTAL);
+}
+
+function buildGrammarMCQPool(numChoices){
+  const qs=[];
+  // Articles
+  qs.push({type:'grammar',prompt:'Choose the correct article: "She is <b>___</b> honest person."',answer:'an',choices:makeMCQ('an',['a','the','—'],numChoices),category:'📝 Grammar · Articles'});
+  qs.push({type:'grammar',prompt:'Choose the correct article: "He plays <b>___</b> guitar every evening."',answer:'the',choices:makeMCQ('the',['a','an','—'],numChoices),category:'📝 Grammar · Articles'});
+  qs.push({type:'grammar',prompt:'"<b>___</b> information you gave me was useful." Which article?',answer:'The',choices:makeMCQ('The',['A','An','—'],numChoices),category:'📝 Grammar · Articles'});
+  // Tenses
+  qs.push({type:'grammar',prompt:'"By the time she arrived, I <b>_____</b> for two hours." Which tense?',answer:'had been waiting',choices:makeMCQ('had been waiting',['was waiting','have waited','waited'],numChoices),category:'📝 Grammar · Tenses'});
+  qs.push({type:'grammar',prompt:'"Scientists <b>_____</b> that climate change is accelerating." Best choice?',answer:'have confirmed',choices:makeMCQ('have confirmed',['confirm','confirmed','are confirming'],numChoices),category:'📝 Grammar · Tenses'});
+  qs.push({type:'grammar',prompt:'"She <b>_____</b> in France for five years before moving to Germany."',answer:'had lived',choices:makeMCQ('had lived',['has lived','lived','was living'],numChoices),category:'📝 Grammar · Tenses'});
+  // Conditionals
+  qs.push({type:'grammar',prompt:'"If I <b>_____</b> more time, I would study harder." (Type 2)',answer:'had',choices:makeMCQ('had',['have','would have','will have'],numChoices),category:'📝 Grammar · Conditionals'});
+  qs.push({type:'grammar',prompt:'"If they <b>_____</b> earlier, they could have caught the train." (Type 3)',answer:'had left',choices:makeMCQ('had left',['left','would leave','have left'],numChoices),category:'📝 Grammar · Conditionals'});
+  qs.push({type:'grammar',prompt:'"If water <b>_____</b> to 100°C, it boils." (Type 0)',answer:'is heated',choices:makeMCQ('is heated',['was heated','would heat','heats up'],numChoices),category:'📝 Grammar · Conditionals'});
+  // Passive voice
+  qs.push({type:'grammar',prompt:'"The report <b>_____</b> by the committee last week." (passive)',answer:'was written',choices:makeMCQ('was written',['is written','wrote','has written'],numChoices),category:'📝 Grammar · Passive'});
+  qs.push({type:'grammar',prompt:'"A new policy <b>_____</b> currently being developed." (passive)',answer:'is',choices:makeMCQ('is',['was','has been','are'],numChoices),category:'📝 Grammar · Passive'});
+  // Modal verbs
+  qs.push({type:'grammar',prompt:'"You <b>_____</b> smoke in hospitals — it is strictly forbidden."',answer:'must not',choices:makeMCQ('must not',['do not have to','should not','might not'],numChoices),category:'📝 Grammar · Modals'});
+  qs.push({type:'grammar',prompt:'"I <b>_____</b> finish this report today — my boss needs it urgently."',answer:'must',choices:makeMCQ('must',['should','might','could'],numChoices),category:'📝 Grammar · Modals'});
+  qs.push({type:'grammar',prompt:'"She <b>_____</b> have forgotten — she never forgets appointments."',answer:'cannot',choices:makeMCQ('cannot',['must not','should not','might not'],numChoices),category:'📝 Grammar · Modals'});
+  // Relative clauses
+  qs.push({type:'grammar',prompt:'"The scientist <b>_____</b> discovered penicillin won a Nobel Prize."',answer:'who',choices:makeMCQ('who',['which','whom','whose'],numChoices),category:'📝 Grammar · Relatives'});
+  qs.push({type:'grammar',prompt:'"The city <b>_____</b> I grew up has changed dramatically."',answer:'where',choices:makeMCQ('where',['which','that','who'],numChoices),category:'📝 Grammar · Relatives'});
+  // Reported speech
+  qs.push({type:'grammar',prompt:'"She said she <b>_____</b> tired." (Reported: "I am tired.")',answer:'was',choices:makeMCQ('was',['is','were','has been'],numChoices),category:'📝 Grammar · Reported Speech'});
+  qs.push({type:'grammar',prompt:'"He told me he <b>_____</b> the exam the next day." (Reported: "I will take...")',answer:'would take',choices:makeMCQ('would take',['will take','took','had taken'],numChoices),category:'📝 Grammar · Reported Speech'});
+  // Gerund / infinitive
+  qs.push({type:'grammar',prompt:'"I enjoy <b>_____</b> documentaries about nature." (gerund or infinitive?)',answer:'watching',choices:makeMCQ('watching',['to watch','watch','watched'],numChoices),category:'📝 Grammar · Gerund/Infinitive'});
+  qs.push({type:'grammar',prompt:'"She decided <b>_____</b> a new language last year."',answer:'to learn',choices:makeMCQ('to learn',['learning','learned','learn'],numChoices),category:'📝 Grammar · Gerund/Infinitive'});
+  return qs;
+}
+
+function makeMCQ(correct,wrongs,numChoices){
+  return shuffle([correct,...wrongs.slice(0,numChoices-1)]);
+}
+
+function startMixedQuiz(){
+  _clearVocabKeyHandler();
+  const n=mixedQuizState.numChoices;
+  mixedQuizState={
+    ...mixedQuizState,
+    questions:buildMixedQuestions(n),
+    idx:0,score:0,streak:0,bestStreak:0,
+    locked:false,answered:false
+  };
+  renderMixedQuestion();
+}
+
+function renderMixedQuestion(){
+  const state=mixedQuizState;
+  if(state.idx>=state.questions.length){renderMixedResult();return;}
+  const q=state.questions[state.idx];
+  state.locked=false;state.answered=false;
+  const box=document.getElementById('vocabBox');
+  const pct=Math.round((state.idx/state.questions.length)*100);
+  const diffColor={easy:'#22c55e',medium:'#f59e0b',hard:'#ef4444'}[state.difficulty];
+  const diffLabel={easy:'Easy',medium:'Medium',hard:'Hard'}[state.difficulty];
+
+  const choicesHTML=q.choices.map((c,i)=>`
+    <button id="mq_opt${i}" onclick="selectMixedOption(${i})"
+      style="width:100%;text-align:left;background:var(--bg-primary);border:2px solid var(--bg-tertiary);
+             border-radius:10px;padding:0.6rem 0.9rem;margin-bottom:0.35rem;cursor:pointer;
+             font-size:0.88rem;font-family:inherit;color:var(--text-primary);
+             transition:border-color 0.15s,background 0.15s;display:flex;align-items:center;gap:0.6rem;">
+      <span style="min-width:1.6rem;height:1.6rem;background:var(--bg-tertiary);border-radius:6px;
+                   display:flex;align-items:center;justify-content:center;font-size:0.72rem;
+                   font-weight:800;color:var(--text-secondary);flex-shrink:0;">${i+1}</span>
+      <span>${c}</span>
+    </button>`).join('');
+
+  box.innerHTML=`
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.6rem;">
+      <span class="mixed-badge">🎯 MIXED</span>
+      <span style="font-size:0.75rem;color:${diffColor};font-weight:700;">${diffLabel}</span>
+    </div>
+    <div style="margin-bottom:0.5rem;">
+      <div style="display:flex;justify-content:space-between;font-size:0.72rem;color:var(--text-secondary);margin-bottom:0.3rem;">
+        <span>Q${state.idx+1}/${state.questions.length} · Score: <b style="color:var(--success)">${state.score}</b> · 🔥${state.streak}</span>
+        <span style="color:var(--text-secondary);">${q.category}</span>
+      </div>
+      <div style="width:100%;height:4px;background:var(--bg-tertiary);border-radius:2px;overflow:hidden;">
+        <div style="height:100%;width:${pct}%;background:linear-gradient(90deg,#f59e0b,#ef4444);transition:width 0.3s;"></div>
+      </div>
+    </div>
+    <div style="background:var(--bg-primary);border:1px solid var(--bg-tertiary);border-radius:10px;
+                padding:0.85rem;margin-bottom:0.75rem;font-size:0.9rem;line-height:1.65;">
+      ${q.prompt}
+    </div>
+    <div id="mq_choices">${choicesHTML}</div>
+    <div id="mq_feedback" style="min-height:1.2rem;font-size:0.82rem;text-align:center;margin:0.4rem 0;"></div>
+    <div style="display:flex;gap:0.4rem;margin-top:0.3rem;">
+      <button onclick="renderVocabMenu()" style="background:var(--bg-tertiary);color:var(--text-primary);border:none;border-radius:8px;padding:0.45rem 0.85rem;cursor:pointer;font-size:0.82rem;">Menu</button>
+      <div style="flex:1;text-align:right;font-size:0.67rem;color:var(--text-secondary);line-height:1.4;padding-top:0.4rem;">Press <b>1–${q.choices.length}</b> to select instantly</div>
+    </div>`;
+
+  // Keyboard: number keys select option directly
+  const kh=function(e){
+    if(!document.getElementById('vocabModal').classList.contains('show'))return;
+    if(state.locked)return;
+    const n=parseInt(e.key);
+    if(n>=1&&n<=q.choices.length){e.preventDefault();selectMixedOption(n-1);}
+  };
+  state._kh=kh;
+  document.addEventListener('keydown',kh);
+}
+
+function selectMixedOption(idx){
+  const state=mixedQuizState;
+  if(state.locked)return;
+  state.locked=true;
+  if(state._kh){document.removeEventListener('keydown',state._kh);state._kh=null;}
+  const q=state.questions[state.idx];
+  const selected=q.choices[idx];
+  const correct=selected.toLowerCase()===q.answer.toLowerCase();
+
+  // Visual feedback on all buttons
+  q.choices.forEach((c,i)=>{
+    const btn=document.getElementById('mq_opt'+i);
+    if(!btn)return;
+    if(c.toLowerCase()===q.answer.toLowerCase()){
+      btn.style.borderColor='var(--success)';btn.style.background='rgba(34,197,94,0.12)';
+      btn.style.color='var(--success)';
+    }else if(i===idx&&!correct){
+      btn.style.borderColor='var(--error)';btn.style.background='rgba(239,68,68,0.1)';
+      btn.style.color='var(--error)';
+    }else{
+      btn.style.opacity='0.45';
+    }
+  });
+
+  const fb=document.getElementById('mq_feedback');
+  if(correct){
+    state.score++;state.streak++;
+    if(state.streak>state.bestStreak)state.bestStreak=state.streak;
+    if(fb)fb.innerHTML=`<span style="color:var(--success);font-weight:700;">✓ Correct! ${state.streak>=3?'<span class="streak-fire">🔥×'+state.streak+'</span>':''}</span>`;
+    if(navigator.vibrate)navigator.vibrate(30);
+  }else{
+    state.streak=0;
+    if(fb)fb.innerHTML=`<span style="color:var(--error);font-weight:700;">✗ Correct answer: <b>${q.answer}</b></span>`;
+    if(navigator.vibrate)navigator.vibrate([50,30,50]);
+  }
+
+  setTimeout(()=>{state.idx++;renderMixedQuestion();},correct?800:1400);
+}
+
+function renderMixedResult(){
+  const state=mixedQuizState;
+  const total=state.questions.length;
+  const pct=Math.round((state.score/total)*100);
+  const emoji=pct>=80?'🏆':pct>=60?'👍':'📖';
+  const msg=pct>=80?'Outstanding performance!':pct>=60?'Good effort — review what you missed!':'Keep practising!';
+  const diffColor={easy:'#22c55e',medium:'#f59e0b',hard:'#ef4444'}[state.difficulty];
+  const diffLabel={easy:'Easy',medium:'Medium',hard:'Hard'}[state.difficulty];
+  const box=document.getElementById('vocabBox');
+  box.innerHTML=`
+    <div style="text-align:center;padding:0.5rem;">
+      <div class="mixed-badge" style="justify-content:center;margin:0 auto 0.75rem;">🎯 MIXED QUIZ RESULT</div>
+      <div style="font-size:2.5rem;margin-bottom:0.3rem;">${emoji}</div>
+      <div style="font-size:2.2rem;font-weight:900;color:${pct>=80?'var(--success)':pct>=60?'var(--warning)':'var(--error)'};">${state.score}/${total}</div>
+      <div style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:0.5rem;">${pct}% correct · ${msg}</div>
+      <div style="display:flex;justify-content:center;gap:1.5rem;margin-bottom:1rem;font-size:0.8rem;">
+        <div style="text-align:center;"><div style="font-size:1.3rem;font-weight:800;color:${diffColor};">${diffLabel}</div><div style="color:var(--text-secondary);">Difficulty</div></div>
+        <div style="text-align:center;"><div style="font-size:1.3rem;font-weight:800;color:var(--accent);">×${state.bestStreak}</div><div style="color:var(--text-secondary);">Best Streak</div></div>
+        <div style="text-align:center;"><div style="font-size:1.3rem;font-weight:800;color:var(--success);">${total}</div><div style="color:var(--text-secondary);">Questions</div></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:0.4rem;">
+        <button onclick="startMixedQuiz()" style="background:linear-gradient(135deg,#f59e0b,#ef4444);color:#fff;border:none;border-radius:10px;padding:0.65rem;font-weight:800;cursor:pointer;font-size:0.9rem;">🔄 Play Again</button>
+        <button onclick="vocabTab='mixed';renderVocabMenu()" style="background:var(--bg-tertiary);color:var(--text-primary);border:none;border-radius:8px;padding:0.55rem;cursor:pointer;">Change Difficulty</button>
+        <button onclick="renderVocabMenu()" style="background:var(--bg-tertiary);color:var(--text-primary);border:none;border-radius:8px;padding:0.55rem;cursor:pointer;">Back to Menu</button>
+      </div>
+    </div>`;
 }
 
 function revealVocabAnswer(choices,answer){
@@ -2198,7 +2687,7 @@ function renderGrammarResult(){
   
   box.innerHTML=`
     <div style="text-align:center;padding:0.5rem;">
-      <div style="font-size:1.75rem;margin-bottom:0.4rem;">${pct>=80?'Trophy':pct>=60?'Thumbs up':'Book'}</div>
+      <div style="font-size:1.75rem;margin-bottom:0.4rem;">${pct>=80?'🏆':pct>=60?'👍':'📖'}</div>
       <div style="font-size:2rem;font-weight:800;color:var(--accent);">${grammarQuizState.score}/${total}</div>
       <div style="color:var(--text-secondary);margin-bottom:1rem;font-size:0.85rem;">${pct>=80?'Excellent! Perfect grammar!':pct>=60?'Good effort - review the rules!':'Keep studying!'}</div>
       <div style="display:flex;flex-direction:column;gap:0.4rem;">
@@ -2206,6 +2695,265 @@ function renderGrammarResult(){
         <button onclick="grammarView='rules';renderGrammar()" style="background:var(--bg-tertiary);color:var(--text-primary);border:none;border-radius:8px;padding:0.55rem;cursor:pointer;">Back to Rules</button>
       </div>
     </div>`;
+}
+
+// ============================================================
+//  IELTS HUB - SECTION SWITCHER
+// ============================================================
+let activeSection='typing';
+let ieltsActiveTab='writing';
+const IELTS_STATS_KEY='typemaster_ielts_stats';
+
+function switchSection(section){
+  activeSection=section;
+  const isIELTS=section==='ielts';
+
+  // Button states
+  const tBtn=document.getElementById('secTabTyping');
+  const iBtn=document.getElementById('secTabIELTS');
+  tBtn.classList.toggle('active',!isIELTS);
+  tBtn.classList.remove('ielts-active');
+  iBtn.classList.remove('active');
+  iBtn.classList.toggle('ielts-active',isIELTS);
+
+  // Body class for purple theme
+  document.body.classList.toggle('ielts-mode',isIELTS);
+
+  // Stats panels
+  document.getElementById('typingStatsPanels').style.display=isIELTS?'none':'';
+  document.getElementById('ieltsStatsPanel').style.display=isIELTS?'grid':'none';
+
+  // Selectors / tabs
+  document.getElementById('typingTabs').style.display=isIELTS?'none':'';
+  const ieltsTabsEl=document.getElementById('ieltsTabs');
+  ieltsTabsEl.style.display=isIELTS?'flex':'none';
+  document.getElementById('subTabsContainer').style.display=isIELTS?'none':'';
+
+  // Upload / answer panels
+  document.getElementById('uploadSection').style.display='none';
+  document.getElementById('answerPanel').classList.remove('show');
+
+  // Controls
+  document.getElementById('typingControls').style.display=isIELTS?'none':'flex';
+  document.getElementById('ieltsControls').style.display=isIELTS?'flex':'none';
+
+  // Subtitle
+  document.getElementById('appSubtitle').textContent=isIELTS
+    ?'📚 IELTS Hub · Writing · Vocabulary · Grammar · Collocations'
+    :'⌨️ Typing practice · Short & long articles · Library';
+
+  if(isIELTS){
+    updateIELTSStats();
+    selectIELTSTab(ieltsActiveTab);
+  }else{
+    // Restore general typing
+    document.getElementById('ieltsAnswerPanel').classList.remove('show');
+    document.getElementById('ieltsContentPanel').style.display='none';
+    document.getElementById('articleList').style.display='';
+    document.getElementById('typingArea').style.display='';
+    document.querySelector('.keyboard-hint').style.display='';
+    currentMainCat='short';
+    buildSubTabs(['1min','3min','5min']);
+    selectDuration('1min',true);
+    document.querySelectorAll('#typingTabs .selector-tab').forEach(b=>b.classList.remove('active'));
+    document.querySelector('#typingTabs .selector-tab').classList.add('active');
+    restartTest();
+  }
+}
+
+function selectIELTSTab(tab){
+  ieltsActiveTab=tab;
+  // Update tab buttons
+  document.querySelectorAll('.ielts-sub-tab').forEach(b=>b.classList.remove('active'));
+  const activeBtn=document.getElementById('ieltsTab_'+tab);
+  if(activeBtn)activeBtn.classList.add('active');
+
+  const contentPanel=document.getElementById('ieltsContentPanel');
+  const articleList=document.getElementById('articleList');
+  const typingArea=document.getElementById('typingArea');
+  const keyHint=document.querySelector('.keyboard-hint');
+  const ieltsAP=document.getElementById('ieltsAnswerPanel');
+  const libPanel=document.getElementById('libraryPanel');
+  libPanel.style.display='none';
+
+  if(tab==='writing'){
+    contentPanel.style.display='none';
+    articleList.style.display='';
+    typingArea.style.display='';
+    keyHint.style.display='';
+    renderIELTSTopicList();
+  }else{
+    contentPanel.style.display='block';
+    articleList.style.display='none';
+    typingArea.style.display='none';
+    keyHint.style.display='none';
+    ieltsAP.classList.remove('show');
+    if(tab==='vocab')renderIELTSVocabPanel();
+    else if(tab==='grammar')renderIELTSGrammarPanel();
+    else if(tab==='collocations')renderIELTSCollPanel();
+  }
+}
+
+function renderIELTSTopicList(){
+  const list=document.getElementById('articleList');
+  const articles=articlesDB['ielts'];
+  list.style.display='';
+  // Override max-height for taller list in IELTS mode
+  list.style.maxHeight='280px';
+  list.innerHTML=articles.map((a,i)=>{
+    const isDone=completedTexts.has(a.text.slice(0,60));
+    const hasAnswer=!!ieltsAnswers[a.title];
+    const isActive=a.text===currentText;
+    const cleanTitle=a.title.replace('IELTS: ','');
+    return`<div class="ielts-topic-item${isActive?' active':isDone?' completed':''}" onclick="loadIELTSTopic(${i})">
+      <div style="flex:1;min-width:0;">
+        <div style="font-weight:600;font-size:0.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${cleanTitle}</div>
+        <div style="font-size:0.7rem;color:var(--text-secondary);margin-top:0.08rem;">${a.category}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:0.2rem;flex-shrink:0;">
+        ${hasAnswer?'<span style="font-size:0.62rem;background:var(--ielts);color:#fff;border-radius:4px;padding:0.1rem 0.35rem;font-weight:700;">Band 8</span>':''}
+        ${isDone?'<span style="font-size:0.62rem;background:var(--success);color:#fff;border-radius:4px;padding:0.1rem 0.35rem;font-weight:700;">✓ Done</span>':''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function loadIELTSTopic(idx){
+  const a=articlesDB['ielts'][idx];
+  currentText=a.text;
+  restartTest();
+  renderIELTSTopicList();
+  const ieltsAP=document.getElementById('ieltsAnswerPanel');
+  if(ieltsAnswers[a.title]){
+    document.getElementById('ieltsAnswerBody').textContent=ieltsAnswers[a.title];
+    document.getElementById('ieltsAnswerTitle').textContent=a.title.replace('IELTS: ','');
+    // Reset collapsed state
+    document.getElementById('ieltsAnswerBody').style.display='none';
+    document.getElementById('ieltsAnswerToggleBtn').textContent='▼ Show';
+    ieltsAP.classList.add('show');
+  }else{
+    ieltsAP.classList.remove('show');
+  }
+  hiddenInput.focus({preventScroll:true});
+}
+
+function toggleIELTSAnswer(){
+  const body=document.getElementById('ieltsAnswerBody');
+  const btn=document.getElementById('ieltsAnswerToggleBtn');
+  const collapsed=body.style.display==='none'||body.style.display==='';
+  body.style.display=collapsed?'block':'none';
+  btn.textContent=collapsed?'▲ Hide':'▼ Show';
+}
+
+function typeIELTSAnswer(){
+  const body=document.getElementById('ieltsAnswerBody');
+  if(!body||!body.textContent.trim())return;
+  currentText=body.textContent.trim();
+  restartTest();
+  showToast('Now type the Band 8+ model answer!','var(--ielts)');
+  hiddenInput.focus({preventScroll:true});
+}
+
+function renderIELTSVocabPanel(){
+  const panel=document.getElementById('ieltsContentPanel');
+  const html=vocabData.map(v=>`
+    <div class="ielts-vocab-card">
+      <div class="ielts-vocab-word">${v.word}</div>
+      <div class="ielts-vocab-pos">${v.pos}</div>
+      <div class="ielts-vocab-def">${v.definition}</div>
+      <div style="margin-top:0.4rem;display:flex;flex-wrap:wrap;gap:0.2rem;">
+        ${v.collocations.slice(0,2).map(c=>`<span style="font-size:0.63rem;background:rgba(139,92,246,0.1);color:var(--ielts);border-radius:4px;padding:0.08rem 0.35rem;">${c}</span>`).join('')}
+      </div>
+    </div>`).join('');
+  panel.innerHTML=`
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.85rem;flex-wrap:wrap;gap:0.5rem;">
+      <div>
+        <span style="color:var(--ielts);font-weight:800;font-size:0.95rem;">📖 IELTS Vocabulary</span>
+        <span style="margin-left:0.5rem;font-size:0.75rem;color:var(--text-secondary);">${vocabData.length} academic words</span>
+      </div>
+      <div style="display:flex;gap:0.4rem;">
+        <button onclick="openVocabGame()" style="background:var(--ielts);color:#fff;border:none;border-radius:8px;padding:0.4rem 0.8rem;cursor:pointer;font-size:0.82rem;font-weight:700;">🎯 Quiz Mode</button>
+      </div>
+    </div>
+    <div class="ielts-vocab-grid">${html}</div>`;
+}
+
+function renderIELTSGrammarPanel(){
+  const panel=document.getElementById('ieltsContentPanel');
+  const topicsHTML=Object.entries(grammarTopics).map(([key,data])=>`
+    <div class="ielts-grammar-item">
+      <div class="ielts-grammar-header" onclick="toggleGrammarSection(this)">
+        <span style="font-weight:700;color:var(--ielts);font-size:0.88rem;">${data.title}</span>
+        <span style="color:var(--text-secondary);font-size:0.82rem;transition:transform 0.2s;">▶</span>
+      </div>
+      <div class="ielts-grammar-body">
+        ${data.rules.map(r=>`
+          <div class="grammar-card" style="border-color:rgba(139,92,246,0.2);">
+            <h4 style="color:var(--ielts);">${r.name}</h4>
+            <p>${r.explanation}</p>
+            ${r.examples.map(e=>`<div class="example">${e}</div>`).join('')}
+          </div>`).join('')}
+      </div>
+    </div>`).join('');
+  panel.innerHTML=`
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.85rem;flex-wrap:wrap;gap:0.5rem;">
+      <span style="color:var(--ielts);font-weight:800;font-size:0.95rem;">📝 IELTS Grammar</span>
+      <button onclick="openGrammar()" style="background:var(--ielts);color:#fff;border:none;border-radius:8px;padding:0.4rem 0.8rem;cursor:pointer;font-size:0.82rem;font-weight:700;">📝 Quiz Mode</button>
+    </div>
+    <p style="font-size:0.78rem;color:var(--text-secondary);margin-bottom:0.75rem;">Click any topic to expand rules and examples.</p>
+    ${topicsHTML}`;
+}
+
+function toggleGrammarSection(header){
+  const body=header.nextElementSibling;
+  const icon=header.querySelector('span:last-child');
+  const isOpen=body.classList.toggle('open');
+  icon.style.transform=isOpen?'rotate(90deg)':'rotate(0deg)';
+}
+
+function renderIELTSCollPanel(){
+  const panel=document.getElementById('ieltsContentPanel');
+  const properColls=collocationSets.filter(s=>s.noun!==undefined);
+  const html=properColls.map(s=>{
+    const adjTags=(s.adjectives||[]).map(a=>`<span class="coll-tag adj">${a} ${s.noun}</span>`).join('');
+    const verbTags=(s.verbs||[]).map(v=>`<span class="coll-tag verb">${v} ${s.noun}</span>`).join('');
+    const phraseTags=(s.phrases||[]).map(p=>`<span class="coll-tag">${p}</span>`).join('');
+    return`<div class="coll-card" style="border-color:rgba(139,92,246,0.2);">
+      <h4 style="color:var(--ielts);">+ ${s.noun.toUpperCase()}</h4>
+      <div style="margin-bottom:0.2rem;">${adjTags}</div>
+      <div style="margin-bottom:0.2rem;">${verbTags}</div>
+      ${phraseTags?`<div>${phraseTags}</div>`:''}
+    </div>`;
+  }).join('');
+  panel.innerHTML=`
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.85rem;flex-wrap:wrap;gap:0.5rem;">
+      <span style="color:var(--ielts);font-weight:800;font-size:0.95rem;">🔗 IELTS Collocations</span>
+      <button onclick="vocabTab='collocations';openVocabModal()" style="background:var(--ielts);color:#fff;border:none;border-radius:8px;padding:0.4rem 0.8rem;cursor:pointer;font-size:0.82rem;font-weight:700;">🎯 Quiz Mode</button>
+    </div>
+    <p style="font-size:0.78rem;color:var(--text-secondary);margin-bottom:0.65rem;"><span style="color:var(--accent);">■</span> verb &nbsp; <span style="color:var(--success);">■</span> adjective collocations</p>
+    <div class="coll-grid">${html}</div>`;
+}
+
+function updateIELTSStats(){
+  const stats=JSON.parse(localStorage.getItem(IELTS_STATS_KEY)||'{}');
+  const essaysDone=[...completedTexts].filter(k=>articlesDB['ielts'].some(a=>a.text.slice(0,60)===k)).length;
+  document.getElementById('ieltsStatEssays').textContent=essaysDone;
+  document.getElementById('ieltsStatVocab').textContent=vocabData.length;
+  document.getElementById('ieltsStatQuiz').textContent=stats.quizAvg?stats.quizAvg+'%':'--';
+  document.getElementById('ieltsStatStreak').textContent=stats.streak||0;
+}
+
+// Update IELTS stats when a quiz completes (called from mixed quiz result)
+function recordIELTSQuizScore(score,total){
+  const stats=JSON.parse(localStorage.getItem(IELTS_STATS_KEY)||'{}');
+  const pct=Math.round((score/total)*100);
+  if(!stats.quizScores)stats.quizScores=[];
+  stats.quizScores.push(pct);
+  if(stats.quizScores.length>20)stats.quizScores.shift();
+  stats.quizAvg=Math.round(stats.quizScores.reduce((a,b)=>a+b,0)/stats.quizScores.length);
+  stats.streak=(stats.streak||0)+1;
+  localStorage.setItem(IELTS_STATS_KEY,JSON.stringify(stats));
+  if(activeSection==='ielts')updateIELTSStats();
 }
 
 // ============================================================
