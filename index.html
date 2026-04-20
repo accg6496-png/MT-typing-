@@ -168,7 +168,34 @@ body{padding-top:22px;}
 .char-box.wrong{border-color:var(--error);background:rgba(239,68,68,0.15);color:var(--error);}
 .char-box.current{border-color:var(--warning);box-shadow:0 0 0 2px rgba(245,158,11,0.3);animation:cursorBlink 0.9s infinite;}@keyframes cursorBlink{0%,100%{box-shadow:0 0 0 2px rgba(245,158,11,0.3)}50%{box-shadow:0 0 0 3px rgba(245,158,11,0.6)}}
 @media(max-width:768px){h1{font-size:1.6rem;}.prediction-panel{grid-template-columns:repeat(2,1fr);}.prediction-value{font-size:1.2rem;}.stats-bar{grid-template-columns:repeat(2,1fr);}.theme-options{grid-template-columns:repeat(2,1fr);}.article-list{grid-template-columns:1fr;}.typing-area{padding:1rem;min-height:160px;}.text-display{font-size:1rem;}.char-box{width:30px;height:38px;font-size:1rem;}}
-/* Mixed Quiz color theme */
+/* ── Definition Tab ── */
+:root{--def-bg:rgba(99,102,241,0.22);--def-border:#6366f1;}
+.def-highlight{background:var(--def-bg);border-bottom:2px solid var(--def-border);border-radius:3px;cursor:pointer;transition:background 0.12s;position:relative;}
+.def-highlight:hover{filter:brightness(1.35);}
+.def-popup{position:fixed;z-index:9999;background:var(--bg-secondary);border:1.5px solid #6366f1;border-radius:12px;padding:0.85rem 1rem;max-width:260px;box-shadow:0 8px 32px rgba(0,0,0,0.45);pointer-events:none;opacity:0;transform:translateY(6px);transition:opacity 0.18s,transform 0.18s;}
+.def-popup.show{opacity:1;transform:translateY(0);}
+.def-popup-word{font-weight:800;color:#6366f1;font-size:0.95rem;}
+.def-popup-pos{font-style:italic;font-size:0.72rem;color:var(--text-secondary);margin-bottom:0.3rem;}
+.def-popup-def{font-size:0.82rem;line-height:1.55;color:var(--text-primary);}
+.def-popup-ex{font-size:0.75rem;color:var(--text-secondary);margin-top:0.35rem;font-style:italic;border-top:1px solid var(--bg-tertiary);padding-top:0.35rem;}
+#defTabBtn.active,#ieltsDefTabBtn.active{background:rgba(99,102,241,0.28);color:#6366f1;border-color:#6366f1;font-weight:800;}
+/* Game modal */
+.game-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.82);z-index:2000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.25s;}
+.game-modal-overlay.show{opacity:1;pointer-events:all;}
+.game-modal{background:var(--bg-secondary);border:2px solid #ef4444;border-radius:18px;padding:2rem;max-width:520px;width:92%;box-shadow:0 0 60px rgba(239,68,68,0.25);}
+/* Keyboard heatmap */
+.kb-heatmap{display:flex;flex-direction:column;gap:5px;align-items:center;margin:0.75rem 0;}
+.kb-row{display:flex;gap:4px;}
+.kb-key{min-width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:700;background:var(--bg-tertiary);color:var(--text-secondary);position:relative;transition:all 0.3s;}
+.kb-key.wide{min-width:48px;}
+.kb-key.wider{min-width:60px;}
+.kb-key.widest{min-width:120px;}
+.kb-key[data-heat="1"]{background:rgba(239,68,68,0.25);color:#ef4444;}
+.kb-key[data-heat="2"]{background:rgba(239,68,68,0.5);color:#fff;}
+.kb-key[data-heat="3"]{background:rgba(239,68,68,0.85);color:#fff;box-shadow:0 0 10px rgba(239,68,68,0.5);}
+.kb-key .kb-count{position:absolute;top:-5px;right:-3px;background:#ef4444;color:#fff;border-radius:50%;width:14px;height:14px;font-size:0.55rem;display:flex;align-items:center;justify-content:center;font-weight:900;}
+/* Results time badge */
+.result-time-badge{display:inline-flex;align-items:center;gap:0.4rem;background:rgba(99,102,241,0.15);border:1px solid #6366f1;border-radius:8px;padding:0.35rem 0.75rem;font-size:0.88rem;font-weight:700;color:#6366f1;}
 :root{--mixed:#f59e0b;--mixed-glow:rgba(245,158,11,0.18);--ielts:#8b5cf6;--ielts-glow:rgba(139,92,246,0.2);}
 /* IELTS Mode background */
 .ielts-mode{background-image:radial-gradient(ellipse at 25% 15%,rgba(139,92,246,0.18) 0%,transparent 55%),radial-gradient(ellipse at 75% 85%,rgba(139,92,246,0.10) 0%,transparent 50%)!important;}
@@ -349,13 +376,13 @@ body{padding-top:22px;}
 
   <!-- GENERAL TYPING CONTROLS -->
   <div class="controls" id="typingControls">
-    <button class="primary" onclick="restartTest()">Restart</button>
+    <button class="primary" onclick="restartTest()">↺ Restart</button>
     <button id="pauseBtn" onclick="togglePause()">Pause</button>
-    <button onclick="saveProgress()">Save</button>
-    <button onclick="loadRandomArticle()">Random</button>
+    <button onclick="saveProgress()">💾 Save</button>
+    <button onclick="loadRandomArticle()">🎲 Random</button>
     <button id="answerToggleBtn" onclick="toggleAnswer()" style="display:none;background:var(--success);color:#fff;">Answer</button>
-    <button onclick="openVocabGame()" style="background:rgba(189,147,249,0.15);color:#bd93f9;border:1px solid #bd93f9;">Vocab</button>
-    <button onclick="openGrammar()" style="background:rgba(245,158,11,0.12);color:var(--warning);border:1px solid var(--warning);">Grammar</button>
+    <button onclick="openTypingGame()" style="background:rgba(239,68,68,0.12);color:#ef4444;border:1px solid #ef4444;">💀 Game</button>
+    <button id="defTabBtn" onclick="toggleDefTab()" style="background:rgba(99,102,241,0.12);color:#6366f1;border:1px solid #6366f1;">📖 Defs</button>
   </div>
   <!-- IELTS CONTROLS (shown in IELTS mode) -->
   <div class="controls" id="ieltsControls" style="display:none;">
@@ -363,6 +390,7 @@ body{padding-top:22px;}
     <button id="ieltsPauseBtn" onclick="togglePause()" style="background:var(--bg-tertiary);">Pause</button>
     <button onclick="saveProgress()">💾 Save</button>
     <button onclick="openVocabGame()" style="background:rgba(139,92,246,0.15);color:var(--ielts);border:1px solid var(--ielts);">🎯 Quiz</button>
+    <button id="ieltsDefTabBtn" onclick="toggleDefTab()" style="background:rgba(99,102,241,0.12);color:#6366f1;border:1px solid #6366f1;">📖 Defs</button>
   </div>
   <div class="toast" id="toast"></div>
 
@@ -382,17 +410,30 @@ body{padding-top:22px;}
 
 <!-- RESULTS MODAL -->
 <div class="modal-backdrop" id="resultsModal">
-  <div class="modal-box">
-    <h2 style="font-size:1.5rem;margin-bottom:1.25rem;color:var(--success);">Test Complete!</h2>
+  <div class="modal-box" style="max-width:500px;">
+    <h2 style="font-size:1.5rem;margin-bottom:0.5rem;color:var(--success);">✅ Test Complete!</h2>
+    <div style="display:flex;justify-content:center;gap:0.5rem;margin-bottom:1rem;flex-wrap:wrap;">
+      <span class="result-time-badge" id="finalTimeBadge">⏱ 0:00</span>
+    </div>
     <div class="big-stat" id="finalWpm">0</div>
-    <p style="color:var(--text-secondary);margin-bottom:1.25rem;">Words Per Minute</p>
+    <p style="color:var(--text-secondary);margin-bottom:1rem;">Words Per Minute</p>
     <div class="results-grid">
       <div class="result-item"><div class="stat-label">Accuracy</div><div class="stat-value" id="finalAccuracy">0%</div></div>
       <div class="result-item"><div class="stat-label">Raw CPM</div><div class="stat-value" id="finalCpm">0</div></div>
       <div class="result-item"><div class="stat-label">Characters</div><div class="stat-value" id="finalChars">0</div></div>
       <div class="result-item"><div class="stat-label">Errors</div><div class="stat-value" id="finalErrors">0</div></div>
     </div>
-    <button class="primary" onclick="closeResults()" style="width:100%;justify-content:center;">Continue</button>
+    <!-- Keyboard Heatmap -->
+    <div id="kbHeatmapSection" style="margin-top:1rem;">
+      <div style="font-size:0.78rem;font-weight:700;color:var(--text-secondary);text-align:center;margin-bottom:0.5rem;text-transform:uppercase;letter-spacing:0.07em;">⌨️ Mistake Heatmap</div>
+      <div class="kb-heatmap" id="kbHeatmap"></div>
+      <div style="display:flex;justify-content:center;gap:1rem;font-size:0.65rem;color:var(--text-secondary);margin-top:0.3rem;">
+        <span><span style="display:inline-block;width:10px;height:10px;background:rgba(239,68,68,0.25);border-radius:2px;vertical-align:middle;"></span> Few</span>
+        <span><span style="display:inline-block;width:10px;height:10px;background:rgba(239,68,68,0.5);border-radius:2px;vertical-align:middle;"></span> Some</span>
+        <span><span style="display:inline-block;width:10px;height:10px;background:rgba(239,68,68,0.85);border-radius:2px;vertical-align:middle;"></span> Many</span>
+      </div>
+    </div>
+    <button class="primary" onclick="closeResults()" style="width:100%;justify-content:center;margin-top:1rem;">Continue</button>
   </div>
 </div>
 
@@ -511,6 +552,22 @@ body{padding-top:22px;}
         </div>
       </div>
     </div>
+    <div class="settings-section">
+      <label class="settings-label">📖 Definition Highlight Color</label>
+      <div style="display:flex;gap:0.4rem;flex-wrap:wrap;margin-bottom:0.45rem;">
+        <button onclick="applyDefColor('rgba(99,102,241,0.22)','#6366f1')" style="padding:0.35rem 0.6rem;border-radius:7px;border:2px solid #6366f1;background:rgba(99,102,241,0.2);color:#6366f1;cursor:pointer;font-size:0.75rem;font-weight:700;">Indigo</button>
+        <button onclick="applyDefColor('rgba(234,179,8,0.22)','#eab308')" style="padding:0.35rem 0.6rem;border-radius:7px;border:2px solid #eab308;background:rgba(234,179,8,0.2);color:#eab308;cursor:pointer;font-size:0.75rem;font-weight:700;">Yellow</button>
+        <button onclick="applyDefColor('rgba(34,197,94,0.22)','#22c55e')" style="padding:0.35rem 0.6rem;border-radius:7px;border:2px solid #22c55e;background:rgba(34,197,94,0.2);color:#22c55e;cursor:pointer;font-size:0.75rem;font-weight:700;">Green</button>
+        <button onclick="applyDefColor('rgba(249,115,22,0.22)','#f97316')" style="padding:0.35rem 0.6rem;border-radius:7px;border:2px solid #f97316;background:rgba(249,115,22,0.2);color:#f97316;cursor:pointer;font-size:0.75rem;font-weight:700;">Orange</button>
+        <button onclick="applyDefColor('rgba(236,72,153,0.22)','#ec4899')" style="padding:0.35rem 0.6rem;border-radius:7px;border:2px solid #ec4899;background:rgba(236,72,153,0.2);color:#ec4899;cursor:pointer;font-size:0.75rem;font-weight:700;">Pink</button>
+        <button onclick="applyDefColor('rgba(6,182,212,0.22)','#06b6d4')" style="padding:0.35rem 0.6rem;border-radius:7px;border:2px solid #06b6d4;background:rgba(6,182,212,0.2);color:#06b6d4;cursor:pointer;font-size:0.75rem;font-weight:700;">Cyan</button>
+      </div>
+      <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.78rem;color:var(--text-secondary);">
+        <span>Custom border:</span>
+        <input type="color" id="defColorCustom" value="#6366f1" style="width:30px;height:24px;border:none;border-radius:4px;cursor:pointer;"
+          oninput="applyDefColor('rgba('+hexToRgbTriple(this.value)+',0.22)',this.value)">
+      </div>
+    </div>
     <button class="primary" onclick="closeSettings()" style="width:100%;">💾 Save &amp; Close</button>
   </div>
 </div>
@@ -523,6 +580,19 @@ body{padding-top:22px;}
 <!-- GRAMMAR MODAL -->
 <div class="modal-backdrop" id="grammarModal">
   <div class="modal-box left" style="max-width:560px;" id="grammarBox"></div>
+</div>
+
+<!-- DEFINITION POPUP (floating tooltip) -->
+<div class="def-popup" id="defPopup">
+  <div class="def-popup-word" id="defPopupWord"></div>
+  <div class="def-popup-pos" id="defPopupPos"></div>
+  <div class="def-popup-def" id="defPopupDef"></div>
+  <div class="def-popup-ex" id="defPopupEx"></div>
+</div>
+
+<!-- TYPING GAME MODAL -->
+<div class="game-modal-overlay" id="gameModal">
+  <div class="game-modal" id="gameModalBox"></div>
 </div>
 
 <script>
@@ -734,7 +804,19 @@ const ieltsAnswers = {
   "IELTS: Advertising Influence":"Advertising has become increasingly pervasive in modern society, raising concerns about its effects.\n\nCritics argue that advertising manipulates consumers, creating desires for unnecessary products and promoting materialistic values. Children are particularly vulnerable to sophisticated marketing techniques. Furthermore, advertising often portrays unrealistic body images, contributing to self-esteem issues.\n\nDefenders counter that advertising provides information that helps consumers make informed choices. It also funds free media content and supports economic growth by stimulating demand.\n\nIn my opinion, while advertising serves legitimate economic functions, stronger regulation is needed to protect vulnerable populations and ensure truthful messaging.\n\nIn conclusion, advertising is neither wholly beneficial nor entirely harmful; its impact depends on how it is regulated and consumed.",
   "IELTS: Remote Work":"Remote working has transformed employment patterns for millions of people worldwide.\n\nThe advantages are significant. Workers save time and money by eliminating commutes. Many report improved work-life balance and increased productivity in home environments. Employers can access global talent pools and reduce office costs.\n\nHowever, challenges exist. Remote workers may experience isolation and blurred boundaries between work and personal life. Career advancement can suffer from reduced visibility to management. Collaboration and creativity may be hampered by lack of face-to-face interaction.\n\nIn my view, the optimal approach combines remote and in-person work, allowing flexibility while maintaining social connections and organisational culture.\n\nIn conclusion, remote work offers genuine benefits but requires thoughtful implementation to maximise advantages while mitigating drawbacks.",
   "IELTS: Fast Fashion":"The fast fashion industry produces inexpensive clothing rapidly to meet changing trends, raising serious concerns.\n\nEnvironmental impacts are severe. The industry is a major contributor to water pollution, textile waste, and carbon emissions. Cheap, disposable clothing encourages overconsumption and rapid disposal, filling landfills with synthetic materials that do not biodegrade.\n\nSocial impacts are equally troubling. Garment workers in developing countries often face unsafe conditions, long hours, and poverty wages. The rush to minimise costs creates pressure that leads to tragedies like factory collapses.\n\nSolutions include consumer education about sustainable choices, industry regulation requiring transparency and fair wages, and development of circular economy models that prioritise recycling and durability.\n\nIn conclusion, the fast fashion model is environmentally and socially unsustainable, demanding action from consumers, companies, and governments alike.",
-  "IELTS: Aging Population":"Many countries face the challenge of aging populations as birth rates decline and life expectancy increases.\n\nPositive effects include the wisdom and experience older workers bring to the economy. Many older adults contribute to families through childcare and to communities through volunteering. Extended lifespans represent a triumph of medical and social progress.\n\nHowever, challenges are significant. Pension systems face strain as the ratio of workers to retirees shifts. Healthcare costs rise with age-related conditions. Labour shortages may slow economic growth. Social isolation affects many elderly people.\n\nMeasures to address these challenges include raising retirement ages gradually, promoting lifelong learning and flexible work for older adults, investing in healthcare prevention, and developing age-friendly communities that support independent living.\n\nIn conclusion, aging populations present both opportunities and challenges requiring proactive policy responses."
+  "IELTS: Aging Population":"Many countries face the challenge of aging populations as birth rates decline and life expectancy increases.\n\nPositive effects include the wisdom and experience older workers bring to the economy. Many older adults contribute to families through childcare and to communities through volunteering. Extended lifespans represent a triumph of medical and social progress.\n\nHowever, challenges are significant. Pension systems face strain as the ratio of workers to retirees shifts. Healthcare costs rise with age-related conditions. Labour shortages may slow economic growth. Social isolation affects many elderly people.\n\nMeasures to address these challenges include raising retirement ages gradually, promoting lifelong learning and flexible work for older adults, investing in healthcare prevention, and developing age-friendly communities that support independent living.\n\nIn conclusion, aging populations present both opportunities and challenges requiring proactive policy responses.",
+  "IELTS: Online Learning":"The debate over whether online education matches the quality of traditional classroom learning has intensified following the rapid expansion of digital platforms.\n\nProponents of online learning argue convincingly that it democratises access to education. Students in remote areas, working adults, and those with disabilities gain access to world-class instruction previously unavailable to them. Platforms such as Coursera and edX offer courses from leading universities at a fraction of the cost. Furthermore, self-paced learning accommodates individual learning styles and schedules.\n\nNevertheless, online education carries significant limitations. The absence of face-to-face interaction reduces opportunities for collaborative learning and immediate feedback. Many students lack the self-discipline required for independent study, leading to high dropout rates on online courses. Practical subjects such as medicine, engineering, and the performing arts require physical environments that digital platforms cannot replicate. Moreover, the social dimension of education, including the development of communication skills and professional networks, is difficult to reproduce online.\n\nIn my view, online and traditional education are complementary rather than competing systems. A blended approach, combining digital flexibility with in-person instruction, represents the most effective model for most learners.\n\nIn conclusion, while online learning has expanded access to education considerably, it cannot fully replace the richness of the traditional classroom experience.",
+  "IELTS: Nuclear Energy":"Nuclear energy occupies a contentious position in debates about the future of global energy supply, with passionate advocates and equally determined opponents.\n\nSupporters present a compelling case. Nuclear power generates large quantities of electricity without direct carbon emissions, making it attractive as a tool for combating climate change. Modern reactor designs incorporate multiple safety systems that make catastrophic failures far less likely than in older plants. Countries such as France have operated extensive nuclear programmes for decades with strong safety records.\n\nHowever, the objections are substantial. The consequences of accidents, as demonstrated at Chernobyl and Fukushima, can be catastrophic and long-lasting. The problem of nuclear waste, which remains hazardous for thousands of years, has no fully satisfactory solution. The enormous capital costs and lengthy construction times of nuclear plants compare unfavourably with rapidly falling costs for wind and solar power. The risk of nuclear proliferation, the spread of weapons-grade material, is a further cause for concern.\n\nIn my opinion, nuclear power may have a transitional role in the shift away from fossil fuels in countries where renewable energy alone cannot yet meet baseload demand. However, investment should prioritise expanding renewables rather than expanding nuclear capacity.\n\nIn conclusion, nuclear energy offers genuine low-carbon advantages but poses risks that demand the most rigorous regulation and long-term planning.",
+  "IELTS: Urbanisation Benefits":"Urbanisation, the movement of populations from rural areas to cities, is one of the defining trends of the modern era, bringing both opportunities and challenges.\n\nThe benefits of urban life are substantial. Cities concentrate economic opportunity, offering a wider range of employment, better wages, and greater prospects for career advancement than rural areas typically provide. Access to healthcare, education, and cultural institutions is generally superior in urban centres. The density of cities also makes them more efficient in terms of energy use and infrastructure provision per capita. Historically, cities have been the primary engines of innovation, culture, and social progress.\n\nYet urbanisation creates serious problems. Rapid growth overwhelms housing supply, driving up costs and expanding informal settlements where residents lack access to clean water, sanitation, and legal security. Traffic congestion, air pollution, and noise degrade quality of life. The concentration of poverty in deprived urban neighbourhoods can entrench inequality and social exclusion. Rural areas lose population and economic vitality, creating a damaging imbalance in national development.\n\nIn my view, urbanisation is neither inherently positive nor negative. Its consequences depend almost entirely on the quality of urban governance, planning, and investment in infrastructure and social services.\n\nIn conclusion, while cities offer remarkable opportunities, realising their potential requires proactive policies to ensure that growth is inclusive, sustainable, and well-managed.",
+  "IELTS: Wealth and Happiness":"The relationship between wealth and happiness is one of the most enduring questions in psychology and social science, with research offering nuanced and sometimes counterintuitive findings.\n\nThose who argue that wealth is central to happiness point to the obvious ways in which money removes sources of stress and expands freedom. Financial security provides access to quality healthcare, nutrition, and education. It enables people to pursue meaningful experiences and protects against the anxiety of poverty and insecurity. Studies consistently show that people in wealthier countries report higher levels of life satisfaction on average.\n\nHowever, the relationship is more complex than it first appears. Research by psychologist Ed Diener and others suggests that beyond a moderate income sufficient to meet basic needs and avoid financial stress, additional wealth produces diminishing returns in happiness. The phenomenon of hedonic adaptation means that people quickly adjust to improvements in material circumstances and return to their previous baseline of wellbeing. Relationships, purpose, autonomy, and a sense of contribution consistently emerge as more powerful predictors of sustained happiness than income above a comfortable level.\n\nIn my opinion, wealth is a necessary but insufficient condition for happiness. A society that provides economic security for all its members while also fostering strong communities and meaningful work is more likely to produce widespread wellbeing than one that maximises aggregate wealth while tolerating deep inequality.\n\nIn conclusion, money matters greatly at low income levels but becomes progressively less important above a comfortable threshold.",
+  "IELTS: Tourism Impacts":"International tourism has become one of the world's largest industries, generating both significant benefits and serious problems for destinations and their communities.\n\nThe economic advantages are considerable. Tourism creates employment in hospitality, transport, retail, and cultural sectors. It generates foreign exchange earnings and stimulates investment in infrastructure that local residents also benefit from. In developing countries, tourism can provide livelihoods in areas with few alternative economic opportunities and fund conservation of natural and cultural heritage.\n\nNevertheless, the negative consequences are increasingly well-documented. Mass tourism overwhelms fragile natural environments, damaging coral reefs, eroding footpaths, and disturbing wildlife. The concentration of visitors in a small number of iconic destinations leads to overcrowding that degrades the very qualities that make them attractive. Culturally, the commercialisation of local traditions can strip them of authenticity. Economically, much of the revenue generated by international tourism leaks out of local economies to foreign-owned hotel chains and tour operators.\n\nMeasures to mitigate these impacts include limiting visitor numbers through pricing or permits, investing in less-visited destinations to distribute tourism more widely, and requiring that a greater proportion of tourism revenue benefits local communities directly.\n\nIn conclusion, tourism's impacts depend heavily on how it is managed. With thoughtful governance, its benefits can be maximised while its damage is contained.",
+  "IELTS: Volunteering":"The question of whether community service or volunteering should be made compulsory raises important issues about the relationship between individual freedom and social responsibility.\n\nThe potential benefits of mandatory volunteering are significant. Structured community service exposes young people to social realities beyond their own experience, building empathy and civic awareness. Many countries with compulsory national service report that it fosters social cohesion across class and ethnic divides. Communities benefit directly from the additional labour, particularly in sectors such as elderly care, environmental conservation, and education support.\n\nHowever, the drawbacks of compulsion are also real. Volunteering derives much of its social value from the goodwill and genuine motivation of the participants. Coerced volunteers may resent the obligation, producing poor-quality service that burdens rather than benefits recipients. Mandatory schemes also raise questions of personal liberty: in democratic societies, forcing citizens to donate their time represents a significant imposition. Administrative costs of running large-scale compulsory programmes can be considerable.\n\nIn my view, the benefits of voluntary community engagement are best cultivated through positive incentives rather than legal obligation. Schools should integrate service-learning into curricula, and governments should recognise and reward voluntary contributions through tax credits or enhanced social benefits.\n\nIn conclusion, while community service is highly valuable, making it compulsory risks undermining the very qualities that make voluntary service beneficial.",
+  "IELTS: Urban Farming":"Urban farming, the cultivation of food within city environments, has attracted growing interest as cities seek to address food security, environmental sustainability, and community wellbeing simultaneously.\n\nAdvocates argue that urban farming offers multiple benefits. Growing food locally reduces the carbon footprint associated with long-distance transportation. Rooftop gardens, vertical farms, and community plots can convert unused urban space into productive land, improving biodiversity and reducing the urban heat island effect. For urban residents, access to fresh produce improves nutrition, and the act of growing food builds community connections and horticultural knowledge that has been lost across generations of urban living.\n\nCritics, however, question whether urban farming can make a meaningful contribution to food security at scale. Cities lack the land area necessary to produce food in quantities comparable to rural agriculture. Soil contamination in urban environments can pose health risks requiring expensive remediation. The costs per unit of food produced in urban settings are generally far higher than conventional agriculture, making urban farming economically unviable without subsidies for most food categories.\n\nIn my opinion, urban farming is a valuable complement to, rather than a replacement for, conventional agriculture. Its greatest contributions lie in community building, education, and environmental improvement rather than in meeting a significant proportion of urban food needs.\n\nIn conclusion, urban farming deserves support as part of a broader strategy for sustainable cities, but expectations of its contribution to food security should remain realistic.",
+  "IELTS: Privacy in the Digital Age":"The mass collection of personal data by governments and corporations has become one of the defining ethical and political controversies of the digital era.\n\nProponents of data collection argue that it enables services of genuine value. Personalised recommendations, more accurate medical diagnoses, targeted public health interventions, and improved national security all depend on the analysis of large datasets. Many people willingly trade personal information for the convenience of free digital services and find the experience of personalised content genuinely useful.\n\nHowever, the risks to privacy are profound. Data collected for one purpose can be used for others without consent, a practice known as function creep. Commercial platforms monetise personal information in ways that most users do not fully understand. Governments have in some cases used surveillance infrastructure to monitor political opponents, journalists, and minority communities. The concentration of vast quantities of intimate data creates targets for criminals and hostile states, as major data breaches demonstrate regularly.\n\nIn my view, the collection and use of personal data requires a robust regulatory framework based on principles of informed consent, purpose limitation, and proportionality. Citizens should have clear rights to access, correct, and delete their personal information, and organisations holding data should bear genuine legal liability for its misuse.\n\nIn conclusion, the benefits of data collection are real but must be balanced against fundamental rights to privacy through meaningful legal protections and genuine corporate accountability.",
+  "IELTS: Mental Health in Schools":"Whether mental health education should be compulsory in schools is a question that touches on the purpose of education, the role of schools in young people's lives, and the growing burden of psychological distress among adolescents.\n\nThe case for inclusion in the curriculum is compelling. Rates of anxiety, depression, and eating disorders among young people have risen sharply over the past two decades. Teaching students to recognise symptoms of mental distress, to seek help, and to develop emotional resilience can reduce the stigma that prevents many from accessing support. Schools already teach physical health; mental health deserves equivalent attention. Evidence suggests that social and emotional learning programmes improve academic performance as well as wellbeing.\n\nOpponents raise genuine concerns. Teachers are not mental health professionals and may do more harm than good if inadequately trained. Some argue that introducing mental health topics without sufficient support structures risks raising anxiety rather than alleviating it. Parents may feel that family and religious communities are the appropriate context for discussing emotional wellbeing, and that schools are overstepping their boundaries.\n\nIn my view, these concerns point to the importance of implementation rather than providing grounds for exclusion. Mental health education should be delivered by appropriately trained staff within a wider framework of support services, not treated as a standalone lesson.\n\nIn conclusion, the case for mental health education in schools is strong, provided it is properly resourced, expertly delivered, and integrated with accessible professional support.",
+  "IELTS: Space Exploration Funding":"The question of whether space exploration funding is justified when urgent problems remain unresolved on Earth is one of the most frequently debated issues in science policy.\n\nCritics of space spending argue that the resources devoted to exploring distant planets and moons could more effectively address immediate human needs. Global poverty, climate change, pandemic preparedness, and inadequate access to education and healthcare demand urgent funding. The spectacle of rockets launched at enormous cost while millions lack clean water strikes many observers as a profound misallocation of priorities.\n\nHowever, this framing presents a false choice. Space exploration has historically produced technologies with widespread terrestrial applications, including GPS navigation, satellite communication, water purification systems, and medical imaging technologies. The sums spent on space exploration represent a tiny fraction of national budgets; diverting them to other priorities would make negligible difference to earthly problems at the scale required. Furthermore, the long-term survival of humanity arguably depends on developing the capacity to inhabit environments beyond Earth.\n\nIn my opinion, space exploration is a legitimate public investment that should be maintained even as governments address pressing social needs. The challenge is not to choose between space and Earth but to ensure that public resources overall are allocated according to genuine priorities, with space receiving a proportionate share.\n\nIn conclusion, space exploration delivers real benefits and represents a worthwhile long-term investment, provided it does not come at the direct expense of urgent humanitarian needs.",
+  "IELTS: Artificial Intelligence and Employment":"The impact of artificial intelligence and automation on employment is generating intense debate among economists, policymakers, and workers around the world.\n\nOptimists argue that previous waves of technological change, from the industrial revolution to the computerisation of the twentieth century, ultimately created more jobs than they destroyed, as productivity gains generated new industries and increased consumer spending. Artificial intelligence, they contend, will similarly free workers from dangerous, repetitive, and physically demanding tasks, enabling them to focus on more creative, interpersonal, and cognitively demanding work. Medical diagnosis, drug discovery, and climate modelling stand to benefit enormously from AI's analytical capabilities.\n\nPessimists counter that the current wave of automation is qualitatively different from previous ones. AI threatens not only manual jobs but also skilled white-collar work in areas such as law, accounting, financial analysis, and even medical diagnosis. The speed of displacement may outpace the ability of education and training systems to retrain workers. Without deliberate policy intervention, the gains from automation risk flowing overwhelmingly to capital owners rather than workers, dramatically worsening inequality.\n\nIn my view, the outcome depends primarily on policy choices rather than technological inevitability. Governments must invest in education and retraining, consider mechanisms for distributing the gains from automation more broadly, and ensure that social protection systems are adequate for a more fragmented labour market.\n\nIn conclusion, artificial intelligence need not produce mass unemployment, but avoiding that outcome requires deliberate, forward-looking policy rather than passive reliance on market adjustment.",
+  "IELTS: Cultural Homogenisation":"Globalisation has connected the world as never before, but critics argue that this integration is erasing the cultural diversity that makes humanity rich and complex.\n\nThose who welcome cultural convergence point to genuine benefits. A shared global culture facilitates communication, trade, and cooperation across national boundaries. The spread of democratic values, human rights norms, and scientific knowledge has improved lives worldwide. Cultural exchange enriches local traditions rather than simply displacing them; many of today's most vital cultural forms are hybrids shaped by global influences.\n\nHowever, the concern that dominant cultures, particularly American popular culture, are overwhelming local traditions deserves serious consideration. Indigenous languages are disappearing at alarming rates, taking with them unique ways of understanding the world. Local cuisines, musical traditions, and artistic practices face commercial pressure from globally distributed mass culture. When cultural diversity is lost, it is rarely recovered; the world becomes in some meaningful sense poorer.\n\nIn my view, cultural homogenisation is a genuine risk that requires active countermeasures. Governments should fund the preservation and teaching of local languages, support national arts and cultural industries, and ensure that international trade agreements do not treat culture as simply another commodity. At the same time, resisting all cultural exchange in the name of preservation would be both futile and undesirable.\n\nIn conclusion, the challenge is to embrace the genuine benefits of cultural exchange while actively protecting the diversity of traditions, languages, and ways of life that constitute humanity's collective heritage."
 };
 
 
@@ -1020,7 +1102,7 @@ const grammarTopics = {
 //  STATE
 // ============================================================
 let currentText = articlesDB["1min"][0].text;
-let startTime=null,timerInterval=null,typedLength=0,errors=0,totalErrors=0;
+let startTime=null,timerInterval=null,typedLength=0,errors=0,totalErrors=0,keyMistakeMap={};
 let isActive=false,isComplete=false,isPaused=false,pauseStart=null;
 let wpmHistory=[];
 let completedTexts=new Set(JSON.parse(localStorage.getItem('typemaster_completed')||'[]'));
@@ -1054,6 +1136,7 @@ function init(){
   applyLineHeightCSS(settings.lineHeight);
   applyCursorStyle(settings.cursorStyle);
   applyAnimationSetting();
+  loadDefColor();
 }
 
 // ============================================================
@@ -1072,6 +1155,8 @@ function renderText(){
   const wtl=document.getElementById('wordsTypedLabel');
   if(wtl)wtl.textContent='0 words typed';
   updateTimePrediction();
+  // Re-apply definition highlights if the tab is active
+  if(defTabActive)applyDefHighlights();
 }
 function handleInput(){
   if(isComplete||isPaused)return;
@@ -1127,7 +1212,15 @@ function updateDisplay(typed){
     if(i<typed.length){if(typed[i]===currentText[i])c.classList.add('correct');else{c.classList.add('incorrect');errors++;}}
     else if(i===typed.length)c.classList.add('current');
   });
-  if(errors>prev)totalErrors+=(errors-prev);
+  if(errors>prev){
+    totalErrors+=(errors-prev);
+    for(let i=0;i<typed.length&&i<currentText.length;i++){
+      if(typed[i]!==currentText[i]){
+        const ek=currentText[i].toLowerCase();
+        if(/[a-z0-9,.\/;'\-= ]/.test(ek))keyMistakeMap[ek]=(keyMistakeMap[ek]||0)+1;
+      }
+    }
+  }
   document.getElementById('progressFill').style.width=`${(typed.length/currentText.length)*100}%`;
   // Auto-scroll: keep current char visible inside the typing area
   const curChar=textDisplay.querySelector('.char.current');
@@ -1163,13 +1256,20 @@ function updateTimer(){
 }
 function completeTest(){
   isComplete=true;clearInterval(timerInterval);hiddenInput.blur();
-  const mins=(Date.now()-startTime)/60000;
+  const elapsedMs=Date.now()-startTime;
+  const mins=elapsedMs/60000;
   const wpm=Math.round((currentText.length/5)/mins);
+  // Time badge
+  const secs=Math.round(elapsedMs/1000);
+  const mm=Math.floor(secs/60);const ss=secs%60;
+  document.getElementById('finalTimeBadge').textContent=`⏱ ${mm}:${ss.toString().padStart(2,'0')}`;
   document.getElementById('finalWpm').textContent=wpm;
   document.getElementById('finalAccuracy').textContent=Math.round(((currentText.length-errors)/currentText.length)*100)+'%';
   document.getElementById('finalCpm').textContent=Math.round(currentText.length/mins);
   document.getElementById('finalChars').textContent=currentText.length;
   document.getElementById('finalErrors').textContent=totalErrors;
+  // Keyboard heatmap
+  renderKeyboardHeatmap(keyMistakeMap);
   completedTexts.add(currentText.slice(0,60));
   localStorage.setItem('typemaster_completed',JSON.stringify([...completedTexts]));
   localStorage.removeItem('typemaster_progress');
@@ -1180,7 +1280,7 @@ function completeTest(){
 function restartTest(){
   clearInterval(timerInterval);
   isActive=false;isComplete=false;isPaused=false;pauseStart=null;
-  startTime=null;typedLength=0;errors=0;totalErrors=0;wpmHistory=[];
+  startTime=null;typedLength=0;errors=0;totalErrors=0;wpmHistory=[];keyMistakeMap={};
   hiddenInput.value='';
   document.getElementById('wpm').textContent='0';
   document.getElementById('accuracy').textContent='100%';
@@ -2954,6 +3054,509 @@ function recordIELTSQuizScore(score,total){
   stats.streak=(stats.streak||0)+1;
   localStorage.setItem(IELTS_STATS_KEY,JSON.stringify(stats));
   if(activeSection==='ielts')updateIELTSStats();
+}
+
+// ============================================================
+//  KEYBOARD HEATMAP
+// ============================================================
+const KB_LAYOUT=[
+  ['`','1','2','3','4','5','6','7','8','9','0','-','='],
+  ['q','w','e','r','t','y','u','i','o','p','[',']','\\'],
+  ['a','s','d','f','g','h','j','k','l',';',"'"],
+  ['z','x','c','v','b','n','m',',','.','/'],
+  [' ']
+];
+const KB_WIDE_KEYS=new Set(['`','\\','=','\'']);
+const KB_WIDER_KEYS=new Set(['[',']']);
+
+function renderKeyboardHeatmap(mistakeMap){
+  const el=document.getElementById('kbHeatmap');
+  if(!el)return;
+  const maxMistakes=Math.max(1,...Object.values(mistakeMap));
+  const hasAny=Object.keys(mistakeMap).length>0;
+  if(!hasAny){el.innerHTML='<div style="font-size:0.75rem;color:var(--text-secondary);padding:0.5rem;">No mistakes — perfect!</div>';return;}
+  el.innerHTML=KB_LAYOUT.map((row,ri)=>{
+    const keys=row.map(k=>{
+      const count=mistakeMap[k]||0;
+      const heat=count===0?0:count/maxMistakes<0.33?1:count/maxMistakes<0.67?2:3;
+      const isSpace=k===' ';
+      const cls=`kb-key${isSpace?' widest':KB_WIDER_KEYS.has(k)?' wider':KB_WIDE_KEYS.has(k)?' wide':''}`;
+      const label=isSpace?'SPACE':k.toUpperCase();
+      const badge=count>0?`<span class="kb-count">${count}</span>`:'';
+      return`<div class="${cls}" data-heat="${heat}" title="${label}: ${count} mistake${count!==1?'s':''}">${badge}${label}</div>`;
+    }).join('');
+    return`<div class="kb-row">${keys}</div>`;
+  }).join('');
+}
+
+// ============================================================
+//  DEFINITION TAB — highlight uncommon words & show definitions
+// ============================================================
+let defTabActive=false;
+let defHighlightColor='rgba(99,102,241,0.22)';
+let defHighlightBorder='#6366f1';
+
+// Apply CSS variable for highlight color
+function applyDefColor(bg,border){
+  defHighlightColor=bg;
+  defHighlightBorder=border;
+  document.documentElement.style.setProperty('--def-bg',bg);
+  document.documentElement.style.setProperty('--def-border',border);
+  localStorage.setItem('typemaster_def_color',JSON.stringify({bg,border}));
+}
+function loadDefColor(){
+  try{
+    const s=JSON.parse(localStorage.getItem('typemaster_def_color'));
+    if(s)applyDefColor(s.bg,s.border);
+    else applyDefColor(defHighlightColor,defHighlightBorder);
+  }catch(e){applyDefColor(defHighlightColor,defHighlightBorder);}
+}
+
+// Extended dictionary — covers words that ACTUALLY appear in the articles
+const wordDefinitions={
+  // From the articles
+  'photosynthesis':{pos:'n.',def:'The process by which plants convert sunlight, water and CO₂ into glucose and oxygen.',ex:'Photosynthesis is essential for all aerobic life on Earth.'},
+  'precipitation':{pos:'n.',def:'Water that falls from the atmosphere as rain, snow or hail.',ex:'Precipitation replenishes rivers and groundwater supplies.'},
+  'gravitational':{pos:'adj.',def:'Relating to the force of attraction between masses.',ex:'The gravitational pull of the Moon creates ocean tides.'},
+  'electromagnetic':{pos:'adj.',def:'Relating to the interaction of electric and magnetic fields.',ex:'Electromagnetic induction generates electricity in power stations.'},
+  'deforestation':{pos:'n.',def:'The large-scale clearing of forest land.',ex:'Deforestation releases stored carbon into the atmosphere.'},
+  'biodiversity':{pos:'n.',def:'The variety of plant and animal life in a habitat.',ex:'Coral reefs support extraordinary biodiversity.'},
+  'acidification':{pos:'n.',def:'The process of becoming more acidic.',ex:'Ocean acidification threatens shell-forming marine creatures.'},
+  'microorganisms':{pos:'n.',def:'Living things too small to be seen without a microscope.',ex:'Healthy soil contains billions of microorganisms per teaspoon.'},
+  'cardiovascular':{pos:'adj.',def:'Relating to the heart and blood vessels.',ex:'Regular exercise lowers cardiovascular disease risk significantly.'},
+  'sedentary':{pos:'adj.',def:'Characterised by much sitting and little physical activity.',ex:'Sedentary lifestyles are linked to a range of chronic diseases.'},
+  'overestimate':{pos:'v.',def:'Judge something to be greater than it actually is.',ex:'People consistently overestimate the joy that major purchases bring.'},
+  'underestimate':{pos:'v.',def:'Judge something to be less than it actually is.',ex:'We underestimate the happiness provided by ordinary pleasures.'},
+  'polarisation':{pos:'n.',def:'Division into two sharply contrasting groups or sets of opinions.',ex:'Social media algorithms contribute to political polarisation.'},
+  'disproportionately':{pos:'adv.',def:'To a degree that is too large or too small relative to something else.',ex:'Climate change affects low-income countries disproportionately.'},
+  'indispensable':{pos:'adj.',def:'Absolutely necessary; impossible to do without.',ex:'Forests play an indispensable role in regulating the global climate.'},
+  'antimicrobial':{pos:'adj.',def:'Active against microorganisms, especially bacteria.',ex:'Antimicrobial resistance now kills hundreds of thousands annually.'},
+  'vaccination':{pos:'n.',def:'Treatment with a vaccine to produce immunity to disease.',ex:'Vaccination has eliminated smallpox and reduced many diseases.'},
+  'interconnected':{pos:'adj.',def:'Connected with one another in multiple ways.',ex:'The Internet is a global network of interconnected computer systems.'},
+  'fundamentally':{pos:'adv.',def:'In a central or primary way; at the most basic level.',ex:'The Industrial Revolution fundamentally changed human settlement.'},
+  'catastrophic':{pos:'adj.',def:'Involving or causing sudden great damage or suffering.',ex:'Scientists warn of catastrophic consequences if warming continues.'},
+  'sustainability':{pos:'n.',def:'The ability to be maintained at a certain level without harming the environment.',ex:'Renewable energy is central to long-term sustainability.'},
+  'consciousness':{pos:'n.',def:'The state of being aware and able to think and perceive.',ex:'The nature of consciousness remains one of science\'s great mysteries.'},
+  'reinforcing':{pos:'v.',def:'Strengthening or supporting an existing feeling or pattern.',ex:'Algorithms inadvertently amplify content, reinforcing polarisation.'},
+  'exploitation':{pos:'n.',def:'The action of using something or someone unfairly for profit.',ex:'Colonial history created patterns of resource exploitation.'},
+  'discrimination':{pos:'n.',def:'Unfair treatment of different categories of people.',ex:'Algorithmic bias can reinforce existing discrimination.'},
+  'contamination':{pos:'n.',def:'The presence of an unwanted or harmful substance.',ex:'Pollution and contamination threaten many freshwater sources.'},
+  'transparency':{pos:'n.',def:'Operating in a way that is open and not secretive.',ex:'Citizens demand transparency in government decision-making.'},
+  // Core academic / IELTS words
+  'ubiquitous':{pos:'adj.',def:'Present or found everywhere.',ex:'Smartphones have become ubiquitous in modern life.'},
+  'proliferate':{pos:'v.',def:'Increase rapidly in number or spread widely.',ex:'Social media platforms have proliferated over the past decade.'},
+  'exacerbate':{pos:'v.',def:'Make a problem or bad situation worse.',ex:'Pollution can exacerbate respiratory diseases.'},
+  'mitigate':{pos:'v.',def:'Make something less severe, serious, or painful.',ex:'Governments must act to mitigate the effects of climate change.'},
+  'alleviate':{pos:'v.',def:'Make suffering or a problem less severe.',ex:'Aid workers worked to alleviate hunger in the region.'},
+  'detrimental':{pos:'adj.',def:'Causing harm or damage.',ex:'Excessive screen time can be detrimental to sleep quality.'},
+  'substantial':{pos:'adj.',def:'Of considerable importance, size, or worth.',ex:'There has been substantial growth in renewable energy.'},
+  'subsequently':{pos:'adv.',def:'Afterwards; following in time or order.',ex:'She graduated and subsequently found a job in finance.'},
+  'consequently':{pos:'adv.',def:'As a result; therefore.',ex:'He missed the train; consequently, he arrived late.'},
+  'nevertheless':{pos:'adv.',def:'In spite of that; however.',ex:'The task was hard; nevertheless, they completed it.'},
+  'predominantly':{pos:'adv.',def:'Mainly; for the most part.',ex:'The workforce is predominantly female in that sector.'},
+  'inevitably':{pos:'adv.',def:'As is certain to happen; unavoidably.',ex:'Change will inevitably occur as technology advances.'},
+  'scrutiny':{pos:'n.',def:'Close and detailed examination.',ex:'The new policy came under intense public scrutiny.'},
+  'disparity':{pos:'n.',def:'A great difference between things.',ex:'There is a growing disparity between rich and poor.'},
+  'coherent':{pos:'adj.',def:'Logical and consistent; easy to understand.',ex:'She presented a coherent argument supported by evidence.'},
+  'ambiguous':{pos:'adj.',def:'Open to more than one interpretation; unclear.',ex:'The law was ambiguous on the issue of digital rights.'},
+  'pragmatic':{pos:'adj.',def:'Dealing with things sensibly and realistically.',ex:'We need a pragmatic approach to solve this crisis.'},
+  'rhetoric':{pos:'n.',def:'Persuasive or impressive language, often insincere.',ex:'The politician\'s speech was full of empty rhetoric.'},
+  'profound':{pos:'adj.',def:'Very great or intense; having deep insight.',ex:'The discovery had a profound effect on modern medicine.'},
+  'volatile':{pos:'adj.',def:'Liable to change rapidly and unpredictably.',ex:'Oil prices remain volatile amid global uncertainty.'},
+  'autonomous':{pos:'adj.',def:'Having self-governing independence.',ex:'Self-driving cars are designed to be fully autonomous.'},
+  'incentive':{pos:'n.',def:'Something that motivates or encourages action.',ex:'Tax breaks serve as an incentive for businesses to invest.'},
+  'infrastructure':{pos:'n.',def:'Basic systems and structures needed for society to function.',ex:'The country needs to invest in its ageing infrastructure.'},
+  'demographic':{pos:'n.',def:'A particular sector of a population.',ex:'The ageing demographic poses challenges for healthcare.'},
+  'empirical':{pos:'adj.',def:'Based on observation or experience rather than theory.',ex:'The study provides empirical evidence for the hypothesis.'},
+  'phenomenon':{pos:'n.',def:'A fact or situation that is observed to exist or happen.',ex:'Hedonic adaptation is a well-documented psychological phenomenon.'},
+  'perpetuate':{pos:'v.',def:'Make something continue indefinitely.',ex:'Poverty can perpetuate itself across generations.'},
+  'advocate':{pos:'v./n.',def:'(v.) Publicly recommend; (n.) a person who supports a cause.',ex:'She advocates for stricter environmental regulations.'},
+  'implement':{pos:'v.',def:'Put a plan or decision into effect.',ex:'The school plans to implement a new curriculum next year.'},
+  'culminate':{pos:'v.',def:'Reach a climax or point of highest development.',ex:'Years of research culminated in a breakthrough discovery.'},
+  'attribute':{pos:'v.',def:'Regard something as caused by something else.',ex:'Scientists attribute the warming trend to greenhouse gases.'},
+  'constraint':{pos:'n.',def:'A limitation or restriction.',ex:'Budget constraints limited the scope of the project.'},
+  'illustrate':{pos:'v.',def:'Explain or make clear by using examples or diagrams.',ex:'This graph illustrates the rise in global temperatures.'},
+  'perceive':{pos:'v.',def:'Become aware of or understand something.',ex:'The proposal was perceived as a threat to privacy.'},
+  'fluctuate':{pos:'v.',def:'Rise and fall irregularly in number or amount.',ex:'Exchange rates fluctuate based on market conditions.'},
+  'unprecedented':{pos:'adj.',def:'Never done or known before.',ex:'The pandemic caused unprecedented disruption worldwide.'},
+  'resilience':{pos:'n.',def:'The capacity to recover quickly from difficulties.',ex:'Communities showed remarkable resilience after the disaster.'},
+  'deplete':{pos:'v.',def:'Use up the supply or resources of something.',ex:'Overfishing has depleted many ocean species.'},
+  'aspiration':{pos:'n.',def:'A hope or ambition of achieving something.',ex:'Her lifelong aspiration was to become a scientist.'},
+  'instinctively':{pos:'adv.',def:'As a natural reaction without conscious thought.',ex:'People respond instinctively to rhythm and melody.'},
+  'inadvertently':{pos:'adv.',def:'Without intention; accidentally.',ex:'Algorithms inadvertently amplify divisive content.'},
+  'antimicrobial':{pos:'adj.',def:'Active against microorganisms such as bacteria or fungi.',ex:'Antimicrobial resistance is a growing global health crisis.'},
+  'polarisation':{pos:'n.',def:'Division into two sharply contrasting groups.',ex:'Social media has deepened political polarisation.'},
+  'acceleration':{pos:'n.',def:'An increase in rate or speed.',ex:'The acceleration of climate change demands urgent action.'},
+  'destabilise':{pos:'v.',def:'Upset the stability or smooth functioning of something.',ex:'Nationalism destabilised multi-ethnic empires before WWI.'},
+};
+
+// Event delegation — one listener on textDisplay for all def-highlight clicks
+document.addEventListener('DOMContentLoaded',function(){
+  const td=document.getElementById('textDisplay');
+  if(td){
+    td.addEventListener('click',function(e){
+      if(!defTabActive)return;
+      const span=e.target.closest('.def-highlight[data-def-word]');
+      if(!span){
+        // Walk left to find word start
+        const parent=e.target.closest('.def-highlight');
+        if(!parent){hideDefPopup();return;}
+        // Scan siblings backward for defWord
+        let sib=parent;
+        while(sib&&sib.classList.contains('def-highlight')&&!sib.dataset.defWord){
+          sib=sib.previousElementSibling;
+        }
+        if(sib&&sib.dataset.defWord)showDefPopup(sib.dataset.defWord,parent);
+        return;
+      }
+      showDefPopup(span.dataset.defWord,span);
+    });
+  }
+});
+
+function toggleDefTab(){
+  defTabActive=!defTabActive;
+  const btn=document.getElementById('defTabBtn');
+  const ibtn=document.getElementById('ieltsDefTabBtn');
+  if(btn){btn.classList.toggle('active',defTabActive);btn.textContent=defTabActive?'📖 Defs ON':'📖 Defs';}
+  if(ibtn){ibtn.classList.toggle('active',defTabActive);ibtn.textContent=defTabActive?'📖 Defs ON':'📖 Defs';}
+  if(defTabActive)applyDefHighlights();
+  else removeDefHighlights();
+}
+
+function applyDefHighlights(){
+  const td=document.getElementById('textDisplay');
+  if(!td)return;
+  const spans=Array.from(td.querySelectorAll('.char'));
+  if(!spans.length)return;
+  // Build the full text string from span textContent
+  const full=spans.map(s=>s.textContent).join('');
+  // Find all matching word ranges
+  const toHighlight=new Set();
+  const wordStarts={};
+  const wordRe=/[a-zA-Z]{4,}/g;
+  let match;
+  while((match=wordRe.exec(full))!==null){
+    const w=match[0].toLowerCase();
+    if(wordDefinitions[w]){
+      wordStarts[match.index]=w;
+      for(let i=match.index;i<match.index+match[0].length;i++)toHighlight.add(i);
+    }
+  }
+  // Apply class + store word reference on first char only
+  spans.forEach((s,i)=>{
+    if(toHighlight.has(i)){
+      s.classList.add('def-highlight');
+      if(wordStarts[i])s.dataset.defWord=wordStarts[i];
+    }
+  });
+}
+
+function removeDefHighlights(){
+  const td=document.getElementById('textDisplay');
+  if(!td)return;
+  // Just remove class + data attr — NO cloning (cloning breaks .char class & typing)
+  td.querySelectorAll('.def-highlight').forEach(s=>{
+    s.classList.remove('def-highlight');
+    delete s.dataset.defWord;
+  });
+  hideDefPopup();
+}
+
+function showDefPopup(word,anchor){
+  const def=wordDefinitions[word];
+  if(!def)return;
+  const popup=document.getElementById('defPopup');
+  document.getElementById('defPopupWord').textContent=word;
+  document.getElementById('defPopupPos').textContent=def.pos;
+  document.getElementById('defPopupDef').textContent=def.def;
+  const exEl=document.getElementById('defPopupEx');
+  if(def.ex){exEl.textContent='"'+def.ex+'"';exEl.style.display='block';}
+  else exEl.style.display='none';
+  const rect=anchor.getBoundingClientRect();
+  const left=Math.max(8,Math.min(rect.left,window.innerWidth-272));
+  popup.style.left=left+'px';
+  popup.style.top=(rect.bottom+6)+'px';
+  popup.classList.add('show');
+  clearTimeout(popup._hideTimer);
+  popup._hideTimer=setTimeout(hideDefPopup,5000);
+}
+
+function hideDefPopup(){
+  const popup=document.getElementById('defPopup');
+  if(popup)popup.classList.remove('show');
+}
+
+document.addEventListener('click',function(e){
+  if(!e.target.closest('.def-highlight')&&!e.target.closest('#defPopup'))hideDefPopup();
+});
+// ============================================================
+//  TYPING GAME — 💀 SUDDEN DEATH
+// ============================================================
+const GAME_WORD_POOL=[
+  'ability','absence','access','achieve','action','active','actual','address','advance','affect',
+  'afford','afraid','agency','ahead','allow','almost','alone','already','alter','amount',
+  'appeal','apply','approach','argue','around','aspect','attempt','attend','attract','authority',
+  'balance','because','benefit','better','beyond','border','bridge','budget','burden','capture',
+  'carbon','career','cause','centre','certain','change','charge','choice','choose','claim',
+  'climate','commit','common','complex','concept','concern','conduct','confirm','connect','consider',
+  'contain','context','control','create','credit','crisis','critic','culture','damage','danger',
+  'debate','decide','define','demand','design','detail','develop','differ','direct','discuss',
+  'display','divide','double','drive','during','effect','effort','either','energy','engage',
+  'ensure','entire','entry','environment','equal','escape','event','evidence','evolve','example',
+  'expand','expect','explain','extend','factor','failed','favour','figure','finally','follow',
+  'format','found','future','global','govern','growth','happen','hardly','impact','import',
+  'improve','include','indeed','indicate','inform','instead','invest','involve','issue','justice',
+  'labour','launch','leader','largely','likely','limit','local','major','manage','manner',
+  'margin','market','matter','means','measure','member','method','middle','minor','model',
+  'modern','moment','motion','nature','nearly','network','normal','notice','occur','offer',
+  'oppose','option','output','overcome','pattern','period','permit','phase','place','policy',
+  'poverty','power','prefer','prepare','present','prevent','primary','process','produce','product',
+  'profit','promote','protect','provide','public','pursue','quality','question','reason','reduce',
+  'reform','relate','release','remain','remove','require','result','reveal','review','rights',
+  'sector','secure','series','signal','simple','social','source','stable','standard','strict',
+  'strong','structure','subject','support','sustain','symbol','system','target','threat','through',
+  'together','towards','transfer','trigger','undermine','unique','update','urban','various','widely',
+];
+
+let gameState={
+  active:false,
+  mode:'classic',
+  words:[],
+  currentWord:'',
+  score:0,
+  streak:0,
+  typed:'',
+  speed:1,
+  timeLeft:60,
+  timer:null,
+  wordSpeed:1
+};
+
+function openTypingGame(){
+  const modal=document.getElementById('gameModal');
+  modal.classList.add('show');
+  renderGameMenu();
+  // Close on backdrop click
+  modal.onclick=function(e){if(e.target===modal)closeTypingGame();};
+  document.addEventListener('keydown',gameEscHandler);
+}
+
+function gameEscHandler(e){if(e.key==='Escape')closeTypingGame();}
+
+function closeTypingGame(){
+  stopGame();
+  document.getElementById('gameModal').classList.remove('show');
+  document.removeEventListener('keydown',gameEscHandler);
+}
+
+function renderGameMenu(){
+  const box=document.getElementById('gameModalBox');
+  box.innerHTML=`
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;">
+      <div>
+        <div style="font-size:1.35rem;font-weight:900;color:#ef4444;">💀 Sudden Death</div>
+        <div style="font-size:0.78rem;color:var(--text-secondary);margin-top:0.15rem;">One mistake ends everything</div>
+      </div>
+      <button onclick="closeTypingGame()" style="background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--text-secondary);">✕</button>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.6rem;margin-bottom:1.5rem;">
+      ${renderModeCard('classic','💀','Classic','Type words perfectly.<br>One error = Game Over.<br>Score = words completed.','#ef4444')}
+      ${renderModeCard('speedemon','⚡','Speed Demon','Same rules but words<br>get longer every 5 words.<br>How far can you go?','#f59e0b')}
+      ${renderModeCard('blitz','🔥','Blitz','60 seconds. Survive<br>without a single error.<br>Streak = bonus points.','#8b5cf6')}
+    </div>
+    <button onclick="startGame()" style="width:100%;background:linear-gradient(135deg,#ef4444,#b91c1c);color:#fff;border:none;border-radius:12px;padding:0.85rem;font-size:1rem;font-weight:800;cursor:pointer;letter-spacing:0.02em;">🚀 START GAME</button>
+    ${loadBestScores()}
+  `;
+}
+
+function renderModeCard(id,emoji,name,desc,color){
+  const active=gameState.mode===id;
+  return`<div onclick="gameState.mode='${id}';renderGameMenu()"
+    style="border:2px solid ${active?color:'var(--bg-tertiary)'};border-radius:12px;padding:0.85rem;cursor:pointer;background:${active?`rgba(${hexToRgbStr(color)},0.1)`:'var(--bg-primary)'};transition:all 0.15s;text-align:center;">
+    <div style="font-size:1.5rem;margin-bottom:0.3rem;">${emoji}</div>
+    <div style="font-weight:800;font-size:0.88rem;color:${active?color:'var(--text-primary)'};">${name}</div>
+    <div style="font-size:0.68rem;color:var(--text-secondary);margin-top:0.3rem;line-height:1.45;">${desc}</div>
+  </div>`;
+}
+
+function hexToRgbStr(hex){
+  const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+  return`${r},${g},${b}`;
+}
+
+function loadBestScores(){
+  const best=JSON.parse(localStorage.getItem('typemaster_game_best')||'{}');
+  if(!Object.keys(best).length)return'';
+  const items=Object.entries(best).map(([m,s])=>`<div style="display:flex;justify-content:space-between;"><span style="color:var(--text-secondary);font-size:0.8rem;">${{classic:'💀 Classic',speedemon:'⚡ Speed Demon',blitz:'🔥 Blitz'}[m]||m}</span><span style="font-weight:800;color:#ef4444;font-size:0.8rem;">${s} pts</span></div>`).join('');
+  return`<div style="margin-top:1rem;background:var(--bg-primary);border-radius:10px;padding:0.75rem;"><div style="font-size:0.7rem;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.4rem;">🏆 Best Scores</div>${items}</div>`;
+}
+
+function getNextWord(scoreOrIdx){
+  const pool=shuffle(GAME_WORD_POOL.slice());
+  // Speed Demon: increase word length every 5 words
+  if(gameState.mode==='speedemon'&&scoreOrIdx>0){
+    const tier=Math.floor(scoreOrIdx/5);
+    const minLen=4+tier*2;
+    const filtered=GAME_WORD_POOL.filter(w=>w.length>=Math.min(minLen,10));
+    return(filtered.length?filtered:GAME_WORD_POOL)[Math.floor(Math.random()*(filtered.length||GAME_WORD_POOL.length))];
+  }
+  return pool[0];
+}
+
+function startGame(){
+  gameState.score=0;gameState.streak=0;gameState.typed='';
+  gameState.currentWord=getNextWord(0);
+  gameState.active=true;
+  if(gameState.mode==='blitz'){gameState.timeLeft=60;}
+  renderGamePlay();
+}
+
+function stopGame(){
+  gameState.active=false;
+  if(gameState.timer){clearInterval(gameState.timer);gameState.timer=null;}
+}
+
+function renderGamePlay(){
+  const box=document.getElementById('gameModalBox');
+  const mode=gameState.mode;
+  const modeColor={classic:'#ef4444',speedemon:'#f59e0b',blitz:'#8b5cf6'}[mode];
+  const modeLabel={classic:'💀 Classic',speedemon:'⚡ Speed Demon',blitz:'🔥 Blitz'}[mode];
+  box.innerHTML=`
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+      <div style="font-weight:800;color:${modeColor};">${modeLabel}</div>
+      <div style="display:flex;gap:0.75rem;align-items:center;">
+        ${mode==='blitz'?`<div id="gameTimer" style="font-size:1.1rem;font-weight:900;color:${modeColor};">⏱ 60</div>`:''}
+        <div style="font-size:0.9rem;">Score: <b id="gameScore" style="color:${modeColor};">0</b></div>
+        <div style="font-size:0.9rem;">Streak: <b id="gameStreak" style="color:var(--success);">0</b></div>
+        <button onclick="closeTypingGame()" style="background:none;border:none;font-size:1.1rem;cursor:pointer;color:var(--text-secondary);">✕</button>
+      </div>
+    </div>
+    <div style="background:var(--bg-primary);border:2px solid ${modeColor};border-radius:14px;padding:1.5rem;text-align:center;margin-bottom:1rem;">
+      <div style="font-size:0.72rem;color:var(--text-secondary);margin-bottom:0.6rem;text-transform:uppercase;letter-spacing:0.06em;">Type this word exactly</div>
+      <div id="gameWord" style="font-size:2.2rem;font-weight:900;color:${modeColor};letter-spacing:0.08em;font-family:'Courier New',monospace;">${gameState.currentWord}</div>
+      <div id="gameTyped" style="font-size:1rem;min-height:1.8rem;margin-top:0.5rem;letter-spacing:0.12em;font-family:'Courier New',monospace;color:var(--text-secondary);">_</div>
+    </div>
+    <input id="gameInput" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+      style="width:100%;background:var(--bg-primary);border:2px solid var(--bg-tertiary);border-radius:10px;
+             padding:0.75rem 1rem;font-size:1.1rem;color:var(--text-primary);font-family:'Courier New',monospace;
+             text-align:center;outline:none;box-sizing:border-box;"
+      placeholder="Start typing..."
+      oninput="handleGameInput(this.value)"
+      onkeydown="handleGameKey(event)">
+    <div style="font-size:0.7rem;color:var(--text-secondary);text-align:center;margin-top:0.6rem;">
+      ${mode==='classic'?'One mistake = GAME OVER · Score as many words as you can':
+        mode==='speedemon'?'Words get longer every 5 words — one mistake = GAME OVER':
+        '60 seconds · any mistake ends it · streaks earn bonus points'}
+    </div>
+  `;
+  // Focus input
+  setTimeout(()=>{const inp=document.getElementById('gameInput');if(inp)inp.focus();},50);
+  // Blitz timer
+  if(mode==='blitz'){
+    gameState.timeLeft=60;
+    gameState.timer=setInterval(()=>{
+      gameState.timeLeft--;
+      const te=document.getElementById('gameTimer');
+      if(te)te.textContent=`⏱ ${gameState.timeLeft}`;
+      if(gameState.timeLeft<=0){stopGame();renderGameOver(false,true);}
+    },1000);
+  }
+}
+
+function handleGameInput(val){
+  const word=gameState.currentWord;
+  const typedEl=document.getElementById('gameTyped');
+  const inputEl=document.getElementById('gameInput');
+  if(!gameState.active||!typedEl||!inputEl)return;
+  // Build colored typed display
+  let display='';
+  for(let i=0;i<val.length;i++){
+    if(i>=word.length){display+=`<span style="color:#ef4444;">${val[i]}</span>`;continue;}
+    if(val[i]===word[i])display+=`<span style="color:var(--success);">${val[i]}</span>`;
+    else display+=`<span style="color:#ef4444;text-decoration:underline;">${val[i]}</span>`;
+  }
+  typedEl.innerHTML=display||'_';
+  // Check for error
+  for(let i=0;i<val.length&&i<word.length;i++){
+    if(val[i]!==word[i]){
+      // GAME OVER
+      inputEl.style.borderColor='#ef4444';
+      inputEl.disabled=true;
+      if(navigator.vibrate)navigator.vibrate([80,40,80,40,120]);
+      stopGame();
+      setTimeout(()=>renderGameOver(false,false),600);
+      return;
+    }
+  }
+  inputEl.style.borderColor='var(--bg-tertiary)';
+  // Word completed
+  if(val===word){
+    gameState.score++;
+    gameState.streak++;
+    // Blitz bonus
+    if(gameState.mode==='blitz'&&gameState.streak%5===0&&gameState.streak>0){
+      gameState.score+=2;
+      showToast(`🔥 Streak ×${gameState.streak}! +2 bonus!`,'#8b5cf6');
+    }
+    document.getElementById('gameScore').textContent=gameState.score;
+    document.getElementById('gameStreak').textContent=gameState.streak;
+    inputEl.value='';
+    inputEl.style.borderColor='var(--success)';
+    typedEl.textContent='✓';
+    gameState.currentWord=getNextWord(gameState.score);
+    setTimeout(()=>{
+      const gw=document.getElementById('gameWord');
+      const gt=document.getElementById('gameTyped');
+      const gi=document.getElementById('gameInput');
+      if(gw)gw.textContent=gameState.currentWord;
+      if(gt)gt.textContent='_';
+      if(gi){gi.style.borderColor='var(--bg-tertiary)';gi.value='';gi.focus();}
+    },180);
+    if(navigator.vibrate)navigator.vibrate(20);
+  }
+}
+
+function handleGameKey(e){
+  // Prevent backspace from editing past current char — not needed in Sudden Death
+  if(e.key==='Escape'){closeTypingGame();}
+  if(e.key==='F1'){e.preventDefault();closeTypingGame();}
+}
+
+function renderGameOver(timeout,timesUp){
+  const box=document.getElementById('gameModalBox');
+  const mode=gameState.mode;
+  const modeColor={classic:'#ef4444',speedemon:'#f59e0b',blitz:'#8b5cf6'}[mode];
+  // Save best score
+  const best=JSON.parse(localStorage.getItem('typemaster_game_best')||'{}');
+  const prev=best[mode]||0;
+  const isNew=gameState.score>prev;
+  if(isNew){best[mode]=gameState.score;localStorage.setItem('typemaster_game_best',JSON.stringify(best));}
+  const emoji=gameState.score>=20?'🏆':gameState.score>=10?'💪':gameState.score>=5?'👍':'💀';
+  box.innerHTML=`
+    <div style="text-align:center;padding:0.5rem;">
+      <div style="font-size:0.8rem;color:${modeColor};font-weight:800;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem;">
+        ${timesUp?'⏰ Time\'s Up!':'💀 GAME OVER'}
+      </div>
+      <div style="font-size:3rem;margin-bottom:0.25rem;">${emoji}</div>
+      <div style="font-size:3rem;font-weight:900;color:${modeColor};">${gameState.score}</div>
+      <div style="color:var(--text-secondary);font-size:0.85rem;margin-bottom:0.35rem;">words completed</div>
+      ${isNew?`<div style="background:linear-gradient(135deg,${modeColor},${modeColor}99);color:#fff;border-radius:8px;padding:0.35rem 0.75rem;display:inline-block;font-size:0.8rem;font-weight:800;margin-bottom:0.75rem;">🏆 NEW BEST!</div>`:''}
+      <div style="display:flex;justify-content:center;gap:1.5rem;margin-bottom:1.25rem;font-size:0.82rem;">
+        <div><div style="font-weight:900;font-size:1.3rem;color:var(--success);">${gameState.streak}</div><div style="color:var(--text-secondary);">Best Streak</div></div>
+        <div><div style="font-weight:900;font-size:1.3rem;color:${modeColor};">${best[mode]||0}</div><div style="color:var(--text-secondary);">All-Time Best</div></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:0.4rem;">
+        <button onclick="startGame()" style="background:linear-gradient(135deg,${modeColor},${modeColor}bb);color:#fff;border:none;border-radius:10px;padding:0.7rem;font-weight:800;cursor:pointer;font-size:0.95rem;">🔄 Play Again</button>
+        <button onclick="renderGameMenu()" style="background:var(--bg-tertiary);color:var(--text-primary);border:none;border-radius:8px;padding:0.6rem;cursor:pointer;font-size:0.88rem;">Change Mode</button>
+        <button onclick="closeTypingGame()" style="background:var(--bg-primary);color:var(--text-secondary);border:1px solid var(--bg-tertiary);border-radius:8px;padding:0.55rem;cursor:pointer;font-size:0.82rem;">Back to Typing</button>
+      </div>
+    </div>`;
+}
+
+function hexToRgbTriple(hex){
+  const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+  return`${r},${g},${b}`;
 }
 
 // ============================================================
