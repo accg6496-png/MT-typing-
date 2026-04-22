@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TypeMaster Pro</title>
+<title>MT Typing</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
@@ -168,7 +168,48 @@ body{padding-top:22px;}
 .char-box.wrong{border-color:var(--error);background:rgba(239,68,68,0.15);color:var(--error);}
 .char-box.current{border-color:var(--warning);box-shadow:0 0 0 2px rgba(245,158,11,0.3);animation:cursorBlink 0.9s infinite;}@keyframes cursorBlink{0%,100%{box-shadow:0 0 0 2px rgba(245,158,11,0.3)}50%{box-shadow:0 0 0 3px rgba(245,158,11,0.6)}}
 @media(max-width:768px){h1{font-size:1.6rem;}.prediction-panel{grid-template-columns:repeat(2,1fr);}.prediction-value{font-size:1.2rem;}.stats-bar{grid-template-columns:repeat(2,1fr);}.theme-options{grid-template-columns:repeat(2,1fr);}.article-list{grid-template-columns:1fr;}.typing-area{padding:1rem;min-height:160px;}.text-display{font-size:1rem;}.char-box{width:30px;height:38px;font-size:1rem;}}
-/* ── Definition Tab ── */
+/* ── Timer Mode Tabs ── */
+.timer-mode-tabs{display:flex;gap:0.35rem;flex-wrap:wrap;margin-bottom:0.5rem;}
+.timer-tab{padding:0.38rem 0.75rem;border-radius:8px;border:1.5px solid var(--bg-tertiary);background:var(--bg-primary);color:var(--text-secondary);cursor:pointer;font-weight:700;font-size:0.8rem;transition:all 0.15s;}
+.timer-tab.active{border-color:var(--accent);background:var(--accent-glow);color:var(--accent);}
+.timer-countdown{font-size:2.8rem;font-weight:900;text-align:center;color:var(--accent);line-height:1;margin:0.25rem 0;transition:color 0.3s;}
+.timer-countdown.danger{color:var(--error);animation:timerPulse 0.5s infinite alternate;}
+@keyframes timerPulse{from{transform:scale(1)}to{transform:scale(1.08)}}
+/* ── Analytics Modal ── */
+.analytics-modal{position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:2000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.25s;}
+.analytics-modal.show{opacity:1;pointer-events:all;}
+.analytics-box{background:var(--bg-secondary);border:1.5px solid var(--bg-tertiary);border-radius:18px;padding:1.5rem;max-width:560px;width:94%;max-height:88vh;overflow-y:auto;}
+.pb-card{background:var(--bg-primary);border:1px solid var(--bg-tertiary);border-radius:10px;padding:0.7rem 0.9rem;display:flex;justify-content:space-between;align-items:center;margin-bottom:0.35rem;}
+.pb-article{font-size:0.82rem;color:var(--text-primary);font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.pb-stats{display:flex;gap:0.75rem;flex-shrink:0;font-size:0.78rem;}
+.pb-wpm{color:var(--accent);font-weight:800;}
+.pb-acc{color:var(--success);font-weight:700;}
+.pb-date{color:var(--text-secondary);}
+/* WPM chart bars */
+.wpm-chart{display:flex;align-items:flex-end;gap:3px;height:80px;margin:0.5rem 0;padding:0 2px;}
+.wpm-bar{flex:1;min-width:8px;background:var(--accent);border-radius:3px 3px 0 0;position:relative;transition:height 0.4s ease;cursor:default;}
+.wpm-bar:hover::after{content:attr(data-label);position:absolute;bottom:100%;left:50%;transform:translateX(-50%);background:var(--bg-tertiary);color:var(--text-primary);font-size:0.65rem;padding:0.15rem 0.35rem;border-radius:4px;white-space:nowrap;margin-bottom:3px;}
+/* ── Spelling Section ── */
+.spell-modal{position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:2000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.25s;}
+.spell-modal.show{opacity:1;pointer-events:all;}
+.spell-box{background:var(--bg-secondary);border:2px solid #8b5cf6;border-radius:18px;padding:1.5rem;max-width:480px;width:94%;}
+.spell-word-blanks{display:flex;gap:4px;justify-content:center;flex-wrap:wrap;margin:1rem 0;}
+.spell-blank{width:28px;height:36px;border-bottom:2.5px solid var(--text-secondary);display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:700;transition:border-color 0.2s;}
+.spell-blank.filled{border-color:var(--accent);}
+.spell-blank.correct{border-color:var(--success);color:var(--success);}
+.spell-blank.wrong{border-color:var(--error);color:var(--error);}
+.spell-blank.space-char{border-bottom:none;width:16px;}
+.spell-input{width:100%;background:var(--bg-primary);border:2px solid var(--bg-tertiary);border-radius:10px;padding:0.7rem 1rem;font-size:1.1rem;text-align:center;color:var(--text-primary);outline:none;font-family:inherit;box-sizing:border-box;margin-bottom:0.5rem;}
+.spell-input:focus{border-color:#8b5cf6;}
+.spell-input.wrong-shake{animation:wrongShake 0.4s ease;}
+@keyframes wrongShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.diff-pill{display:inline-flex;align-items:center;gap:0.25rem;padding:0.2rem 0.55rem;border-radius:20px;font-size:0.72rem;font-weight:800;cursor:pointer;border:1.5px solid transparent;transition:all 0.15s;}
+.diff-pill.easy{border-color:#22c55e;color:#22c55e;background:rgba(34,197,94,0.1);}
+.diff-pill.medium{border-color:#f59e0b;color:#f59e0b;background:rgba(245,158,11,0.1);}
+.diff-pill.hard{border-color:#ef4444;color:#ef4444;background:rgba(239,68,68,0.1);}
+.diff-pill.active.easy{background:#22c55e;color:#fff;}
+.diff-pill.active.medium{background:#f59e0b;color:#fff;}
+.diff-pill.active.hard{background:#ef4444;color:#fff;}
 :root{--def-bg:rgba(99,102,241,0.22);--def-border:#6366f1;}
 .def-highlight{background:var(--def-bg);border-bottom:2px solid var(--def-border);border-radius:3px;cursor:pointer;transition:background 0.12s;position:relative;}
 .def-highlight:hover{filter:brightness(1.35);}
@@ -279,7 +320,7 @@ body{padding-top:22px;}
 <div class="container">
   <header>
     <div class="header-left">
-      <h1>TypeMaster Pro</h1>
+      <h1>MT Typing</h1>
       <p class="subtitle" id="appSubtitle">⌨️ Typing practice · Short &amp; long articles · Library</p>
     </div>
     <button class="settings-btn" onclick="openSettings()">⚙️</button>
@@ -318,10 +359,26 @@ body{padding-top:22px;}
 
   <div class="article-selector">
     <!-- General Typing tabs (hidden in IELTS mode) -->
-    <div class="selector-tabs" id="typingTabs">
-      <button class="selector-tab active" onclick="selectCategory('short',this)">Short</button>
-      <button class="selector-tab" onclick="selectCategory('long',this)">Long</button>
-      <button class="selector-tab" onclick="selectCategory('library',this)">Library<span class="lib-count-badge" id="libCountBadge">0</span></button>
+    <div id="typingTabs" style="display:flex;flex-direction:column;gap:0.4rem;">
+      <div style="display:flex;gap:0.35rem;">
+        <button class="selector-tab active" id="catBtnArticles" onclick="setTypingMode('articles',this)">Articles</button>
+        <button class="selector-tab" id="catBtnTimed" onclick="setTypingMode('timed',this)">⏱ Timed</button>
+      </div>
+      <!-- Article sub-tabs (shown in articles mode) -->
+      <div id="articleSubTabs" style="display:flex;gap:0.35rem;">
+        <button class="selector-tab active" onclick="selectCategory('short',this)">Short</button>
+        <button class="selector-tab" onclick="selectCategory('long',this)">Long</button>
+        <button class="selector-tab" onclick="selectCategory('library',this)">Library<span class="lib-count-badge" id="libCountBadge">0</span></button>
+      </div>
+      <!-- Timer sub-tabs (shown in timed mode) -->
+      <div id="timedSubTabs" style="display:none;flex-direction:column;gap:0.35rem;">
+        <div class="timer-mode-tabs">
+          <button class="timer-tab active" id="ttab15" onclick="selectTimedMode(15,this)">15s</button>
+          <button class="timer-tab" id="ttab30" onclick="selectTimedMode(30,this)">30s</button>
+          <button class="timer-tab" id="ttab60" onclick="selectTimedMode(60,this)">60s</button>
+        </div>
+        <div style="font-size:0.75rem;color:var(--text-secondary);">Random quote — type as fast as you can before time runs out</div>
+      </div>
     </div>
     <!-- IELTS Hub tabs (shown in IELTS mode) -->
     <div id="ieltsTabs" style="display:none;gap:0.4rem;flex-wrap:wrap;">
@@ -382,6 +439,8 @@ body{padding-top:22px;}
     <button onclick="loadRandomArticle()">🎲 Random</button>
     <button id="answerToggleBtn" onclick="toggleAnswer()" style="display:none;background:var(--success);color:#fff;">Answer</button>
     <button onclick="openTypingGame()" style="background:rgba(239,68,68,0.12);color:#ef4444;border:1px solid #ef4444;">💀 Game</button>
+    <button onclick="openSpelling()" style="background:rgba(139,92,246,0.12);color:#8b5cf6;border:1px solid #8b5cf6;">🔊 Spell</button>
+    <button onclick="openAnalytics()" style="background:rgba(99,102,241,0.12);color:#6366f1;border:1px solid #6366f1;">📊 Stats</button>
     <button id="defTabBtn" onclick="toggleDefTab()" style="background:rgba(99,102,241,0.12);color:#6366f1;border:1px solid #6366f1;">📖 Defs</button>
   </div>
   <!-- IELTS CONTROLS (shown in IELTS mode) -->
@@ -593,6 +652,16 @@ body{padding-top:22px;}
 <!-- TYPING GAME MODAL -->
 <div class="game-modal-overlay" id="gameModal">
   <div class="game-modal" id="gameModalBox"></div>
+</div>
+
+<!-- ANALYTICS MODAL -->
+<div class="analytics-modal" id="analyticsModal">
+  <div class="analytics-box" id="analyticsBox"></div>
+</div>
+
+<!-- SPELLING MODAL -->
+<div class="spell-modal" id="spellingModal">
+  <div class="spell-box" id="spellingBox"></div>
 </div>
 
 <script>
@@ -933,7 +1002,17 @@ const vocabData = [
   {word:"whereas",pos:"conjunction",definition:"In contrast to the fact that; while on the contrary.",collocations:["whereas in contrast","whereas others","whereas previously","whereas developed","whereas some argue"],sentences:["Whereas developed nations have the resources to adapt to climate change, poorer countries do not.","Some argue that technology divides society, whereas others point to its democratising potential.","Whereas previously education was the preserve of the elite, it is now widely accessible."]},
   {word:"nevertheless",pos:"adverb",definition:"In spite of that; notwithstanding; however.",collocations:["nevertheless important","nevertheless necessary","nevertheless true","nevertheless effective","nevertheless argues"],sentences:["The task is challenging; nevertheless, it is not beyond the capacity of determined policymakers.","Critics raise valid concerns; nevertheless, the overall benefits of the policy outweigh the risks.","Progress has been slow; nevertheless, the direction of change is broadly positive."]},
   {word:"furthermore",pos:"adverb",definition:"In addition to what has already been said.",collocations:["furthermore suggests","furthermore argues","furthermore shows","furthermore indicates","furthermore demonstrates"],sentences:["Technology improves productivity; furthermore, it creates entirely new industries and occupations.","The policy reduces emissions; furthermore, it generates revenue for green infrastructure.","Investment in education reduces poverty; furthermore, it drives long-term economic growth."]},
-  {word:"consequently",pos:"adverb",definition:"As a result; therefore.",collocations:["and consequently","consequently leading","consequently results in","consequently affecting","consequently reducing"],sentences:["The city failed to invest in public transport; consequently, traffic congestion has worsened significantly.","Deforestation reduces rainfall; consequently, agricultural productivity declines in affected regions.","Inequality undermines social trust; consequently, it reduces the effectiveness of democratic institutions."]}
+  {word:"consequently",pos:"adverb",definition:"As a result; therefore.",collocations:["and consequently","consequently leading","consequently results in","consequently affecting","consequently reducing"],sentences:["The city failed to invest in public transport; consequently, traffic congestion has worsened significantly.","Deforestation reduces rainfall; consequently, agricultural productivity declines in affected regions.","Inequality undermines social trust; consequently, it reduces the effectiveness of democratic institutions."]},
+  {word:"scrutinise",pos:"verb",definition:"Examine or inspect closely and thoroughly.",collocations:["scrutinise data","closely scrutinised","scrutinise policy","scrutinise evidence","scrutinised by experts"],sentences:["Journalists must scrutinise government policies to hold authorities accountable.","Scientific findings should be scrutinised by independent researchers before publication.","The committee will scrutinise the budget proposals before approving any expenditure."]},
+  {word:"ideology",pos:"noun",definition:"A system of ideas forming the basis of a political or economic theory.",collocations:["political ideology","dominant ideology","ideological conflict","ideological differences","shared ideology"],sentences:["Competing ideologies shaped the Cold War division of the world into rival blocs.","Economic policy is inevitably influenced by the underlying ideology of the governing party.","Education systems often reflect the dominant ideologies of their societies."]},
+  {word:"paradigm",pos:"noun",definition:"A typical pattern or model; a framework of understanding.",collocations:["paradigm shift","dominant paradigm","new paradigm","challenge the paradigm","paradigm of development"],sentences:["The discovery challenged the prevailing scientific paradigm and sparked intense debate.","A paradigm shift in energy policy is required to address the climate emergency.","The internet has created a new paradigm for commerce, communication, and culture."]},
+  {word:"equitable",pos:"adjective",definition:"Fair and impartial; giving everyone equal treatment.",collocations:["equitable distribution","equitable access","equitable society","more equitable","equitable outcome"],sentences:["An equitable distribution of resources is essential for social stability and cohesion.","Policymakers must ensure equitable access to quality education for all children.","A more equitable tax system would reduce the widening gap between rich and poor."]},
+  {word:"stigma",pos:"noun",definition:"A mark of disgrace associated with a particular circumstance or quality.",collocations:["social stigma","mental health stigma","reduce stigma","stigma surrounding","attached stigma"],sentences:["Social stigma prevents many people from seeking help for mental health conditions.","Reducing the stigma around failure is essential for fostering entrepreneurial culture.","Campaigns have helped reduce the stigma surrounding HIV and AIDS significantly."]},
+  {word:"catalyst",pos:"noun",definition:"A person or thing that precipitates an event or change.",collocations:["act as a catalyst","catalyst for change","economic catalyst","serve as catalyst","catalyst for growth"],sentences:["The financial crisis acted as a catalyst for sweeping regulatory reforms worldwide.","Technology often serves as a catalyst for social and economic transformation.","Education is the most powerful catalyst for sustainable development in any society."]},
+  {word:"proliferation",pos:"noun",definition:"Rapid increase in number or spread of something.",collocations:["nuclear proliferation","proliferation of technology","rapid proliferation","proliferation of misinformation","weapons proliferation"],sentences:["The proliferation of smartphones has transformed how people communicate and access information.","Nuclear proliferation remains one of the most serious threats to global security.","The proliferation of online misinformation poses significant challenges for democracy."]},
+  {word:"mitigation",pos:"noun",definition:"The action of reducing the severity or seriousness of something.",collocations:["climate mitigation","risk mitigation","mitigation measures","mitigation strategy","mitigation efforts"],sentences:["Climate mitigation requires reducing greenhouse gas emissions across all sectors of the economy.","Effective risk mitigation strategies can protect communities from the worst effects of natural disasters.","Mitigation measures alone are insufficient; societies must also adapt to inevitable changes."]},
+  {word:"cohesion",pos:"noun",definition:"The action of forming a united whole; unity and solidarity.",collocations:["social cohesion","community cohesion","promote cohesion","national cohesion","lack of cohesion"],sentences:["Social cohesion is undermined when inequality grows and trust in institutions declines.","Community cohesion programmes help bridge divides between different cultural groups.","National cohesion requires citizens to share a sense of common purpose and identity."]},
+  {word:"polarise",pos:"verb",definition:"Divide into two sharply contrasting groups or sets of opinions.",collocations:["polarise opinion","polarise society","deeply polarised","politically polarised","polarise communities"],sentences:["Social media algorithms tend to polarise public opinion by amplifying extreme views.","The immigration debate has polarised society in many developed nations.","Economic inequality polarises communities and weakens the bonds of social trust."]}
 ];
 
 // ============================================================
@@ -997,7 +1076,16 @@ const collocationSets = [
   {noun:"awareness",adjectives:["public","growing","greater","cultural","environmental"],verbs:["raise","increase","lack","promote","build"],phrases:["raise awareness","public awareness","lack of awareness"]},
   {noun:"commitment",adjectives:["strong","long-term","genuine","political","firm"],verbs:["make","honour","demonstrate","renew","fulfil"],phrases:["make a commitment","demonstrate commitment","long-term commitment"]},
   {noun:"rate",adjectives:["high","low","declining","alarming","unprecedented"],verbs:["increase","decrease","maintain","measure","reduce"],phrases:["crime rate","growth rate","at an alarming rate"]},
-  {noun:"impact",adjectives:["significant","lasting","devastating","measurable","global"],verbs:["have","assess","measure","reduce","minimise"],phrases:["significant impact","lasting impact","measure the impact"]}];
+  {noun:"impact",adjectives:["significant","lasting","devastating","measurable","global"],verbs:["have","assess","measure","reduce","minimise"],phrases:["significant impact","lasting impact","measure the impact"]},
+  {noun:"inequality",adjectives:["growing","economic","social","stark","persistent"],verbs:["reduce","address","widen","tackle","perpetuate"],phrases:["income inequality","gender inequality","inequality of opportunity","tackle inequality"]},
+  {noun:"diversity",adjectives:["cultural","biological","ethnic","linguistic","rich"],verbs:["celebrate","embrace","promote","undermine","reflect"],phrases:["celebrate diversity","diversity of opinion","diversity of experience","in all its diversity"]},
+  {noun:"technology",adjectives:["emerging","digital","modern","advanced","revolutionary"],verbs:["adopt","develop","harness","deploy","embrace"],phrases:["advances in technology","cutting-edge technology","technology-driven","appropriate technology"]},
+  {noun:"welfare",adjectives:["social","public","economic","child","general"],verbs:["promote","protect","improve","undermine","support"],phrases:["welfare of society","animal welfare","welfare state","welfare benefits"]},
+  {noun:"migration",adjectives:["mass","labour","economic","rural","international"],verbs:["drive","encourage","restrict","manage","cause"],phrases:["migration patterns","wave of migration","economic migration","migration crisis"]},
+  {noun:"investment",adjectives:["foreign","domestic","long-term","significant","private"],verbs:["attract","encourage","make","stimulate","require"],phrases:["return on investment","foreign direct investment","investment in education","investment opportunity"]},
+  {noun:"transparency",adjectives:["greater","full","financial","political","public"],verbs:["ensure","demand","promote","lack","increase"],phrases:["transparency in government","commitment to transparency","lack of transparency","financial transparency"]},
+  {noun:"resilience",adjectives:["economic","community","psychological","remarkable","greater"],verbs:["build","show","demonstrate","strengthen","develop"],phrases:["build resilience","show remarkable resilience","community resilience","resilience in the face of"]},
+  {noun:"accountability",adjectives:["public","political","democratic","financial","clear"],verbs:["ensure","demand","improve","lack","strengthen"],phrases:["hold accountable","culture of accountability","lack of accountability","democratic accountability"]}];
 
 
 // ============================================================
@@ -1105,7 +1193,7 @@ let currentText = articlesDB["1min"][0].text;
 let startTime=null,timerInterval=null,typedLength=0,errors=0,totalErrors=0,keyMistakeMap={};
 let isActive=false,isComplete=false,isPaused=false,pauseStart=null;
 let wpmHistory=[];
-let completedTexts=new Set(JSON.parse(localStorage.getItem('typemaster_completed')||'[]'));
+let completedTexts=new Set(JSON.parse(localStorage.getItem('mt_typing_completed')||'[]'));
 let settings={theme:'dark',typingSound:false,typingSoundType:'mechanical',errorSound:false,errorSoundType:'buzz',volume:0.5,fontSize:16,lineHeight:1.7,cursorStyle:'block',animations:true,autoSave:true};
 let audioContext=null;
 let currentMainCat='short',currentDuration='1min';
@@ -1190,6 +1278,7 @@ function handleKeydown(e){
 function startTest(){
   isActive=true;startTime=Date.now();
   timerInterval=setInterval(()=>{updateTimer();updateTimePrediction();},1000);
+  if(typingMode==='timed')startTimedCountdown();
 }
 function updateDisplay(typed){
   const chars=textDisplay.querySelectorAll('.char');
@@ -1259,20 +1348,25 @@ function completeTest(){
   const elapsedMs=Date.now()-startTime;
   const mins=elapsedMs/60000;
   const wpm=Math.round((currentText.length/5)/mins);
-  // Time badge
   const secs=Math.round(elapsedMs/1000);
   const mm=Math.floor(secs/60);const ss=secs%60;
   document.getElementById('finalTimeBadge').textContent=`⏱ ${mm}:${ss.toString().padStart(2,'0')}`;
   document.getElementById('finalWpm').textContent=wpm;
-  document.getElementById('finalAccuracy').textContent=Math.round(((currentText.length-errors)/currentText.length)*100)+'%';
+  const acc=Math.round(((currentText.length-errors)/currentText.length)*100);
+  document.getElementById('finalAccuracy').textContent=acc+'%';
   document.getElementById('finalCpm').textContent=Math.round(currentText.length/mins);
   document.getElementById('finalChars').textContent=currentText.length;
   document.getElementById('finalErrors').textContent=totalErrors;
-  // Keyboard heatmap
   renderKeyboardHeatmap(keyMistakeMap);
+  // Save progress to analytics
+  saveSessionToHistory(wpm, acc);
+  // Check personal best for current article
+  const curTitle=Object.entries(articlesDB).flatMap(([cat,arr])=>arr).find(a=>a.text===currentText)?.title||currentText.slice(0,40);
+  const isNewPB=checkPersonalBest(curTitle, wpm, acc);
+  if(isNewPB&&wpm>20)showToast(`🏆 New Personal Best! ${wpm} WPM`,'var(--accent)');
   completedTexts.add(currentText.slice(0,60));
-  localStorage.setItem('typemaster_completed',JSON.stringify([...completedTexts]));
-  localStorage.removeItem('typemaster_progress');
+  localStorage.setItem('mt_typing_completed',JSON.stringify([...completedTexts]));
+  localStorage.removeItem('mt_typing_progress');
   if(activeSection==='ielts'){renderIELTSTopicList();updateIELTSStats();}
   else{renderArticleList();}
   document.getElementById('resultsModal').classList.add('show');
@@ -1281,6 +1375,7 @@ function restartTest(){
   clearInterval(timerInterval);
   isActive=false;isComplete=false;isPaused=false;pauseStart=null;
   startTime=null;typedLength=0;errors=0;totalErrors=0;wpmHistory=[];keyMistakeMap={};
+  clearTimedMode();
   hiddenInput.value='';
   document.getElementById('wpm').textContent='0';
   document.getElementById('accuracy').textContent='100%';
@@ -1437,7 +1532,7 @@ function togglePause(){
     hiddenInput.focus({preventScroll:true});
   }
 }
-const PROGRESS_KEY='typemaster_progress';
+const PROGRESS_KEY='mt_typing_progress';
 function saveProgress(){
   const typed=hiddenInput.value;if(!typed){showToast('Nothing typed yet!','#ef4444');return;}
   const elMs=isPaused?pauseStart-startTime:startTime?Date.now()-startTime:0;
@@ -1460,21 +1555,21 @@ function discardSaved(){localStorage.removeItem(PROGRESS_KEY);const b=document.g
 //  SETTINGS
 // ============================================================
 function openSettings(){document.getElementById('settingsModal').classList.add('show');}
-function closeSettings(){document.getElementById('settingsModal').classList.remove('show');localStorage.setItem('typemaster_settings',JSON.stringify(settings));}
+function closeSettings(){document.getElementById('settingsModal').classList.remove('show');localStorage.setItem('mt_typing_settings',JSON.stringify(settings));}
 function setTheme(t){settings.theme=t;document.documentElement.setAttribute('data-theme',t);document.querySelectorAll('.theme-btn').forEach(b=>b.classList.toggle('active',b.dataset.theme===t));}
 function toggleSound(type){if(type==='typing'){settings.typingSound=!settings.typingSound;document.getElementById('typingSoundToggle').classList.toggle('active',settings.typingSound);}else{settings.errorSound=!settings.errorSound;document.getElementById('errorSoundToggle').classList.toggle('active',settings.errorSound);}if((settings.typingSound||settings.errorSound)&&!audioContext)initAudio();}
 function setTypingSound(s){settings.typingSoundType=s;document.querySelectorAll('#typingSoundSelector .sound-btn').forEach(b=>b.classList.toggle('active',b.dataset.sound===s));if(audioContext)playTypingSound();}
 function setErrorSound(s){settings.errorSoundType=s;document.querySelectorAll('#errorSoundSelector .sound-btn').forEach(b=>b.classList.toggle('active',b.dataset.sound===s));if(audioContext)playErrorSound();}
 function updateVolume(v){settings.volume=v/100;document.getElementById('volumeValue').textContent=v+'%';}
 function loadSettings(){
-  const s=localStorage.getItem('typemaster_settings');if(!s)return;
+  const s=localStorage.getItem('mt_typing_settings');if(!s)return;
   settings={...settings,...JSON.parse(s)};
   setTheme(settings.theme);
   if(settings.typingSound)document.getElementById('typingSoundToggle').classList.add('active');
   if(settings.errorSound)document.getElementById('errorSoundToggle').classList.add('active');
   setTypingSound(settings.typingSoundType);setErrorSound(settings.errorSoundType);
   updateVolume(settings.volume*100);document.getElementById('volumeSlider').value=settings.volume*100;
-  const savedFont=localStorage.getItem('typemaster_font');
+  const savedFont=localStorage.getItem('mt_typing_font');
   if(savedFont){currentFont=savedFont;applyFont(savedFont);}
   applyFontSizeCSS(settings.fontSize);
   const fss=document.getElementById('fontSizeSlider');if(fss)fss.value=settings.fontSize;
@@ -1536,14 +1631,14 @@ function toggleAutoSave(){
 }
 function closeResults(){
   document.getElementById('resultsModal').classList.remove('show');
-  restartTest();
-  if(activeSection==='ielts')renderIELTSTopicList();
+  if(typingMode==='timed'){loadTimedQuote();}
+  else{restartTest();if(activeSection==='ielts')renderIELTSTopicList();}
 }
 
 // ============================================================
 //  LIBRARY
 // ============================================================
-const LIB_KEY='typemaster_library';
+const LIB_KEY='mt_typing_library';
 function loadLibrary(){try{return JSON.parse(localStorage.getItem(LIB_KEY))||[];}catch{return[];}}
 function saveLibraryData(e){localStorage.setItem(LIB_KEY,JSON.stringify(e));updateLibCountBadge();}
 function updateLibCountBadge(){const b=document.getElementById('libCountBadge');if(b)b.textContent=loadLibrary().length;}
@@ -1579,7 +1674,7 @@ function renderLibrary(){
 // ============================================================
 const TEXT_COLORS=['#f9fafb','#e2e8f0','#fbbf24','#22c55e','#3b82f6','#ef4444','#c084fc','#fb923c'];
 const BG_COLORS=['#0a0f1a','#1e1e2e','#1a1a2e','#0d1117','#191724','#1c1c1c','#f8fafc','#fffbeb'];
-const COLOR_KEY='typemaster_colors';
+const COLOR_KEY='mt_typing_colors';
 function initColorPickers(){
   const saved=JSON.parse(localStorage.getItem(COLOR_KEY)||'{}');
   document.getElementById('textColorPicker').innerHTML=TEXT_COLORS.map(c=>`<div class="color-swatch${saved.text===c?' active':''}" style="background:${c}" onclick="setTextColor('${c}',this)"></div>`).join('');
@@ -1612,7 +1707,7 @@ const FONTS=[
   {name:'Gill Sans',val:"'Gill Sans','Gill Sans MT',sans-serif"},
   {name:'Impact',val:"Impact,Haettenschweiler,sans-serif"},
 ];
-const FONT_KEY='typemaster_font';
+const FONT_KEY='mt_typing_font';
 let currentFont=FONTS[0].val;
 function initFontPicker(){
   const saved=localStorage.getItem(FONT_KEY);
@@ -1636,7 +1731,7 @@ function applyFont(f){
 //  ARTICLE TEXT COLOR
 // ============================================================
 const ARTICLE_TEXT_COLORS=['#f9fafb','#e2e8f0','#fde68a','#86efac','#93c5fd','#fca5a5','#d8b4fe','#fb923c','#6ee7b7','#f0abfc'];
-const ATC_KEY='typemaster_article_color';
+const ATC_KEY='mt_typing_article_color';
 function initArticleTextColorPicker(){
   const saved=localStorage.getItem(ATC_KEY)||'';
   const p=document.getElementById('articleTextColorPicker');
@@ -1664,7 +1759,7 @@ function resetArticleTextColor(){
 //  GLOW EFFECT CUSTOMIZATION
 // ============================================================
 const GLOW_COLORS=['#ef4444','#f97316','#eab308','#22c55e','#3b82f6','#8b5cf6','#ec4899','#ffffff'];
-const GLOW_KEY='typemaster_glow';
+const GLOW_KEY='mt_typing_glow';
 let glowSettings={color:'#ef4444',intensity:2,style:'flash'};
 function loadGlowSettings(){
   const s=localStorage.getItem(GLOW_KEY);
@@ -1783,17 +1878,29 @@ function renderVocabMenu(){
 }
 
 function renderVocabMenuContent(){
-  return`<p style="color:var(--text-secondary);font-size:0.8rem;margin-bottom:0.75rem;">${vocabData.length} IELTS words with definitions, collocations & sentences.</p>
+  const d=vocabState.diff||'medium';
+  const diffDesc={easy:'3 choices · shorter words first',medium:'4 choices · full word pool',hard:'5 choices · no definition hint'};
+  return`
+  <p style="color:var(--text-secondary);font-size:0.8rem;margin-bottom:0.6rem;">${vocabData.length} IELTS words with definitions, collocations &amp; sentences.</p>
+  <div style="margin-bottom:0.7rem;">
+    <div style="font-size:0.72rem;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.35rem;">Difficulty</div>
+    <div style="display:flex;gap:0.35rem;">
+      <span class="diff-pill easy${d==='easy'?' active':''}" onclick="vocabState.diff='easy';renderVocabMenu()">🟢 Easy</span>
+      <span class="diff-pill medium${d==='medium'?' active':''}" onclick="vocabState.diff='medium';renderVocabMenu()">🟡 Medium</span>
+      <span class="diff-pill hard${d==='hard'?' active':''}" onclick="vocabState.diff='hard';renderVocabMenu()">🔴 Hard</span>
+    </div>
+    <div style="font-size:0.68rem;color:var(--text-secondary);margin-top:0.3rem;">${diffDesc[d]}</div>
+  </div>
   <div style="display:flex;flex-direction:column;gap:0.4rem;">
-    <button onclick="startVocabMode('flashcard')" style="background:var(--accent);color:#fff;border:none;border-radius:8px;padding:0.6rem;font-weight:700;cursor:pointer;font-size:0.9rem;">Flashcard Mode</button>
-    <button onclick="startVocabMode('definition')" style="background:var(--bg-tertiary);color:var(--text-primary);border:none;border-radius:8px;padding:0.6rem;font-weight:700;cursor:pointer;font-size:0.9rem;">Definition Quiz (Type Answers)</button>
-    <button onclick="startVocabMode('collocation')" style="background:var(--bg-tertiary);color:var(--text-primary);border:none;border-radius:8px;padding:0.6rem;font-weight:700;cursor:pointer;font-size:0.9rem;">Collocation Quiz (Type Answers)</button>
-    <button onclick="startVocabMode('sentence')" style="background:var(--bg-tertiary);color:var(--text-primary);border:none;border-radius:8px;padding:0.6rem;font-weight:700;cursor:pointer;font-size:0.9rem;">Sentence Fill-in (Type Answers)</button>
+    <button onclick="startVocabMode('flashcard')" style="background:var(--accent);color:#fff;border:none;border-radius:8px;padding:0.6rem;font-weight:700;cursor:pointer;font-size:0.9rem;">🃏 Flashcard Mode</button>
+    <button onclick="startVocabMode('definition')" style="background:var(--bg-tertiary);color:var(--text-primary);border:none;border-radius:8px;padding:0.6rem;font-weight:700;cursor:pointer;font-size:0.9rem;">📖 Definition Quiz</button>
+    <button onclick="startVocabMode('collocation')" style="background:var(--bg-tertiary);color:var(--text-primary);border:none;border-radius:8px;padding:0.6rem;font-weight:700;cursor:pointer;font-size:0.9rem;">🔗 Collocation Quiz</button>
+    <button onclick="startVocabMode('sentence')" style="background:var(--bg-tertiary);color:var(--text-primary);border:none;border-radius:8px;padding:0.6rem;font-weight:700;cursor:pointer;font-size:0.9rem;">✍️ Sentence Fill-in</button>
   </div>`;
 }
 
 function renderCollocationContent(){
-  // Filter to only include proper collocation items (those with 'noun' property)
+  const d=vocabState.collDiff||'medium';
   const properCollocations = collocationSets.filter(s => s.noun !== undefined);
   const html=properCollocations.map(s=>{
     const adjTags=(s.adjectives||[]).map(a=>`<span class="coll-tag adj">${a} ${s.noun}</span>`).join('');
@@ -1806,16 +1913,27 @@ function renderCollocationContent(){
       ${phraseTags?`<div>${phraseTags}</div>`:''}
     </div>`;
   }).join('');
-  return`<p style="color:var(--text-secondary);font-size:0.8rem;margin-bottom:0.6rem;">Collocations - <span style="color:var(--accent)">blue = verb</span>, <span style="color:var(--success)">green = adjective</span></p>
-  <div class="coll-grid" style="max-height:50vh;overflow-y:auto;">${html}</div>
-  <button onclick="startCollocationQuiz()" style="margin-top:0.75rem;width:100%;background:var(--warning);color:#000;border:none;border-radius:8px;padding:0.6rem;font-weight:700;cursor:pointer;">Collocation Quiz (Type Answers)</button>`;
+  return`
+  <div style="margin-bottom:0.55rem;">
+    <div style="font-size:0.72rem;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.35rem;">Quiz Difficulty</div>
+    <div style="display:flex;gap:0.35rem;">
+      <span class="diff-pill easy${d==='easy'?' active':''}" onclick="vocabState.collDiff='easy';renderVocabMenu()">🟢 Easy (3)</span>
+      <span class="diff-pill medium${d==='medium'?' active':''}" onclick="vocabState.collDiff='medium';renderVocabMenu()">🟡 Med (4)</span>
+      <span class="diff-pill hard${d==='hard'?' active':''}" onclick="vocabState.collDiff='hard';renderVocabMenu()">🔴 Hard (5)</span>
+    </div>
+  </div>
+  <p style="color:var(--text-secondary);font-size:0.78rem;margin-bottom:0.5rem;"><span style="color:var(--accent);">■</span> verb &nbsp;<span style="color:var(--success);">■</span> adjective</p>
+  <div class="coll-grid" style="max-height:36vh;overflow-y:auto;">${html}</div>
+  <button onclick="startCollocationQuiz()" style="margin-top:0.75rem;width:100%;background:var(--warning);color:#000;border:none;border-radius:8px;padding:0.6rem;font-weight:700;cursor:pointer;">🎯 Collocation Quiz</button>`;
 }
 
 const VOCAB_SESSION=15;
 function startVocabMode(mode){
   _clearVocabKeyHandler();
+  const diff=vocabState.diff||'medium';
+  const numChoices={easy:3,medium:4,hard:5}[diff];
   const pool=shuffle(vocabData.slice()).slice(0,VOCAB_SESSION);
-  vocabState={mode,cardIdx:0,score:0,streak:0,shuffled:pool,currentAnswer:'',typedAnswer:'',_choiceLocked:false,_keyHandler:null};
+  vocabState={mode,diff,numChoices,cardIdx:0,score:0,streak:0,shuffled:pool,currentAnswer:'',typedAnswer:'',_choiceLocked:false,_keyHandler:null,collDiff:vocabState.collDiff||'medium'};
   if(mode==='flashcard')renderFlashcard(false);else renderVocabTypingQuiz();
 }
 function shuffle(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}return arr;}
@@ -1918,8 +2036,9 @@ function renderVocabTypingQuiz(){
   vocabState.choiceSelected=null;
   vocabState.answerShown=false;
 
-  // Build 4 choices: 1 correct + 3 distractors
-  const distractors=getVocabDistractors(answer, vocabData, 3);
+  // Build choices based on difficulty
+  const numChoices=vocabState.numChoices||4;
+  const distractors=getVocabDistractors(answer, vocabData, numChoices-1);
   const choices=shuffle([answer,...distractors]);
   vocabState.choices=choices;
 
@@ -2444,23 +2563,23 @@ function revealVocabAnswer(choices,answer){
 
 
 // ============================================================
-//  COLLOCATION QUIZ WITH TYPING
+//  COLLOCATION QUIZ WITH TYPING + DIFFICULTY
 // ============================================================
 const COLL_SESSION=15;
-let collQuizState={idx:0,score:0,sets:[],currentAnswer:'',typedAnswer:''};
+let collQuizState={idx:0,score:0,sets:[],currentAnswer:'',typedAnswer:'',diff:'medium'};
 
 function startCollocationQuiz(){
-  collQuizState={idx:0,score:0,sets:shuffle(buildCollQuestions()),currentAnswer:'',typedAnswer:'',failedAnswer:false};
+  const d=vocabState.collDiff||'medium';
+  collQuizState={idx:0,score:0,diff:d,sets:shuffle(buildCollQuestions()),currentAnswer:'',typedAnswer:'',failedAnswer:false};
   renderCollTypingQuiz();
 }
 
 function buildCollQuestions(){
   const qs=[];
-  // Filter to only include proper collocation items (those with 'noun' property)
   const properCollocations = collocationSets.filter(s => s.noun !== undefined);
   properCollocations.forEach(s=>{
-    if(s.verbs&&s.verbs.length){const v=s.verbs[Math.floor(Math.random()*s.verbs.length)];qs.push({noun:s.noun,type:'verb',correct:v,fullAnswer:v+' '+s.noun});}
-    if(s.adjectives&&s.adjectives.length){const a=s.adjectives[Math.floor(Math.random()*s.adjectives.length)];qs.push({noun:s.noun,type:'adj',correct:a,fullAnswer:a+' '+s.noun});}
+    if(s.verbs&&s.verbs.length){const v=s.verbs[Math.floor(Math.random()*s.verbs.length)];qs.push({noun:s.noun,type:'verb',correct:v,fullAnswer:v+' '+s.noun,allVerbs:s.verbs,allAdj:s.adjectives||[]});}
+    if(s.adjectives&&s.adjectives.length){const a=s.adjectives[Math.floor(Math.random()*s.adjectives.length)];qs.push({noun:s.noun,type:'adj',correct:a,fullAnswer:a+' '+s.noun,allVerbs:s.verbs||[],allAdj:s.adjectives});}
   });
   return shuffle(qs).slice(0,COLL_SESSION);
 }
@@ -2468,44 +2587,96 @@ function buildCollQuestions(){
 function renderCollTypingQuiz(){
   const total=collQuizState.sets.length;
   if(collQuizState.idx>=total){renderCollResult();return;}
-  
   const q=collQuizState.sets[collQuizState.idx];
+  const d=collQuizState.diff||'medium';
   collQuizState.currentAnswer=q.fullAnswer.toLowerCase();
   collQuizState.typedAnswer='';
   collQuizState.failedAnswer=false;
-  
   const typeLabel=q.type==='verb'?'verb':'adjective';
   const box=document.getElementById('vocabBox');
-  
-  box.innerHTML=`
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.6rem;">
-      <span style="color:var(--warning);font-weight:700;font-size:0.9rem;">Collocations</span>
-      <button onclick="renderVocabMenu()" style="background:none;border:none;color:var(--text-secondary);cursor:pointer;font-size:0.9rem;">Close</button>
+  const pct=Math.round((collQuizState.idx/total)*100);
+  const header=`
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
+      <span style="color:var(--warning);font-weight:800;font-size:0.9rem;">🔗 Collocations · <span style="font-size:0.72rem;">${d.charAt(0).toUpperCase()+d.slice(1)}</span></span>
+      <span style="font-size:0.75rem;color:var(--text-secondary);">Q${collQuizState.idx+1}/${total} · <b style="color:var(--success);">${collQuizState.score}</b> pts</span>
     </div>
-    <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:var(--text-secondary);margin-bottom:0.6rem;">
-      <span>Q${collQuizState.idx+1}/${total} · Score: <b style="color:var(--success)">${collQuizState.score}</b></span>
+    <div style="height:3px;background:var(--bg-tertiary);border-radius:2px;margin-bottom:0.75rem;overflow:hidden;">
+      <div style="height:100%;width:${pct}%;background:var(--warning);transition:width 0.3s;"></div>
     </div>
-    <div class="type-quiz-area">
-      <div class="type-quiz-prompt">Type the <b style="color:var(--warning);">${typeLabel}</b> that collocates with <b style="color:var(--accent);">"${q.noun}"</b></div>
+    <div style="background:var(--bg-primary);border:1px solid var(--bg-tertiary);border-radius:10px;padding:0.85rem;margin-bottom:0.75rem;text-align:center;">
+      Type the <b style="color:var(--warning);">${typeLabel}</b> that collocates with <b style="color:var(--accent);">"${q.noun}"</b>
+    </div>`;
+
+  if(d==='hard'){
+    // Hard = type the full answer
+    box.innerHTML=header+`
       <div class="char-display" id="collCharDisplay"></div>
-      <input type="text" id="collTypeInput" class="type-quiz-input" placeholder="Type: ${q.type==='verb'?'verb + '+q.noun:'adjective + '+q.noun}..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+      <input type="text" id="collTypeInput" class="type-quiz-input" placeholder="Type: ${typeLabel} + ${q.noun}…" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
       <div class="type-hint" id="collTypeHint"></div>
-    </div>
-    <div style="display:flex;gap:0.4rem;margin-top:0.5rem;">
-      <button onclick="showCollAnswer()" style="flex:1;background:var(--warning);color:#000;border:none;border-radius:8px;padding:0.55rem;cursor:pointer;font-weight:600;font-size:0.85rem;">Show Answer</button>
-      <button onclick="renderVocabMenu()" style="background:var(--bg-tertiary);color:var(--text-primary);border:none;border-radius:8px;padding:0.55rem 0.9rem;cursor:pointer;">Menu</button>
-    </div>
-  `;
-  
-  updateCollCharBoxes();
-  
-  setTimeout(()=>{
-    const inp=document.getElementById('collTypeInput');
-    if(!inp)return;
-    inp.focus();
-    inp.addEventListener('input',handleCollTyping);
-    inp.addEventListener('keydown',handleCollKeydown);
-  },50);
+      <div style="display:flex;gap:0.4rem;margin-top:0.5rem;">
+        <button onclick="showCollAnswer()" style="flex:1;background:var(--warning);color:#000;border:none;border-radius:8px;padding:0.55rem;cursor:pointer;font-weight:600;font-size:0.85rem;">Show Answer</button>
+        <button onclick="renderVocabMenu()" style="background:var(--bg-tertiary);color:var(--text-primary);border:none;border-radius:8px;padding:0.55rem 0.9rem;cursor:pointer;">Menu</button>
+      </div>`;
+    updateCollCharBoxes();
+    setTimeout(()=>{
+      const inp=document.getElementById('collTypeInput');
+      if(!inp)return;
+      inp.focus();
+      inp.addEventListener('input',handleCollTyping);
+      inp.addEventListener('keydown',handleCollKeydown);
+    },50);
+  } else {
+    // Easy (3) / Medium (4) = MCQ
+    const numOpts=d==='easy'?3:4;
+    // Build distractors from same type across other nouns
+    const sameType=collQuizState.sets
+      .filter((_,i)=>i!==collQuizState.idx)
+      .map(x=>x.type===q.type?x.correct:null)
+      .filter(Boolean);
+    const distractors=shuffle([...new Set(sameType)]).slice(0,numOpts-1);
+    // Pad if not enough
+    const extraPool=['significant','rapid','growing','major','critical','essential','important','clear','direct','serious','considerable','dramatic'];
+    while(distractors.length<numOpts-1)distractors.push(extraPool[distractors.length]||'common');
+    const choices=shuffle([q.correct,...distractors.slice(0,numOpts-1)]);
+    const choicesHTML=choices.map((c,i)=>`
+      <button onclick="selectCollChoice('${c}','${q.correct}')"
+        id="collopt${i}"
+        style="width:100%;text-align:left;background:var(--bg-primary);border:2px solid var(--bg-tertiary);
+               border-radius:9px;padding:0.55rem 0.85rem;margin-bottom:0.3rem;cursor:pointer;
+               font-size:0.88rem;font-family:inherit;color:var(--text-primary);display:flex;align-items:center;gap:0.5rem;">
+        <span style="min-width:1.4rem;background:var(--bg-tertiary);border-radius:5px;padding:0.1rem 0.3rem;font-size:0.72rem;font-weight:800;color:var(--text-secondary);">${i+1}</span>
+        ${c} ${q.noun}
+      </button>`).join('');
+    box.innerHTML=header+choicesHTML+`
+      <div id="collMCQFeedback" style="min-height:1.2rem;text-align:center;font-size:0.82rem;margin-top:0.3rem;"></div>
+      <div style="font-size:0.67rem;color:var(--text-secondary);text-align:center;margin-top:0.25rem;">Press 1–${numOpts} to select instantly</div>`;
+    // Keyboard handler for MCQ
+    const kh=function(e){
+      if(!document.getElementById('vocabModal').classList.contains('show'))return;
+      const n=parseInt(e.key);
+      if(n>=1&&n<=choices.length){e.preventDefault();selectCollChoice(choices[n-1],q.correct);}
+    };
+    collQuizState._kh=kh;
+    document.addEventListener('keydown',kh);
+  }
+}
+
+function selectCollChoice(selected, correct){
+  if(collQuizState._kh){document.removeEventListener('keydown',collQuizState._kh);collQuizState._kh=null;}
+  const isRight=selected.toLowerCase()===correct.toLowerCase();
+  // Visual feedback
+  const q=collQuizState.sets[collQuizState.idx];
+  document.querySelectorAll('[id^="collopt"]').forEach(btn=>{
+    const txt=btn.textContent.trim().split(' ')[1];
+    if(txt&&txt.toLowerCase()===correct.toLowerCase()){btn.style.borderColor='var(--success)';btn.style.background='rgba(34,197,94,0.12)';btn.style.color='var(--success)';}
+    else if(txt&&txt.toLowerCase()===selected.toLowerCase()&&!isRight){btn.style.borderColor='var(--error)';btn.style.background='rgba(239,68,68,0.08)';btn.style.color='var(--error)';}
+    else btn.style.opacity='0.45';
+    btn.style.pointerEvents='none';
+  });
+  const fb=document.getElementById('collMCQFeedback');
+  if(isRight){collQuizState.score++;if(fb)fb.innerHTML='<span style="color:var(--success);font-weight:700;">✓ Correct!</span>';}
+  else{if(fb)fb.innerHTML=`<span style="color:var(--error);font-weight:700;">✗ Answer: ${correct} ${q.noun}</span>`;}
+  setTimeout(()=>{collQuizState.idx++;renderCollTypingQuiz();},isRight?750:1400);
 }
 
 function updateCollCharBoxes(){
@@ -2610,9 +2781,16 @@ function renderCollResult(){
 // ============================================================
 let grammarTopic=Object.keys(grammarTopics)[0];
 let grammarView='rules';
+let grammarDiff='medium';
 let grammarQuizState={currentQ:0,score:0,answers:[],currentAnswer:'',typedAnswer:'',answerShown:false};
 
-function openGrammar(){document.getElementById('grammarModal').classList.add('show');grammarTopic=Object.keys(grammarTopics)[0];grammarView='rules';grammarQuizState={currentQ:0,score:0,answers:[],currentAnswer:'',typedAnswer:'',answerShown:false};renderGrammar();}
+function openGrammar(){
+  document.getElementById('grammarModal').classList.add('show');
+  grammarTopic=Object.keys(grammarTopics)[0];
+  grammarView='rules';
+  grammarQuizState={currentQ:0,score:0,answers:[],currentAnswer:'',typedAnswer:'',answerShown:false};
+  renderGrammar();
+}
 function closeGrammarModal(){document.getElementById('grammarModal').classList.remove('show');}
 document.getElementById('grammarModal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeGrammarModal();});
 
@@ -2621,11 +2799,16 @@ function renderGrammar(){
   const topics=Object.keys(grammarTopics);
   const topicData=grammarTopics[grammarTopic];
   const tabsHTML=topics.map(t=>`<button class="g-tab${t===grammarTopic?' active':''}" onclick="grammarTopic='${t}';grammarView='rules';grammarQuizState={currentQ:0,score:0,answers:[],currentAnswer:'',typedAnswer:'',answerShown:false};renderGrammar()">${t}</button>`).join('');
-  const viewToggle=`<div style="display:flex;gap:0.4rem;margin-bottom:0.75rem;">
-    <button onclick="grammarView='rules';renderGrammar()" style="flex:1;padding:0.45rem;border-radius:8px;border:2px solid ${grammarView==='rules'?'var(--accent)':'var(--bg-tertiary)'};background:${grammarView==='rules'?'var(--accent-glow)':'var(--bg-primary)'};color:${grammarView==='rules'?'var(--accent)':'var(--text-secondary)'};cursor:pointer;font-weight:600;font-size:0.85rem;">Rules</button>
-    <button onclick="grammarView='quiz';grammarQuizState={currentQ:0,score:0,answers:[],currentAnswer:'',typedAnswer:'',answerShown:false};renderGrammar()" style="flex:1;padding:0.45rem;border-radius:8px;border:2px solid ${grammarView==='quiz'?'var(--warning)':'var(--bg-tertiary)'};background:${grammarView==='quiz'?'rgba(245,158,11,0.12)':'var(--bg-primary)'};color:${grammarView==='quiz'?'var(--warning)':'var(--text-secondary)'};cursor:pointer;font-weight:600;font-size:0.85rem;">Quiz (Type Answers)</button>
+  const diffPills=`<div style="display:flex;gap:0.35rem;margin-bottom:0.55rem;">
+    <span class="diff-pill easy${grammarDiff==='easy'?' active':''}" onclick="grammarDiff='easy';" style="cursor:pointer;">🟢 Easy</span>
+    <span class="diff-pill medium${grammarDiff==='medium'?' active':''}" onclick="grammarDiff='medium';" style="cursor:pointer;">🟡 Medium</span>
+    <span class="diff-pill hard${grammarDiff==='hard'?' active':''}" onclick="grammarDiff='hard';" style="cursor:pointer;">🔴 Hard</span>
   </div>`;
-  
+  const viewToggle=`<div style="display:flex;gap:0.4rem;margin-bottom:0.75rem;">
+    <button onclick="grammarView='rules';renderGrammar()" style="flex:1;padding:0.45rem;border-radius:8px;border:2px solid ${grammarView==='rules'?'var(--accent)':'var(--bg-tertiary)'};background:${grammarView==='rules'?'var(--accent-glow)':'var(--bg-primary)'};color:${grammarView==='rules'?'var(--accent)':'var(--text-secondary)'};cursor:pointer;font-weight:600;font-size:0.85rem;">📖 Rules</button>
+    <button onclick="grammarView='quiz';grammarQuizState={currentQ:0,score:0,answers:[],currentAnswer:'',typedAnswer:'',answerShown:false};renderGrammar()" style="flex:1;padding:0.45rem;border-radius:8px;border:2px solid ${grammarView==='quiz'?'var(--warning)':'var(--bg-tertiary)'};background:${grammarView==='quiz'?'rgba(245,158,11,0.12)':'var(--bg-primary)'};color:${grammarView==='quiz'?'var(--warning)':'var(--text-secondary)'};cursor:pointer;font-weight:600;font-size:0.85rem;">✏️ Quiz</button>
+  </div>`;
+
   let content='';
   if(grammarView==='rules'){
     content=topicData.rules.map(r=>`
@@ -2638,15 +2821,16 @@ function renderGrammar(){
     renderGrammarTypingQuiz();
     return;
   }
-  
+
   box.innerHTML=`
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;">
-      <h2 style="color:var(--warning);font-size:1.2rem;">Grammar for IELTS</h2>
-      <button onclick="closeGrammarModal()" style="background:none;border:none;font-size:1.1rem;cursor:pointer;color:var(--text-secondary);">Close</button>
+      <h2 style="color:var(--warning);font-size:1.2rem;">📝 Grammar for IELTS</h2>
+      <button onclick="closeGrammarModal()" style="background:none;border:none;font-size:1.1rem;cursor:pointer;color:var(--text-secondary);">✕</button>
     </div>
     <div class="grammar-section-tabs">${tabsHTML}</div>
+    ${diffPills}
     ${viewToggle}
-    <div style="max-height:55vh;overflow-y:auto;padding-right:2px;">${content}</div>`;
+    <div style="max-height:52vh;overflow-y:auto;padding-right:2px;">${content}</div>`;
 }
 
 function renderGrammarTypingQuiz(){
@@ -2654,48 +2838,99 @@ function renderGrammarTypingQuiz(){
   const topics=Object.keys(grammarTopics);
   const topicData=grammarTopics[grammarTopic];
   const tabsHTML=topics.map(t=>`<button class="g-tab${t===grammarTopic?' active':''}" onclick="grammarTopic='${t}';grammarView='rules';renderGrammar()">${t}</button>`).join('');
-  
   const total=topicData.quiz.length;
-  if(grammarQuizState.currentQ>=total){
-    renderGrammarResult();
-    return;
-  }
-  
+  if(grammarQuizState.currentQ>=total){renderGrammarResult();return;}
   const q=topicData.quiz[grammarQuizState.currentQ];
   grammarQuizState.currentAnswer=q.answer.toLowerCase();
   grammarQuizState.typedAnswer='';
   grammarQuizState.answerShown=false;
-  
-  box.innerHTML=`
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;">
-      <h2 style="color:var(--warning);font-size:1.2rem;">Grammar Quiz</h2>
-      <button onclick="closeGrammarModal()" style="background:none;border:none;font-size:1.1rem;cursor:pointer;color:var(--text-secondary);">Close</button>
+  const pct=Math.round((grammarQuizState.currentQ/total)*100);
+
+  const header=`
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.6rem;">
+      <h2 style="color:var(--warning);font-size:1.1rem;">📝 Grammar Quiz</h2>
+      <button onclick="closeGrammarModal()" style="background:none;border:none;font-size:1.1rem;cursor:pointer;color:var(--text-secondary);">✕</button>
     </div>
-    <div class="grammar-section-tabs">${tabsHTML}</div>
-    <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:var(--text-secondary);margin:0.6rem 0;">
-      <span>Q${grammarQuizState.currentQ+1}/${total} · Score: <b style="color:var(--success)">${grammarQuizState.score}</b></span>
+    <div class="grammar-section-tabs" style="margin-bottom:0.5rem;">${tabsHTML}</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;font-size:0.73rem;color:var(--text-secondary);margin-bottom:0.45rem;">
+      <span>Q${grammarQuizState.currentQ+1}/${total} · Score: <b style="color:var(--success);">${grammarQuizState.score}</b></span>
+      <span style="color:${grammarDiff==='easy'?'#22c55e':grammarDiff==='medium'?'#f59e0b':'#ef4444'};font-weight:700;">${grammarDiff.charAt(0).toUpperCase()+grammarDiff.slice(1)}</span>
     </div>
-    <div class="type-quiz-area">
-      <div class="type-quiz-prompt">${q.q}</div>
-      <div class="char-display" id="grammarCharDisplay"></div>
-      <input type="text" id="grammarTypeInput" class="type-quiz-input" placeholder="Type your answer..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-      <div class="type-hint" id="grammarTypeHint">${q.hint?`Hint: ${q.hint}`:''}</div>
+    <div style="height:3px;background:var(--bg-tertiary);border-radius:2px;margin-bottom:0.75rem;overflow:hidden;">
+      <div style="height:100%;width:${pct}%;background:var(--warning);transition:width 0.3s;"></div>
     </div>
-    <div style="display:flex;gap:0.4rem;margin-top:0.5rem;">
-      <button onclick="grammarView='rules';renderGrammar()" style="flex:1;background:var(--bg-tertiary);color:var(--text-primary);border:none;border-radius:8px;padding:0.55rem;cursor:pointer;">Back to Rules</button>
-      <button onclick="showGrammarAnswer()" style="background:var(--warning);color:#000;border:none;border-radius:8px;padding:0.55rem 0.9rem;cursor:pointer;font-weight:600;">Show Answer</button>
-    </div>
-  `;
-  
-  updateGrammarCharBoxes();
-  
-  setTimeout(()=>{
-    const inp=document.getElementById('grammarTypeInput');
-    if(!inp)return;
-    inp.focus();
-    inp.addEventListener('input',handleGrammarTyping);
-    inp.addEventListener('keydown',handleGrammarKeydown);
-  },50);
+    <div style="background:var(--bg-primary);border:1px solid var(--bg-tertiary);border-radius:10px;padding:0.85rem;margin-bottom:0.7rem;font-size:0.88rem;line-height:1.6;">${q.q}</div>`;
+
+  if(grammarDiff==='hard'){
+    // Hard = type the full answer
+    box.innerHTML=header+`
+      <div class="type-quiz-area">
+        <div class="char-display" id="grammarCharDisplay"></div>
+        <input type="text" id="grammarTypeInput" class="type-quiz-input" placeholder="Type your answer…" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+        <div class="type-hint" id="grammarTypeHint">${q.hint?`💡 Hint: ${q.hint}`:''}</div>
+      </div>
+      <div style="display:flex;gap:0.4rem;margin-top:0.5rem;">
+        <button onclick="grammarView='rules';renderGrammar()" style="background:var(--bg-tertiary);color:var(--text-primary);border:none;border-radius:8px;padding:0.5rem 0.75rem;cursor:pointer;font-size:0.82rem;">Rules</button>
+        <button onclick="showGrammarAnswer()" style="flex:1;background:var(--warning);color:#000;border:none;border-radius:8px;padding:0.5rem;cursor:pointer;font-weight:600;font-size:0.85rem;">Show Answer</button>
+      </div>`;
+    updateGrammarCharBoxes();
+    setTimeout(()=>{
+      const inp=document.getElementById('grammarTypeInput');
+      if(!inp)return;
+      inp.focus();
+      inp.addEventListener('input',handleGrammarTyping);
+      inp.addEventListener('keydown',handleGrammarKeydown);
+    },50);
+  } else {
+    // Easy (3 opts) / Medium (4 opts) = MCQ
+    const numOpts=grammarDiff==='easy'?3:4;
+    // Build distractors from OTHER quiz answers in this topic
+    const allAnswers=topicData.quiz.map(x=>x.answer).filter(a=>a.toLowerCase()!==q.answer.toLowerCase());
+    const distractors=shuffle([...new Set(allAnswers)]).slice(0,numOpts-1);
+    while(distractors.length<numOpts-1){distractors.push(['is','was','are','has been','had been','will be','would','could','should','might'][distractors.length]||'does');}
+    const choices=shuffle([q.answer,...distractors.slice(0,numOpts-1)]);
+    const hintHTML=grammarDiff==='easy'&&q.hint?`<div style="font-size:0.72rem;color:var(--text-secondary);margin-bottom:0.5rem;">💡 ${q.hint}</div>`:'';
+    const choicesHTML=choices.map((c,i)=>`
+      <button onclick="selectGrammarChoice('${c.replace(/'/g,"\\'")}','${q.answer.replace(/'/g,"\\'")}')"
+        id="gopt${i}"
+        style="width:100%;text-align:left;background:var(--bg-primary);border:2px solid var(--bg-tertiary);
+               border-radius:9px;padding:0.55rem 0.85rem;margin-bottom:0.32rem;cursor:pointer;
+               font-size:0.88rem;font-family:inherit;color:var(--text-primary);
+               display:flex;align-items:center;gap:0.5rem;transition:border-color 0.12s,background 0.12s;">
+        <span style="min-width:1.4rem;background:var(--bg-tertiary);border-radius:5px;padding:0.1rem 0.3rem;font-size:0.72rem;font-weight:800;color:var(--text-secondary);">${i+1}</span>
+        ${c}
+      </button>`).join('');
+    box.innerHTML=header+hintHTML+choicesHTML+`
+      <div id="grammarMCQFeedback" style="min-height:1.2rem;text-align:center;font-size:0.82rem;margin-top:0.3rem;"></div>
+      <div style="font-size:0.67rem;color:var(--text-secondary);text-align:center;margin-top:0.25rem;">Press 1–${numOpts} to select instantly</div>`;
+    // Keyboard
+    if(grammarQuizState._kh)document.removeEventListener('keydown',grammarQuizState._kh);
+    const kh=function(e){
+      if(!document.getElementById('grammarModal').classList.contains('show'))return;
+      const n=parseInt(e.key);
+      if(n>=1&&n<=choices.length){e.preventDefault();selectGrammarChoice(choices[n-1],q.answer);}
+    };
+    grammarQuizState._kh=kh;
+    document.addEventListener('keydown',kh);
+  }
+}
+
+function selectGrammarChoice(selected, correct){
+  if(grammarQuizState._kh){document.removeEventListener('keydown',grammarQuizState._kh);grammarQuizState._kh=null;}
+  const isRight=selected.toLowerCase()===correct.toLowerCase();
+  document.querySelectorAll('[id^="gopt"]').forEach(btn=>{
+    const txt=btn.querySelector('span+span')||btn.childNodes[btn.childNodes.length-1];
+    const btnText=btn.textContent.replace(/^\s*\d+\s*/,'').trim();
+    if(btnText.toLowerCase()===correct.toLowerCase()){btn.style.borderColor='var(--success)';btn.style.background='rgba(34,197,94,0.12)';btn.style.color='var(--success)';}
+    else if(btnText.toLowerCase()===selected.toLowerCase()&&!isRight){btn.style.borderColor='var(--error)';btn.style.background='rgba(239,68,68,0.08)';btn.style.color='var(--error)';}
+    else btn.style.opacity='0.45';
+    btn.style.pointerEvents='none';
+  });
+  const fb=document.getElementById('grammarMCQFeedback');
+  if(isRight){grammarQuizState.score++;if(fb)fb.innerHTML='<span style="color:var(--success);font-weight:700;">✓ Correct!</span>';}
+  else{if(fb)fb.innerHTML=`<span style="color:var(--error);font-weight:700;">✗ Answer: <b>${correct}</b></span>`;}
+  grammarQuizState.currentQ++;
+  setTimeout(()=>renderGrammarTypingQuiz(),isRight?750:1500);
 }
 
 function updateGrammarCharBoxes(){
@@ -2802,7 +3037,7 @@ function renderGrammarResult(){
 // ============================================================
 let activeSection='typing';
 let ieltsActiveTab='writing';
-const IELTS_STATS_KEY='typemaster_ielts_stats';
+const IELTS_STATS_KEY='mt_typing_ielts_stats';
 
 function switchSection(section){
   activeSection=section;
@@ -3102,11 +3337,11 @@ function applyDefColor(bg,border){
   defHighlightBorder=border;
   document.documentElement.style.setProperty('--def-bg',bg);
   document.documentElement.style.setProperty('--def-border',border);
-  localStorage.setItem('typemaster_def_color',JSON.stringify({bg,border}));
+  localStorage.setItem('mt_typing_def_color',JSON.stringify({bg,border}));
 }
 function loadDefColor(){
   try{
-    const s=JSON.parse(localStorage.getItem('typemaster_def_color'));
+    const s=JSON.parse(localStorage.getItem('mt_typing_def_color'));
     if(s)applyDefColor(s.bg,s.border);
     else applyDefColor(defHighlightColor,defHighlightBorder);
   }catch(e){applyDefColor(defHighlightColor,defHighlightBorder);}
@@ -3188,6 +3423,36 @@ const wordDefinitions={
   'polarisation':{pos:'n.',def:'Division into two sharply contrasting groups.',ex:'Social media has deepened political polarisation.'},
   'acceleration':{pos:'n.',def:'An increase in rate or speed.',ex:'The acceleration of climate change demands urgent action.'},
   'destabilise':{pos:'v.',def:'Upset the stability or smooth functioning of something.',ex:'Nationalism destabilised multi-ethnic empires before WWI.'},
+  'scrutinise':{pos:'v.',def:'Examine or inspect closely and thoroughly.',ex:'Journalists must scrutinise government policies to ensure accountability.'},
+  'ideology':{pos:'n.',def:'A system of ideas forming the basis of a political or economic theory.',ex:'Competing ideologies shaped the Cold War division of the world.'},
+  'paradigm':{pos:'n.',def:'A typical pattern or framework of understanding.',ex:'A paradigm shift in energy policy is required to address climate change.'},
+  'equitable':{pos:'adj.',def:'Fair and impartial; giving everyone equal treatment.',ex:'An equitable distribution of resources is essential for social stability.'},
+  'stigma':{pos:'n.',def:'A mark of disgrace associated with a particular circumstance.',ex:'Social stigma prevents many people from seeking help for mental health conditions.'},
+  'catalyst':{pos:'n.',def:'A person or thing that precipitates an event or change.',ex:'The financial crisis acted as a catalyst for sweeping regulatory reforms.'},
+  'polarise':{pos:'v.',def:'Divide into two sharply contrasting groups or opinions.',ex:'Social media algorithms tend to polarise public opinion by amplifying extreme views.'},
+  'proliferation':{pos:'n.',def:'Rapid increase in number or spread of something.',ex:'The proliferation of smartphones has transformed how people communicate.'},
+  'mitigation':{pos:'n.',def:'The action of reducing the severity of something harmful.',ex:'Climate mitigation requires reducing greenhouse gas emissions across all sectors.'},
+  'cohesion':{pos:'n.',def:'The action of forming a united whole; unity and solidarity.',ex:'Social cohesion is undermined when inequality grows and trust in institutions declines.'},
+  'accountability':{pos:'n.',def:'The fact of being responsible for one\'s actions and decisions.',ex:'Democratic accountability requires that elected officials answer to their constituents.'},
+  'disparity':{pos:'n.',def:'A great difference between things; inequality.',ex:'There is a growing disparity between the wages of skilled and unskilled workers.'},
+  'sustainable':{pos:'adj.',def:'Able to be maintained long-term without depleting natural resources.',ex:'Sustainable development meets the needs of the present without compromising future generations.'},
+  'deteriorate':{pos:'v.',def:'Become progressively worse in condition or quality.',ex:'Without adequate investment, public services will inevitably deteriorate over time.'},
+  'transition':{pos:'n.',def:'The process of changing from one state or condition to another.',ex:'The energy transition requires massive investment in renewable infrastructure.'},
+  'collaborative':{pos:'adj.',def:'Produced or conducted by two or more parties working jointly.',ex:'A collaborative approach between government and industry is essential for meaningful reform.'},
+  'resilient':{pos:'adj.',def:'Able to recover quickly from difficulties; tough and adaptable.',ex:'Communities that invest in social cohesion tend to be more resilient in the face of crises.'},
+  'marginalise':{pos:'v.',def:'Treat as insignificant or exclude from power and decision-making.',ex:'Poor urban planning can marginalise low-income communities by limiting their access to services.'},
+  'counterproductive':{pos:'adj.',def:'Having the opposite effect to the one intended.',ex:'Overly punitive drug policies have proven counterproductive in many countries.'},
+  'chronic':{pos:'adj.',def:'Persisting for a long time; constantly recurring.',ex:'Chronic poverty traps communities in cycles of poor health and limited opportunity.'},
+  'coerce':{pos:'v.',def:'Persuade or restrain someone by force or threats.',ex:'International law prohibits states from coercing weaker nations through economic pressure.'},
+  'arbitrary':{pos:'adj.',def:'Based on random choice rather than reason or system.',ex:'Arbitrary arrests undermine the rule of law and public trust in institutions.'},
+  'disseminate':{pos:'v.',def:'Spread information or knowledge widely.',ex:'Social media enables misinformation to be disseminated to millions within minutes.'},
+  'sovereignty':{pos:'n.',def:'Supreme power, especially over a self-governing state.',ex:'The question of national sovereignty lies at the heart of many Brexit debates.'},
+  'bureaucracy':{pos:'n.',def:'A system of government with many complicated rules and processes.',ex:'Excessive bureaucracy can stifle innovation and delay necessary policy reforms.'},
+  'competence':{pos:'n.',def:'The ability to do something successfully or efficiently.',ex:'Effective governance depends on the competence and integrity of public officials.'},
+  'deterrent':{pos:'n.',def:'A thing that discourages or is intended to discourage action.',ex:'Some argue that harsher sentences act as a deterrent to serious crime.'},
+  'encompass':{pos:'v.',def:'Include or contain a wide range of things.',ex:'Sustainable development must encompass economic, social, and environmental dimensions.'},
+  'facilitate':{pos:'v.',def:'Make an action or process easier; help bring about.',ex:'Good infrastructure facilitates trade and boosts economic productivity significantly.'},
+  'hierarchy':{pos:'n.',def:'A system in which things are ranked according to status or authority.',ex:'Flat organisational hierarchies tend to encourage more collaborative and creative work.'},
 };
 
 // Event delegation — one listener on textDisplay for all def-highlight clicks
@@ -3386,7 +3651,7 @@ function hexToRgbStr(hex){
 }
 
 function loadBestScores(){
-  const best=JSON.parse(localStorage.getItem('typemaster_game_best')||'{}');
+  const best=JSON.parse(localStorage.getItem('mt_typing_game_best')||'{}');
   if(!Object.keys(best).length)return'';
   const items=Object.entries(best).map(([m,s])=>`<div style="display:flex;justify-content:space-between;"><span style="color:var(--text-secondary);font-size:0.8rem;">${{classic:'💀 Classic',speedemon:'⚡ Speed Demon',blitz:'🔥 Blitz'}[m]||m}</span><span style="font-weight:800;color:#ef4444;font-size:0.8rem;">${s} pts</span></div>`).join('');
   return`<div style="margin-top:1rem;background:var(--bg-primary);border-radius:10px;padding:0.75rem;"><div style="font-size:0.7rem;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.4rem;">🏆 Best Scores</div>${items}</div>`;
@@ -3528,10 +3793,10 @@ function renderGameOver(timeout,timesUp){
   const mode=gameState.mode;
   const modeColor={classic:'#ef4444',speedemon:'#f59e0b',blitz:'#8b5cf6'}[mode];
   // Save best score
-  const best=JSON.parse(localStorage.getItem('typemaster_game_best')||'{}');
+  const best=JSON.parse(localStorage.getItem('mt_typing_game_best')||'{}');
   const prev=best[mode]||0;
   const isNew=gameState.score>prev;
-  if(isNew){best[mode]=gameState.score;localStorage.setItem('typemaster_game_best',JSON.stringify(best));}
+  if(isNew){best[mode]=gameState.score;localStorage.setItem('mt_typing_game_best',JSON.stringify(best));}
   const emoji=gameState.score>=20?'🏆':gameState.score>=10?'💪':gameState.score>=5?'👍':'💀';
   box.innerHTML=`
     <div style="text-align:center;padding:0.5rem;">
@@ -3557,6 +3822,552 @@ function renderGameOver(timeout,timesUp){
 function hexToRgbTriple(hex){
   const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
   return`${r},${g},${b}`;
+}
+
+// ============================================================
+//  TIMER MODES — 15s / 30s / 60s
+// ============================================================
+let typingMode='articles'; // 'articles' | 'timed'
+let timedDuration=60;
+let timedCountdown=60;
+let timedInterval=null;
+let timedFinished=false;
+
+const TIMED_QUOTES=[
+  "The only way to do great work is to love what you do. If you have not found it yet, keep looking and do not settle.",
+  "Success is not final, failure is not fatal. It is the courage to continue that counts in the long run.",
+  "In the middle of every difficulty lies opportunity. Those who look for solutions will always find them.",
+  "The future belongs to those who believe in the beauty of their dreams and work tirelessly to achieve them.",
+  "Education is the most powerful weapon which you can use to change the world and transform lives forever.",
+  "Technology is best when it brings people together and enables them to solve problems they could not solve alone.",
+  "Climate change is the greatest challenge of our time and requires urgent cooperation across all nations.",
+  "Science is a way of thinking much more than it is a body of knowledge accumulated over centuries of research.",
+  "Democracy cannot succeed unless those who express their choice are prepared to choose wisely and responsibly.",
+  "The measure of intelligence is the ability to change and adapt to new information and circumstances.",
+  "Injustice anywhere is a threat to justice everywhere because we are caught in an inescapable network of mutuality.",
+  "Economic growth without social progress lets the great majority of people remain prisoners of poverty.",
+  "Language is the road map of a culture that tells you where its people come from and where they are going.",
+  "The internet has become the town square for the global village of tomorrow, connecting billions of people.",
+  "Resilience is not about never falling but about rising every time you fall and learning from each experience.",
+  "Biodiversity is the foundation of ecosystem services to which human well-being is fundamentally dependent.",
+  "Artificial intelligence is one of the most transformative and potentially disruptive technologies ever created.",
+  "Globalisation has connected the world economically but has also intensified competition between nations.",
+  "Mental health is not a destination but a process and it is about how you drive and not where you are going.",
+  "The greatest discovery of all time is that a person can change their future by merely changing their attitude.",
+  "Innovation distinguishes between a leader and a follower, and the best leaders always seek new solutions.",
+  "Reading gives us someplace to go when we have to stay where we are and opens infinite doors of knowledge.",
+  "Sustainable development is development that meets the needs of the present without compromising future generations.",
+  "Critical thinking is the intellectually disciplined process of actively and skilfully analysing information.",
+  "Empathy is the capacity to understand or feel what another person is experiencing from within their frame of reference.",
+];
+
+function setTypingMode(mode, btn){
+  typingMode=mode;
+  document.getElementById('catBtnArticles').classList.toggle('active', mode==='articles');
+  document.getElementById('catBtnTimed').classList.toggle('active', mode==='timed');
+  document.getElementById('articleSubTabs').style.display=mode==='articles'?'flex':'none';
+  document.getElementById('timedSubTabs').style.display=mode==='timed'?'flex':'none';
+  document.getElementById('articleList').style.display=mode==='articles'?'':'none';
+  document.getElementById('uploadSection').style.display='none';
+
+  if(mode==='timed'){
+    loadTimedQuote();
+  } else {
+    selectCategory('short', document.querySelector('#articleSubTabs .selector-tab'));
+  }
+}
+
+function selectTimedMode(sec, btn){
+  timedDuration=sec;
+  document.querySelectorAll('.timer-tab').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  loadTimedQuote();
+}
+
+function loadTimedQuote(){
+  clearTimedMode();
+  const q=TIMED_QUOTES[Math.floor(Math.random()*TIMED_QUOTES.length)];
+  currentText=q;
+  restartTest();
+  // Inject countdown display into typing area
+  injectTimedCountdown();
+}
+
+function injectTimedCountdown(){
+  // Remove existing if any
+  const existing=document.getElementById('timedCountdownDisplay');
+  if(existing)existing.remove();
+  const div=document.createElement('div');
+  div.id='timedCountdownDisplay';
+  div.className='timer-countdown';
+  div.textContent=timedDuration;
+  div.style.cssText='font-size:2rem;font-weight:900;text-align:center;color:var(--accent);margin-bottom:0.5rem;';
+  const ta=document.getElementById('typingArea');
+  ta.parentNode.insertBefore(div, ta);
+}
+
+function startTimedCountdown(){
+  if(typingMode!=='timed')return;
+  timedCountdown=timedDuration;
+  timedFinished=false;
+  const el=document.getElementById('timedCountdownDisplay');
+  if(el)el.textContent=timedCountdown;
+  timedInterval=setInterval(()=>{
+    timedCountdown--;
+    const el=document.getElementById('timedCountdownDisplay');
+    if(el){
+      el.textContent=timedCountdown;
+      el.className='timer-countdown'+(timedCountdown<=5?' danger':'');
+    }
+    if(timedCountdown<=0){
+      clearTimedMode();
+      timedFinished=true;
+      // Force complete
+      completeTimedTest();
+    }
+  },1000);
+}
+
+function clearTimedMode(){
+  if(timedInterval){clearInterval(timedInterval);timedInterval=null;}
+}
+
+function completeTimedTest(){
+  // Calculate results based on what was typed so far
+  isComplete=true;
+  clearInterval(timerInterval);
+  hiddenInput.blur();
+  const typed=hiddenInput.value||'';
+  const words=typed.trim().split(/\s+/).filter(Boolean).length;
+  const elapsedMs=timedDuration*1000;
+  const mins=elapsedMs/60000;
+  const wpm=Math.round(words/mins);
+  let correct=0;
+  for(let i=0;i<Math.min(typed.length,currentText.length);i++){if(typed[i]===currentText[i])correct++;}
+  const acc=typed.length>0?Math.round((correct/typed.length)*100):100;
+  const secs=timedDuration;
+  const mm=Math.floor(secs/60);const ss=secs%60;
+  document.getElementById('finalTimeBadge').textContent=`⏱ ${mm}:${ss.toString().padStart(2,'0')}`;
+  document.getElementById('finalWpm').textContent=wpm;
+  document.getElementById('finalAccuracy').textContent=acc+'%';
+  document.getElementById('finalCpm').textContent=Math.round(typed.length/mins);
+  document.getElementById('finalChars').textContent=typed.length;
+  document.getElementById('finalErrors').textContent=totalErrors;
+  renderKeyboardHeatmap(keyMistakeMap);
+  // Save to history
+  saveSessionToHistory(wpm, acc);
+  document.getElementById('resultsModal').classList.add('show');
+}
+
+// Hook timed mode into restartTest - already handled in startTest above
+
+// ============================================================
+//  PROGRESS & ANALYTICS
+// ============================================================
+const PB_KEY='mt_typing_personal_bests';
+const HIST_KEY='mt_typing_wpm_history';
+
+function getPersonalBests(){
+  try{return JSON.parse(localStorage.getItem(PB_KEY)||'{}');}catch(e){return{};}
+}
+function getWpmHistory(){
+  try{return JSON.parse(localStorage.getItem(HIST_KEY)||'[]');}catch(e){return[];}
+}
+
+function saveSessionToHistory(wpm, acc){
+  if(wpm<5)return;
+  const hist=getWpmHistory();
+  hist.push({wpm,acc,date:new Date().toLocaleDateString(),ts:Date.now()});
+  if(hist.length>60)hist.splice(0,hist.length-60);
+  localStorage.setItem(HIST_KEY,JSON.stringify(hist));
+}
+
+function checkPersonalBest(articleTitle, wpm, acc){
+  const bests=getPersonalBests();
+  const prev=bests[articleTitle];
+  const isNewBest=!prev||wpm>prev.wpm;
+  if(isNewBest){
+    bests[articleTitle]={wpm,acc,date:new Date().toLocaleDateString()};
+    localStorage.setItem(PB_KEY,JSON.stringify(bests));
+  }
+  return isNewBest;
+}
+
+function openAnalytics(){
+  const modal=document.getElementById('analyticsModal');
+  modal.classList.add('show');
+  renderAnalytics();
+  modal.onclick=e=>{if(e.target===modal)modal.classList.remove('show');};
+}
+
+function renderAnalytics(){
+  const box=document.getElementById('analyticsBox');
+  const hist=getWpmHistory();
+  const bests=getPersonalBests();
+  const bestEntries=Object.entries(bests).sort((a,b)=>b[1].wpm-a[1].wpm);
+
+  // WPM chart
+  const recent=hist.slice(-30);
+  const maxWpm=Math.max(1,...recent.map(h=>h.wpm));
+  const chartHTML=recent.length<2
+    ?'<div style="text-align:center;color:var(--text-secondary);font-size:0.8rem;padding:1rem;">Complete at least 2 sessions to see your chart.</div>'
+    :`<div class="wpm-chart">${recent.map(h=>{
+        const pct=Math.round((h.wpm/maxWpm)*100);
+        return`<div class="wpm-bar" style="height:${Math.max(4,pct)}%" data-label="${h.wpm} WPM · ${h.date}"></div>`;
+      }).join('')}</div>
+      <div style="display:flex;justify-content:space-between;font-size:0.65rem;color:var(--text-secondary);">
+        <span>${recent[0]?.date||''}</span><span>${recent[recent.length-1]?.date||''}</span>
+      </div>`;
+
+  // Session summary
+  const avgWpm=hist.length?Math.round(hist.reduce((a,b)=>a+b.wpm,0)/hist.length):0;
+  const bestWpm=hist.length?Math.max(...hist.map(h=>h.wpm)):0;
+  const avgAcc=hist.length?Math.round(hist.reduce((a,b)=>a+b.acc,0)/hist.length):0;
+
+  box.innerHTML=`
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+      <div style="font-size:1.15rem;font-weight:900;color:var(--accent);">📊 Progress & Analytics</div>
+      <button onclick="document.getElementById('analyticsModal').classList.remove('show')" style="background:none;border:none;font-size:1.2rem;cursor:pointer;color:var(--text-secondary);">✕</button>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.5rem;margin-bottom:1rem;">
+      <div class="ielts-stat-card" style="border-color:rgba(99,102,241,0.3);">
+        <div class="ielts-stat-label" style="color:var(--accent);">Avg WPM</div>
+        <div class="ielts-stat-value" style="color:var(--accent);">${avgWpm}</div>
+      </div>
+      <div class="ielts-stat-card" style="border-color:rgba(34,197,94,0.3);">
+        <div class="ielts-stat-label" style="color:var(--success);">Best WPM</div>
+        <div class="ielts-stat-value" style="color:var(--success);">${bestWpm}</div>
+      </div>
+      <div class="ielts-stat-card" style="border-color:rgba(245,158,11,0.3);">
+        <div class="ielts-stat-label" style="color:var(--warning);">Avg Acc</div>
+        <div class="ielts-stat-value" style="color:var(--warning);">${avgAcc}%</div>
+      </div>
+    </div>
+    <div style="font-size:0.78rem;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.4rem;">WPM Over Last ${recent.length} Sessions</div>
+    ${chartHTML}
+    <div style="font-size:0.78rem;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.07em;margin:0.85rem 0 0.4rem;">🏆 Personal Bests by Article</div>
+    ${bestEntries.length===0
+      ?'<div style="color:var(--text-secondary);font-size:0.8rem;">No records yet. Complete some articles to set personal bests!</div>'
+      :bestEntries.map(([title,pb])=>`
+        <div class="pb-card">
+          <div class="pb-article">${title.replace('IELTS: ','📚 ')}</div>
+          <div class="pb-stats">
+            <span class="pb-wpm">${pb.wpm} WPM</span>
+            <span class="pb-acc">${pb.acc}%</span>
+            <span class="pb-date">${pb.date}</span>
+          </div>
+        </div>`).join('')}
+    <div style="margin-top:0.85rem;display:flex;gap:0.4rem;justify-content:flex-end;">
+      <button onclick="if(confirm('Clear all analytics data?')){localStorage.removeItem('${HIST_KEY}');localStorage.removeItem('${PB_KEY}');renderAnalytics();}" style="font-size:0.75rem;background:rgba(239,68,68,0.1);color:#ef4444;border:1px solid #ef4444;border-radius:7px;padding:0.3rem 0.65rem;cursor:pointer;">🗑 Clear Data</button>
+    </div>`;
+}
+
+// ============================================================
+//  SPELLING SECTION 🔊
+// ============================================================
+const SPELL_WORDS={
+  easy:[
+    {word:'achieve',hint:'To succeed in reaching a goal'},
+    {word:'benefit',hint:'An advantage or profit'},
+    {word:'climate',hint:'The weather conditions of a region'},
+    {word:'control',hint:'The power to manage or regulate'},
+    {word:'culture',hint:'The customs and beliefs of a society'},
+    {word:'develop',hint:'To grow or cause to grow'},
+    {word:'economy',hint:'The system of production and trade'},
+    {word:'example',hint:'A thing that illustrates a point'},
+    {word:'freedom',hint:'The power to act without restraint'},
+    {word:'general',hint:'Affecting or relating to all parts'},
+    {word:'however',hint:'Used to introduce a contrast'},
+    {word:'improve',hint:'To make or become better'},
+    {word:'justice',hint:'Fair treatment according to the law'},
+    {word:'measure',hint:'A step taken to achieve a result'},
+    {word:'problem',hint:'A matter that is difficult to deal with'},
+    {word:'provide',hint:'To make available; to supply'},
+    {word:'quality',hint:'The degree of excellence of something'},
+    {word:'require',hint:'To need or depend on something'},
+    {word:'society',hint:'People living together in a community'},
+    {word:'support',hint:'To bear weight; to give assistance'},
+  ],
+  medium:[
+    {word:'accessible',hint:'Easy to approach, use, or obtain'},
+    {word:'appreciate',hint:'To recognise the value of something'},
+    {word:'assessment',hint:'Evaluation or judgement of something'},
+    {word:'commitment',hint:'A pledge or obligation to do something'},
+    {word:'consequence',hint:'A result or effect of an action'},
+    {word:'contribution',hint:'Something given to a common purpose'},
+    {word:'deteriorate',hint:'To become progressively worse'},
+    {word:'environment',hint:'The natural world and surroundings'},
+    {word:'fundamental',hint:'Central and important; forming a base'},
+    {word:'government',hint:'The group that rules or controls a state'},
+    {word:'independent',hint:'Free from outside control or influence'},
+    {word:'opportunity',hint:'A favourable set of circumstances'},
+    {word:'participate',hint:'To take part in an activity or event'},
+    {word:'perspective',hint:'A particular way of considering things'},
+    {word:'population',hint:'All the inhabitants of a place'},
+    {word:'significant',hint:'Sufficiently large or important'},
+    {word:'sustainable',hint:'Able to be maintained long-term'},
+    {word:'technology',hint:'The application of scientific knowledge'},
+    {word:'transparent',hint:'Open, honest, and not secretive'},
+    {word:'vulnerable',hint:'Susceptible to harm or criticism'},
+  ],
+  hard:[
+    {word:'accountability',hint:'Responsibility for one\'s actions'},
+    {word:'bureaucratic',hint:'Relating to excessive official rules'},
+    {word:'collaboration',hint:'Working jointly on a project'},
+    {word:'commemorate',hint:'To honour the memory of something'},
+    {word:'contemporary',hint:'Existing or occurring at present'},
+    {word:'controversial',hint:'Giving rise to public disagreement'},
+    {word:'discrimination',hint:'Unjust treatment of different groups'},
+    {word:'disproportionate',hint:'Too large or small in relation to something'},
+    {word:'exacerbate',hint:'To make a problem worse'},
+    {word:'infrastructure',hint:'Basic facilities serving a society'},
+    {word:'interdependent',hint:'Mutually reliant on each other'},
+    {word:'phenomenon',hint:'A remarkable or observable occurrence'},
+    {word:'predominantly',hint:'Mainly; for the most part'},
+    {word:'proliferation',hint:'Rapid increase in number'},
+    {word:'simultaneously',hint:'At the same time as something else'},
+    {word:'transformation',hint:'A thorough or dramatic change'},
+    {word:'unprecedented',hint:'Never done or known before'},
+    {word:'vulnerability',hint:'The quality of being exposed to harm'},
+    {word:'marginalisation',hint:'Treatment as insignificant or peripheral'},
+    {word:'counterproductive',hint:'Having the opposite effect to what was intended'},
+  ]
+};
+
+let spellState={diff:'medium',idx:0,score:0,total:10,pool:[],currentWord:'',typed:'',checked:false};
+
+function openSpelling(){
+  const modal=document.getElementById('spellingModal');
+  modal.classList.add('show');
+  renderSpellingMenu();
+  modal.onclick=e=>{if(e.target===modal)closeSpelling();};
+  document.addEventListener('keydown',spellEscHandler);
+}
+
+function spellEscHandler(e){if(e.key==='Escape')closeSpelling();}
+
+function closeSpelling(){
+  document.getElementById('spellingModal').classList.remove('show');
+  document.removeEventListener('keydown',spellEscHandler);
+  // Stop any speech
+  if(window.speechSynthesis){try{speechSynthesis.cancel();}catch(e){}}
+}
+
+function renderSpellingMenu(){
+  const box=document.getElementById('spellingBox');
+  const d=spellState.diff;
+  box.innerHTML=`
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+      <div>
+        <div style="font-size:1.2rem;font-weight:900;color:#8b5cf6;">🔊 Spelling Practice</div>
+        <div style="font-size:0.75rem;color:var(--text-secondary);margin-top:0.1rem;">Listen and type the correct word</div>
+      </div>
+      <button onclick="closeSpelling()" style="background:none;border:none;font-size:1.2rem;cursor:pointer;color:var(--text-secondary);">✕</button>
+    </div>
+    <div style="margin-bottom:1rem;">
+      <div style="font-size:0.75rem;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.45rem;">Difficulty</div>
+      <div style="display:flex;gap:0.4rem;">
+        <span class="diff-pill easy${d==='easy'?' active':''}" onclick="spellState.diff='easy';renderSpellingMenu()">🟢 Easy</span>
+        <span class="diff-pill medium${d==='medium'?' active':''}" onclick="spellState.diff='medium';renderSpellingMenu()">🟡 Medium</span>
+        <span class="diff-pill hard${d==='hard'?' active':''}" onclick="spellState.diff='hard';renderSpellingMenu()">🔴 Hard</span>
+      </div>
+    </div>
+    <div style="background:var(--bg-primary);border:1px solid var(--bg-tertiary);border-radius:10px;padding:0.85rem;margin-bottom:1rem;font-size:0.8rem;color:var(--text-secondary);line-height:1.55;">
+      <b style="color:#8b5cf6;">How it works:</b> A word will be spoken aloud. Type what you hear and press <kbd style="background:var(--bg-tertiary);padding:0.1rem 0.35rem;border-radius:4px;">Enter</kbd> to check. Mistakes show only after you submit — not while typing!
+    </div>
+    <div style="display:flex;gap:0.4rem;">
+      <button onclick="startSpelling()" style="flex:1;background:linear-gradient(135deg,#8b5cf6,#6d28d9);color:#fff;border:none;border-radius:10px;padding:0.75rem;font-weight:800;font-size:0.95rem;cursor:pointer;">🎧 Start Practice</button>
+    </div>
+  `;
+}
+
+function startSpelling(){
+  const pool=shuffle(SPELL_WORDS[spellState.diff].slice()).slice(0,10);
+  spellState={...spellState,idx:0,score:0,total:pool.length,pool,currentWord:pool[0].word,typed:'',checked:false};
+  renderSpellingQuestion();
+}
+
+function renderSpellingQuestion(){
+  const s=spellState;
+  if(s.idx>=s.total){renderSpellingResult();return;}
+  const entry=s.pool[s.idx];
+  s.currentWord=entry.word;
+  s.typed='';s.checked=false;
+  const box=document.getElementById('spellingBox');
+  const pct=Math.round((s.idx/s.total)*100);
+  const blanks=entry.word.split('').map((_,i)=>`<div class="spell-blank" id="sb${i}">_</div>`).join('');
+
+  box.innerHTML=`
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;">
+      <span style="font-size:0.78rem;color:#8b5cf6;font-weight:700;">🔊 Spelling · ${s.diff.charAt(0).toUpperCase()+s.diff.slice(1)}</span>
+      <span style="font-size:0.78rem;color:var(--text-secondary);">Q${s.idx+1}/${s.total} · Score: <b style="color:#8b5cf6;">${s.score}</b></span>
+    </div>
+    <div style="height:4px;background:var(--bg-tertiary);border-radius:2px;margin-bottom:1rem;overflow:hidden;">
+      <div style="height:100%;width:${pct}%;background:linear-gradient(90deg,#8b5cf6,#6d28d9);transition:width 0.3s;"></div>
+    </div>
+    <div style="text-align:center;margin-bottom:0.75rem;">
+      <button id="spellPlayBtn" onclick="spellPlayBtnClick()" style="background:rgba(139,92,246,0.15);color:#8b5cf6;border:2px solid #8b5cf6;border-radius:12px;padding:0.65rem 1.5rem;font-size:1rem;cursor:pointer;font-weight:700;">🔊 Play Word</button>
+      <div style="font-size:0.72rem;color:var(--text-secondary);margin-top:0.4rem;">Hint: ${entry.hint}</div>
+    </div>
+    <div class="spell-word-blanks">${blanks}</div>
+    <input id="spellInput" class="spell-input" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Type the word you heard…"
+      oninput="updateSpellBlanks(this.value)"
+      onkeydown="handleSpellKey(event)">
+    <div id="spellFeedback" style="min-height:1.4rem;text-align:center;font-size:0.82rem;margin-bottom:0.4rem;"></div>
+    <div style="font-size:0.68rem;color:var(--text-secondary);text-align:center;">Press <b>Enter</b> to check · <b>Ctrl+R</b> to replay audio</div>
+  `;
+  setTimeout(()=>{
+    speakWord();
+    const inp=document.getElementById('spellInput');
+    if(inp)inp.focus();
+  },300);
+}
+
+// ── Speech engine — loads voices async, retries until ready ──
+let _ttsVoices=[];
+let _ttsReady=false;
+function _loadVoices(){
+  if(!window.speechSynthesis)return;
+  const v=speechSynthesis.getVoices();
+  if(v.length){_ttsVoices=v;_ttsReady=true;}
+}
+if(window.speechSynthesis){
+  _loadVoices();
+  speechSynthesis.onvoiceschanged=_loadVoices;
+}
+
+function _pickVoice(){
+  if(!_ttsVoices.length)_loadVoices();
+  // Prefer en-GB, then en-US, then any English, then first available
+  const prefs=['en-GB','en-US','en-AU','en-IN'];
+  for(const lang of prefs){
+    const v=_ttsVoices.find(v=>v.lang===lang);
+    if(v)return v;
+  }
+  const anyEn=_ttsVoices.find(v=>v.lang.startsWith('en'));
+  return anyEn||_ttsVoices[0]||null;
+}
+
+function speakWord(){
+  if(!window.speechSynthesis){
+    showToast('Text-to-speech is not available in this browser.','#ef4444');
+    return;
+  }
+  speechSynthesis.cancel();
+  const word=spellState.currentWord;
+  if(!word)return;
+
+  function _doSpeak(){
+    const utt=new SpeechSynthesisUtterance(word);
+    utt.rate=0.78;
+    utt.pitch=1.0;
+    utt.volume=1.0;
+    const voice=_pickVoice();
+    if(voice){utt.voice=voice;utt.lang=voice.lang;}
+    else{utt.lang='en-US';}
+    utt.onerror=function(e){
+      // Silently ignore 'interrupted' (happens when cancel() is called quickly)
+      if(e.error!=='interrupted')showToast('Audio error: '+e.error,'#ef4444');
+    };
+    speechSynthesis.speak(utt);
+  }
+
+  // If voices aren't loaded yet, wait up to 2s then try anyway
+  if(_ttsVoices.length){
+    _doSpeak();
+  }else{
+    let waited=0;
+    const poll=setInterval(()=>{
+      _loadVoices();
+      waited+=80;
+      if(_ttsVoices.length||waited>=2000){
+        clearInterval(poll);
+        _doSpeak();
+      }
+    },80);
+  }
+}
+
+function spellPlayBtnClick(){
+  const btn=document.getElementById('spellPlayBtn');
+  if(btn){btn.textContent='⏳ Loading…';btn.disabled=true;}
+  speakWord();
+  // Re-enable after a short delay
+  setTimeout(()=>{
+    if(btn){btn.textContent='🔊 Play Word';btn.disabled=false;}
+  },1200);
+}
+
+function updateSpellBlanks(val){
+  spellState.typed=val;
+  const word=spellState.currentWord;
+  for(let i=0;i<word.length;i++){
+    const el=document.getElementById('sb'+i);
+    if(!el)continue;
+    if(i<val.length){el.textContent=val[i];el.classList.add('filled');}
+    else{el.textContent='_';el.classList.remove('filled','correct','wrong');}
+  }
+}
+
+function handleSpellKey(e){
+  if(e.key==='Enter'){e.preventDefault();checkSpelling();}
+  if(e.ctrlKey&&e.key==='r'){e.preventDefault();speakWord();}
+}
+
+function checkSpelling(){
+  const s=spellState;
+  if(s.checked)return;
+  s.checked=true;
+  const typed=s.typed.trim().toLowerCase();
+  const correct=s.currentWord.toLowerCase();
+  const isCorrect=typed===correct;
+  const word=s.currentWord;
+
+  // Show letter-by-letter result on blanks
+  for(let i=0;i<word.length;i++){
+    const el=document.getElementById('sb'+i);
+    if(!el)continue;
+    if(i<typed.length){
+      el.classList.remove('filled');
+      if(typed[i]===word[i]){el.classList.add('correct');el.textContent=word[i];}
+      else{el.classList.add('wrong');el.textContent=typed[i]||'_';}
+    }else{
+      el.classList.add('wrong');el.textContent='_';
+    }
+  }
+
+  const fb=document.getElementById('spellFeedback');
+  const inp=document.getElementById('spellInput');
+  if(isCorrect){
+    s.score++;
+    if(fb)fb.innerHTML=`<span style="color:var(--success);font-weight:700;">✓ Correct!</span>`;
+    if(inp){inp.style.borderColor='var(--success)';inp.disabled=true;}
+    if(navigator.vibrate)navigator.vibrate(30);
+  }else{
+    if(fb)fb.innerHTML=`<span style="color:var(--error);font-weight:700;">✗ Correct spelling: <b>${s.currentWord}</b></span>`;
+    if(inp){inp.classList.add('wrong-shake');inp.style.borderColor='var(--error)';inp.disabled=true;}
+    speakWord(); // replay correct pronunciation
+    if(navigator.vibrate)navigator.vibrate([60,30,60]);
+  }
+  setTimeout(()=>{s.idx++;renderSpellingQuestion();},isCorrect?900:2000);
+}
+
+function renderSpellingResult(){
+  const s=spellState;
+  const pct=Math.round((s.score/s.total)*100);
+  const box=document.getElementById('spellingBox');
+  const emoji=pct>=80?'🏆':pct>=60?'👍':'📖';
+  box.innerHTML=`
+    <div style="text-align:center;padding:0.5rem;">
+      <div style="font-size:2.5rem;margin-bottom:0.35rem;">${emoji}</div>
+      <div style="font-size:2rem;font-weight:900;color:#8b5cf6;">${s.score}/${s.total}</div>
+      <div style="color:var(--text-secondary);font-size:0.82rem;margin-bottom:1rem;">${pct}% correct · ${s.diff} difficulty</div>
+      <div style="display:flex;flex-direction:column;gap:0.4rem;">
+        <button onclick="startSpelling()" style="background:linear-gradient(135deg,#8b5cf6,#6d28d9);color:#fff;border:none;border-radius:10px;padding:0.65rem;font-weight:800;cursor:pointer;">🔄 Try Again</button>
+        <button onclick="renderSpellingMenu()" style="background:var(--bg-tertiary);color:var(--text-primary);border:none;border-radius:8px;padding:0.55rem;cursor:pointer;">Change Difficulty</button>
+        <button onclick="closeSpelling()" style="background:var(--bg-primary);color:var(--text-secondary);border:1px solid var(--bg-tertiary);border-radius:8px;padding:0.5rem;cursor:pointer;">Close</button>
+      </div>
+    </div>`;
 }
 
 // ============================================================
