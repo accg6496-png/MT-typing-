@@ -472,8 +472,7 @@ body{padding-top:22px;}
 .reading-splitscreen{flex:1;display:flex;overflow:hidden;min-height:0;}
 .reading-passage-pane{flex:1;overflow-y:auto;padding:1.5rem 1.75rem;border-right:2px solid var(--bg-tertiary);min-width:0;}
 .reading-passage-pane h3{font-size:1rem;font-weight:900;color:var(--ielts);margin-bottom:1rem;padding-bottom:0.55rem;border-bottom:1.5px solid rgba(139,92,246,0.2);line-height:1.4;}
-.reading-passage-pane p{margin-bottom:0.9rem;font-size:var(--rd-font-size,0.95rem);line-height:var(--rd-line-height,1.95);color:var(--text-secondary);text-indent:1.25rem;}
-.reading-passage-pane p:first-of-type{text-indent:0;}
+.reading-passage-pane p{margin-bottom:0.9rem;font-size:var(--rd-font-size,0.95rem);line-height:var(--rd-line-height,1.95);color:var(--text-secondary);}
 .passage-label{display:inline-block;background:linear-gradient(135deg,rgba(139,92,246,0.15),rgba(109,40,217,0.08));color:var(--ielts);border-radius:5px;padding:0.12rem 0.55rem;font-size:0.62rem;font-weight:800;margin-bottom:0.85rem;letter-spacing:0.08em;border:1px solid rgba(139,92,246,0.25);}
 .para-sec-lbl{display:inline-flex;align-items:center;justify-content:center;width:1.4rem;height:1.4rem;background:linear-gradient(135deg,var(--ielts),#6d28d9);color:#fff;border-radius:4px;font-size:0.68rem;font-weight:900;margin-right:0.42rem;flex-shrink:0;vertical-align:middle;line-height:1;}
 .reading-questions-pane{width:430px;flex-shrink:0;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:0.55rem;background:var(--bg-secondary);}
@@ -640,8 +639,40 @@ body{padding-top:22px;}
 .rd-hl-eraser{padding:0.28rem 0.6rem;border-radius:6px;border:1.5px solid var(--bg-tertiary);background:var(--bg-primary);color:var(--text-secondary);cursor:pointer;font-size:0.75rem;font-weight:700;transition:all 0.12s;}
 .rd-hl-eraser:hover{border-color:var(--error);color:var(--error);}
 @keyframes rdPulse{0%,100%{opacity:1}50%{opacity:0.55}}
-/* ── Test warning bar ── */
-.test-warning-bar{background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.3);border-radius:8px;padding:0.45rem 0.85rem;font-size:0.75rem;color:#f59e0b;font-weight:700;margin-bottom:0.6rem;display:none;text-align:center;}
+/* ── Draggable split pane divider ── */
+.rd-divider{width:6px;flex-shrink:0;background:var(--bg-tertiary);cursor:col-resize;transition:background 0.15s;display:flex;align-items:center;justify-content:center;position:relative;user-select:none;}
+.rd-divider:hover,.rd-divider.dragging{background:var(--ielts);}
+.rd-divider::before{content:'⋮';font-size:0.9rem;color:var(--text-secondary);letter-spacing:-2px;opacity:0.5;}
+.rd-divider:hover::before,.rd-divider.dragging::before{opacity:1;color:#fff;}
+/* ── Paragraph jump nav ── */
+.rd-para-jump{display:flex;align-items:center;gap:0.3rem;flex-wrap:wrap;padding:0.4rem 1.75rem;background:rgba(139,92,246,0.04);border-bottom:1px solid rgba(139,92,246,0.12);flex-shrink:0;}
+.rd-para-jump-label{font-size:0.62rem;font-weight:800;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.08em;margin-right:0.2rem;}
+.rd-para-btn{width:26px;height:26px;border-radius:5px;border:1.5px solid rgba(139,92,246,0.25);background:rgba(139,92,246,0.06);color:var(--ielts);font-size:0.68rem;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.12s;flex-shrink:0;}
+.rd-para-btn:hover{background:var(--ielts);color:#fff;border-color:var(--ielts);transform:scale(1.12);}
+/* ── Passage line numbers ── */
+.rd-passage-para{display:flex;align-items:flex-start;gap:0.7rem;margin-bottom:0.9rem;}
+.rd-line-num{font-size:0.6rem;font-weight:700;color:rgba(139,92,246,0.35);min-width:1.6rem;text-align:right;flex-shrink:0;padding-top:0.25rem;font-variant-numeric:tabular-nums;font-family:'JetBrains Mono',monospace;user-select:none;}
+.rd-para-text{flex:1;font-size:var(--rd-font-size,0.95rem);line-height:var(--rd-line-height,1.95);color:var(--text-secondary);text-indent:1.25rem;}
+.rd-para-text:first-of-type{text-indent:0;}
+/* ── Writing font control ── */
+.wt-font-ctrl{display:flex;align-items:center;gap:0.25rem;background:var(--bg-primary);border:1.5px solid var(--bg-tertiary);border-radius:7px;padding:0.18rem 0.42rem;}
+.wt-font-ctrl button{background:none;border:none;color:var(--text-secondary);cursor:pointer;font-size:0.85rem;padding:0 0.12rem;line-height:1;transition:color 0.12s;}
+.wt-font-ctrl button:hover{color:var(--ielts);}
+.wt-font-ctrl span{font-size:0.65rem;color:var(--text-secondary);min-width:2rem;text-align:center;font-weight:700;}
+/* ── Essay structure template ── */
+.wt-essay-tmpl{border:1.5px solid rgba(59,130,246,0.3);border-radius:8px;overflow:hidden;margin-top:0.75rem;}
+.wt-essay-tmpl-header{display:flex;align-items:center;justify-content:space-between;padding:0.35rem 0.65rem;background:rgba(59,130,246,0.07);cursor:pointer;user-select:none;}
+.wt-essay-tmpl-header:hover{background:rgba(59,130,246,0.12);}
+.wt-essay-tmpl-body{padding:0.55rem 0.7rem;display:flex;flex-direction:column;gap:0.28rem;}
+.wt-tmpl-para{display:flex;gap:0.45rem;align-items:flex-start;padding:0.35rem 0.45rem;border-radius:6px;background:var(--bg-primary);border-left:3px solid;}
+.wt-tmpl-para-label{font-size:0.62rem;font-weight:900;white-space:nowrap;flex-shrink:0;padding-top:1px;}
+.wt-tmpl-para-text{font-size:0.72rem;color:var(--text-secondary);line-height:1.55;}
+/* ── Writing results screen ── */
+.wt-results-overlay{position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,0.78);display:flex;align-items:center;justify-content:center;padding:1rem;animation:rdFadeIn 0.22s ease;}
+.wt-results-box{background:var(--bg-secondary);border:2px solid var(--ielts);border-radius:18px;padding:1.75rem;max-width:500px;width:100%;max-height:92vh;overflow-y:auto;box-shadow:0 25px 60px rgba(139,92,246,0.3);}
+/* ── Submit Test confirm modal ── */
+.rd-submit-confirm{position:absolute;inset:0;z-index:200;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;padding:1rem;animation:rdFadeIn 0.18s ease;}
+.rd-submit-confirm-box{background:var(--bg-secondary);border:2px solid var(--ielts);border-radius:16px;max-width:460px;width:100%;padding:1.5rem;}
 /* ── Flagged nav dots ── */
 .rd-q-nav-dot.flagged-dot{background:rgba(245,158,11,0.2)!important;border-color:#f59e0b!important;color:#f59e0b!important;}
 .rd-q-nav-dot.flagged-dot::after{content:'🚩';font-size:0.45rem;position:absolute;top:-3px;right:-3px;}
@@ -6342,25 +6373,36 @@ function _renderTestOverlay(){
   const passages=readingState.testPassages;
   const p=passages[readingState.testCurrentP];
 
+  // Compute global question offset for this passage
+  const qOffset=passages.slice(0,readingState.testCurrentP).reduce((a,pp)=>a+pp.questions.length,0);
+  const qStart=qOffset+1;
+  const qEnd=qOffset+p.questions.length;
+  const totalQ=passages.reduce((a,pp)=>a+pp.questions.length,0);
+  const totalAnswered=passages.reduce((a,pp,i)=>a+Object.keys(readingState.testAnswers[i]).filter(k=>readingState.testAnswers[i][k]!==''&&readingState.testAnswers[i][k]!==undefined).length,0);
+
   overlay.innerHTML=`
     <div class="reading-topbar" id="testTopbar">
-      <button onclick="closeTestOverlay()" style="background:var(--bg-tertiary);border:none;border-radius:8px;padding:0.35rem 0.68rem;cursor:pointer;color:var(--text-secondary);font-size:0.8rem;font-weight:700;flex-shrink:0;">← Exit</button>
-      <div class="reading-topbar-title" style="flex-shrink:0;max-width:140px;">${ts?ts.title:'IELTS Test'}</div>
+      <button onclick="closeTestOverlay()" style="background:var(--bg-tertiary);border:none;border-radius:8px;padding:0.35rem 0.68rem;cursor:pointer;color:var(--text-secondary);font-size:0.8rem;font-weight:700;flex-shrink:0;">Exit</button>
+      <div class="reading-topbar-title" style="flex-shrink:0;max-width:140px;">${ts?ts.title:'IELTS Academic Reading Test'}</div>
       <div class="test-passage-tabs" id="testPassageTabs">
-        ${passages.map((pp,i)=>`<button class="test-passage-tab ${i===readingState.testCurrentP?'active':''}" id="testTab_${i}" onclick="switchTestPassage(${i})">P${i+1}</button>`).join('')}
+        ${passages.map((pp,i)=>{
+          const off=passages.slice(0,i).reduce((a,x)=>a+x.questions.length,0);
+          const ans=Object.keys(readingState.testAnswers[i]).filter(k=>readingState.testAnswers[i][k]!==''&&readingState.testAnswers[i][k]!==undefined).length;
+          return`<button class="test-passage-tab ${i===readingState.testCurrentP?'active':''}" id="testTab_${i}" onclick="switchTestPassage(${i})">P${i+1} · Q${off+1}–${off+pp.questions.length}<span style="font-size:0.6rem;opacity:0.75;"> (${ans}/${pp.questions.length})</span></button>`;
+        }).join('')}
       </div>
       <div style="flex:1;"></div>
-      <div id="testQCount" style="font-size:0.68rem;color:var(--text-secondary);flex-shrink:0;"></div>
+      <div id="testQCount" style="font-size:0.7rem;color:var(--text-secondary);flex-shrink:0;padding:0.2rem 0.55rem;background:var(--bg-primary);border-radius:6px;">${totalAnswered}/${totalQ} answered</div>
       <div style="display:flex;align-items:center;gap:0.4rem;flex-shrink:0;">
         <span style="font-size:0.7rem;color:var(--text-secondary);">⏱</span>
         <div class="rd-countdown" id="testTimerEl">60:00</div>
       </div>
-      <button onclick="submitTest(false)" id="testSubmitTopBtn"
+      <button onclick="rdShowTestSubmitConfirm()" id="testSubmitTopBtn"
         style="background:linear-gradient(135deg,var(--ielts),#6d28d9);color:#fff;border:none;border-radius:8px;padding:0.35rem 0.85rem;cursor:pointer;font-size:0.77rem;font-weight:800;flex-shrink:0;transition:all 0.15s;">
         Submit Test
       </button>
     </div>
-    <div id="testWarningBar" class="test-warning-bar">⚠️ 5 minutes remaining!</div>
+    <div id="testWarningBar" class="test-warning-bar"></div>
     <div class="reading-splitscreen" id="testSplitscreen">
       <div style="display:flex;flex-direction:column;flex:1;min-width:0;overflow:hidden;">
         <div class="reading-passage-pane" id="testPassagePane">
@@ -6370,9 +6412,6 @@ function _renderTestOverlay(){
         </div>
         <div class="rd-highlight-bar">
           <button class="rd-hl-btn" id="rdHlBtn" onclick="toggleRdHighlight()" title="Select text to highlight">🖊 Highlight</button>
-          <div style="display:flex;gap:0.28rem;align-items:center;">
-            ${['rgba(255,214,0,0.5)','rgba(144,238,144,0.55)','rgba(135,206,250,0.55)','rgba(255,160,122,0.55)','rgba(221,160,221,0.55)'].map((col,i)=>`<div class="rd-hl-swatch" id="rdSwatch_${i}" style="background:${col};" onclick="setRdHlColor('${col}',${i})" title="Highlight color"></div>`).join('')}
-          </div>
           <button class="rd-hl-eraser" onclick="clearRdHighlights()">✕ Clear</button>
           <div style="margin-left:auto;display:flex;align-items:center;gap:0.5rem;">
             <button onclick="rdFontAdj(-1)" style="background:var(--bg-primary);border:1.5px solid var(--bg-tertiary);border-radius:6px;color:var(--text-secondary);cursor:pointer;font-size:0.78rem;padding:0.18rem 0.45rem;font-weight:700;" title="Smaller text">A−</button>
@@ -6383,12 +6422,12 @@ function _renderTestOverlay(){
       </div>
       <div class="reading-questions-pane" id="testQPane">
         <div class="reading-q-header">
-          <div style="font-weight:800;color:var(--ielts);font-size:0.88rem;">Questions 1–${p.questions.length}</div>
-          <div id="testAnsweredCount" style="font-size:0.7rem;color:var(--text-secondary);">0/${p.questions.length} answered</div>
+          <div style="font-weight:800;color:var(--ielts);font-size:0.88rem;">Questions ${qStart}–${qEnd}</div>
+          <div id="testAnsweredCount" style="font-size:0.7rem;color:var(--text-secondary);">0/${p.questions.length} answered this passage</div>
         </div>
-        ${_buildTestQuestionsHtml(p, readingState.testCurrentP)}
+        ${_buildTestQuestionsHtml(p, readingState.testCurrentP, qOffset)}
         <div style="display:flex;flex-direction:column;gap:0.35rem;margin-top:0.5rem;">
-          <button onclick="rdShowReview('t${readingState.testCurrentP}')" style="background:var(--bg-tertiary);color:var(--text-primary);border:none;border-radius:9px;padding:0.58rem;font-weight:700;cursor:pointer;font-size:0.82rem;transition:all 0.14s;" onmouseover="this.style.borderColor='var(--ielts)'" onmouseout="this.style.borderColor=''">🔍 Review All Questions</button>
+          <button onclick="rdShowReview('t${readingState.testCurrentP}')" style="background:var(--bg-tertiary);color:var(--text-primary);border:none;border-radius:9px;padding:0.58rem;font-weight:700;cursor:pointer;font-size:0.82rem;transition:all 0.14s;">🔍 Review All Questions</button>
         </div>
         <div style="padding:0.55rem;background:rgba(139,92,246,0.06);border-radius:9px;margin-top:0.35rem;font-size:0.72rem;color:var(--text-secondary);text-align:center;">
           Use the <b>P1 / P2 / P3</b> tabs above to switch passages. Submit all together using <b>Submit Test</b>.
@@ -6399,10 +6438,10 @@ function _renderTestOverlay(){
   _updateTestQCount();
 }
 
-function _buildTestQuestionsHtml(test, pIdx){
-  // Delegate to unified builder using prefix 't'+pIdx
+function _buildTestQuestionsHtml(test, pIdx, qOffset){
+  qOffset=qOffset||0;
   const prefix='t'+pIdx;
-  return _buildQuestionsHtml(test,prefix);
+  return _buildQuestionsHtml(test,prefix,qOffset);
 }
 
 function switchTestPassage(pIdx){
@@ -6551,16 +6590,57 @@ function rdReviewJump(prefix,qi){
   },80);
 }
 
+function rdShowTestSubmitConfirm(){
+  const overlay=document.getElementById('readingOverlay');
+  if(!overlay)return;
+  document.getElementById('rdSubmitConfirmModal')?.remove();
+  const passages=readingState.testPassages;
+  const totalQ=passages.reduce((a,pp)=>a+pp.questions.length,0);
+  const totalAns=passages.reduce((a,pp,i)=>a+Object.keys(readingState.testAnswers[i]).filter(k=>readingState.testAnswers[i][k]!==''&&readingState.testAnswers[i][k]!==undefined).length,0);
+  const unanswered=totalQ-totalAns;
+  const r=readingState.testRemaining;
+  const mLeft=Math.floor(r/60),sLeft=r%60;
+
+  const div=document.createElement('div');
+  div.id='rdSubmitConfirmModal';
+  div.className='rd-submit-confirm';
+  div.innerHTML=`<div class="rd-submit-confirm-box">
+    <div style="text-align:center;margin-bottom:1.1rem;">
+      <div style="font-size:1.8rem;margin-bottom:0.35rem;">📋</div>
+      <div style="font-weight:900;color:var(--ielts);font-size:0.98rem;">Submit Reading Test?</div>
+      <div style="font-size:0.73rem;color:var(--text-secondary);margin-top:0.2rem;">Time remaining: <b style="color:${r<=300?'var(--error)':'var(--text-primary)'};">${mLeft}:${String(sLeft).padStart(2,'0')}</b></div>
+    </div>
+    ${unanswered>0?`<div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.3);border-radius:9px;padding:0.6rem 0.85rem;margin-bottom:0.85rem;font-size:0.8rem;color:var(--error);font-weight:700;text-align:center;">⚠️ ${unanswered} question${unanswered>1?'s':''} still unanswered</div>`:'<div style="background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.3);border-radius:9px;padding:0.6rem 0.85rem;margin-bottom:0.85rem;font-size:0.8rem;color:var(--success);font-weight:700;text-align:center;">✓ All '+totalQ+' questions answered</div>'}
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.5rem;margin-bottom:0.9rem;">
+      ${passages.map((pp,i)=>{
+        const off=passages.slice(0,i).reduce((a,x)=>a+x.questions.length,0);
+        const ans=Object.keys(readingState.testAnswers[i]).filter(k=>readingState.testAnswers[i][k]!==''&&readingState.testAnswers[i][k]!==undefined).length;
+        const allDone=ans===pp.questions.length;
+        return`<div style="background:var(--bg-primary);border:1.5px solid ${allDone?'rgba(34,197,94,0.4)':'rgba(239,68,68,0.3)'};border-radius:10px;padding:0.65rem;text-align:center;">
+          <div style="font-size:0.6rem;font-weight:800;color:var(--text-secondary);margin-bottom:0.25rem;">PASSAGE ${i+1}<br><span style="opacity:0.7;">Q${off+1}–${off+pp.questions.length}</span></div>
+          <div style="font-size:1.3rem;font-weight:900;color:${allDone?'var(--success)':'var(--error)'};">${ans}/${pp.questions.length}</div>
+        </div>`;
+      }).join('')}
+    </div>
+    <div style="font-size:0.72rem;color:var(--text-secondary);background:rgba(139,92,246,0.06);border-radius:8px;padding:0.55rem 0.8rem;margin-bottom:0.9rem;line-height:1.6;">
+      Once submitted, you <b style="color:var(--text-primary);">cannot</b> return to change your answers.
+    </div>
+    <div style="display:flex;flex-direction:column;gap:0.4rem;">
+      <button onclick="document.getElementById('rdSubmitConfirmModal').remove();submitTest(false);"
+        style="background:linear-gradient(135deg,var(--ielts),#6d28d9);color:#fff;border:none;border-radius:10px;padding:0.68rem;font-weight:800;cursor:pointer;font-size:0.9rem;">
+        ✓ Confirm Submit
+      </button>
+      <button onclick="document.getElementById('rdSubmitConfirmModal').remove();"
+        style="background:var(--bg-tertiary);color:var(--text-primary);border:none;border-radius:10px;padding:0.65rem;font-weight:600;cursor:pointer;font-size:0.88rem;">
+        ← Return to Test
+      </button>
+    </div>
+  </div>`;
+  overlay.appendChild(div);
+}
+
 function submitTest(timedOut=false){
   if(readingState.testSubmitted)return;
-  if(!timedOut){
-    const total=readingState.testPassages.reduce((a,pp,i)=>a+Object.keys(readingState.testAnswers[i]).filter(k=>readingState.testAnswers[i][k]!==''&& readingState.testAnswers[i][k]!==undefined).length,0);
-    const totalQ=readingState.testPassages.reduce((a,pp)=>a+pp.questions.length,0);
-    if(total<totalQ){
-      const unanswered=totalQ-total;
-      if(!confirm(`You have ${unanswered} unanswered question${unanswered>1?'s':''}. Submit anyway?`))return;
-    }
-  }
   readingState.testSubmitted=true;
   clearInterval(readingState.testTimerInterval);
   const timeUsed=3600-readingState.testRemaining;
@@ -6830,19 +6910,15 @@ function _renderReadingOverlayContent(){
           ${test.passage.split('\n\n').filter(p=>p.trim()).map(p=>{const lbl=p.trim().match(/^\[([A-G])\]\s*/);return lbl?`<p><span class="para-sec-lbl">${lbl[1]}</span>${p.trim().replace(/^\[[A-G]\]\s*/,'')}</p>`:`<p>${p.trim()}</p>`;}).join('')}
         </div>
         <div class="rd-highlight-bar" id="rdHlBar">
-          <button class="rd-hl-btn" id="rdHlBtn" onclick="toggleRdHighlight()" title="Click to enable, then select text to highlight">
+          <button class="rd-hl-btn" id="rdHlBtn" onclick="toggleRdHighlight()" title="Select text then click to highlight">
             🖊 Highlight
           </button>
-          <div style="display:flex;gap:0.28rem;align-items:center;">
-            ${['rgba(255,214,0,0.5)','rgba(144,238,144,0.55)','rgba(135,206,250,0.55)','rgba(255,160,122,0.55)','rgba(221,160,221,0.55)'].map((col,i)=>`<div class="rd-hl-swatch" id="rdSwatch_${i}" style="background:${col};" onclick="setRdHlColor('${col}',${i})" title="Highlight color"></div>`).join('')}
-          </div>
-          <button class="rd-hl-eraser" onclick="clearRdHighlights()" title="Remove all highlights">✕ Clear</button>
-          <div style="font-size:0.68rem;color:var(--text-secondary);margin-left:auto;">
-            🔤 <button class="rd-font-ctrl" style="display:inline-flex;align-items:center;gap:0.28rem;background:var(--bg-primary);border:1.5px solid var(--bg-tertiary);border-radius:8px;padding:0.2rem 0.45rem;">
-              <button onclick="rdFontAdj(-1)" style="background:none;border:none;color:var(--text-secondary);cursor:pointer;font-size:0.9rem;padding:0;line-height:1;transition:color 0.12s;" onmouseover="this.style.color='var(--ielts)'" onmouseout="this.style.color='var(--text-secondary)'">A−</button>
-              <span id="rdFontLabel" style="font-size:0.68rem;color:var(--text-secondary);min-width:2.2rem;text-align:center;font-weight:700;">${Math.round(readingState.rdFontSize*16)}px</span>
-              <button onclick="rdFontAdj(1)" style="background:none;border:none;color:var(--text-secondary);cursor:pointer;font-size:0.9rem;padding:0;line-height:1;transition:color 0.12s;" onmouseover="this.style.color='var(--ielts)'" onmouseout="this.style.color='var(--text-secondary)'">A+</button>
-            </button>
+          <button class="rd-hl-eraser" onclick="clearRdHighlights()" title="Remove all highlights">✕ Clear All</button>
+          <div style="font-size:0.7rem;color:var(--text-secondary);margin-left:auto;opacity:0.65;">Select text, then click Highlight</div>
+          <div style="display:flex;align-items:center;gap:0.3rem;margin-left:0.7rem;">
+            <button onclick="rdFontAdj(-1)" style="background:var(--bg-primary);border:1.5px solid var(--bg-tertiary);border-radius:6px;color:var(--text-secondary);cursor:pointer;font-size:0.8rem;padding:0.18rem 0.5rem;font-weight:700;transition:all 0.12s;" onmouseover="this.style.color='var(--ielts)'" onmouseout="this.style.color='var(--text-secondary)'">A−</button>
+            <span id="rdFontLabel" style="font-size:0.68rem;color:var(--text-secondary);min-width:2.2rem;text-align:center;font-weight:700;">${Math.round(readingState.rdFontSize*16)}px</span>
+            <button onclick="rdFontAdj(1)" style="background:var(--bg-primary);border:1.5px solid var(--bg-tertiary);border-radius:6px;color:var(--text-secondary);cursor:pointer;font-size:0.8rem;padding:0.18rem 0.5rem;font-weight:700;transition:all 0.12s;" onmouseover="this.style.color='var(--ielts)'" onmouseout="this.style.color='var(--text-secondary)'">A+</button>
           </div>
         </div>
       </div>
@@ -6858,12 +6934,13 @@ function _renderReadingOverlayContent(){
     </div>`;
 }
 
-function _buildQuestionsHtml(test,prefix){
+function _buildQuestionsHtml(test,prefix,qOffset){
   prefix=prefix||'rd';
-  // Build question nav dots first
-  const navDots=test.questions.map((q,qi)=>`<div class="rd-q-nav-dot" id="${prefix}Nav_${qi}" title="Q${qi+1}: ${q.type.toUpperCase()}" onclick="rdScrollToQ('${prefix}',${qi})">${qi+1}</div>`).join('');
+  qOffset=qOffset||0;
+  // Build question nav dots — show GLOBAL question numbers
+  const navDots=test.questions.map((q,qi)=>`<div class="rd-q-nav-dot" id="${prefix}Nav_${qi}" title="Q${qi+qOffset+1}: ${q.type.toUpperCase()}" onclick="rdScrollToQ('${prefix}',${qi})">${qi+qOffset+1}</div>`).join('');
   // Build group instruction headers
-  const groupHeaders=_buildGroupInstructions(test.questions);
+  const groupHeaders=_buildGroupInstructions(test.questions,qOffset);
   const qHtml=test.questions.map((q,qi)=>{
     const headerHtml=groupHeaders[qi]||'';
     const typeLabelMap={
@@ -6916,14 +6993,19 @@ function _buildQuestionsHtml(test,prefix){
           oninput="rdShortAnsInput(this,${wl},${qi},'${prefix}')" onblur="rdShortAnsBlur(this,${wl},${qi},'${prefix}')">
         <span class="rd-shortans-counter" id="${prefix}SAC_${qi}">0/${wl}</span>
       </div>`;
-    }else{
-      inputHtml=`<input type="text" class="reading-input-answer" id="${prefix}Inp_${qi}" placeholder="Type your answer…"
-        oninput="saveReadingTextAnswer(${qi},this.value,'${prefix}')" onblur="saveReadingTextAnswer(${qi},this.value,'${prefix}')">`;
+    }else if(q.type==='sentence'){
+      const wl=q.wordLimit||2;
+      inputHtml=`<div style="font-size:0.68rem;color:var(--text-secondary);margin-bottom:0.25rem;"><span class="rd-word-limit">NO MORE THAN ${wl} WORD${wl>1?'S':''}</span> Use exact words from the passage.</div>
+      <div class="rd-shortans-wrap">
+        <input type="text" class="reading-input-answer" id="${prefix}Inp_${qi}" placeholder="Type missing word${wl>1?'s':''}…"
+          oninput="rdShortAnsInput(this,${wl},${qi},'${prefix}')" onblur="rdShortAnsBlur(this,${wl},${qi},'${prefix}')">
+        <span class="rd-shortans-counter" id="${prefix}SAC_${qi}">0/${wl}</span>
+      </div>`;
     }
     const isFlagged=readingState.flagged&& readingState.flagged.has(prefix+'_'+qi);
     return`${headerHtml}<div class="reading-question-item" id="${prefix}QItem_${qi}">
       <div class="reading-question-text">
-        <span class="reading-question-num">${qi+1}</span>
+        <span class="reading-question-num">${qi+qOffset+1}</span>
         <span style="flex:1;margin-right:0.4rem;">${q.text}</span>
         <span class="reading-question-type-badge ${badgeClass}">${typeLabel}</span>
         <button class="rd-flag-btn${isFlagged?' flagged':''}" id="${prefix}Flag_${qi}" onclick="rdToggleFlag('${prefix}',${qi})" title="${isFlagged?'Remove flag':'Flag for review'}">🚩</button>
@@ -6935,66 +7017,98 @@ function _buildQuestionsHtml(test,prefix){
 }
 
 // Build group instruction banners — groups consecutive same-type questions
-function _buildGroupInstructions(questions){
+// ── Helper: generate the correct word-limit instruction string ──
+function _wordLimitStr(type, wordLimit){
+  // wordLimit: number of words allowed (1, 2, 3, 4). undefined = default per type.
+  const wl = wordLimit || (type==='shortans' ? 3 : 2);
+  const hasNum = type !== 'sentence'; // sentence completion rarely allows a number
+  if(wl === 1) return 'ONE WORD ONLY';
+  const numPart = hasNum ? ' AND/OR A NUMBER' : '';
+  return `NO MORE THAN ${['','ONE','TWO','THREE','FOUR'][wl]} WORD${wl>1?'S':''}${numPart}`;
+}
+
+function _buildGroupInstructions(questions, qOffset){
+  qOffset=qOffset||0;
   const headers={};
-  const typeInstructions={
+
+  // Static instructions (no word limit needed)
+  const staticInstr={
     tfng:{label:'TRUE / FALSE / NOT GIVEN',color:'#3b82f6',icon:'📋',
-      desc:'Do the following statements agree with the information given in the Reading Passage?\nTRUE — the statement agrees with the information\nFALSE — the statement contradicts the information\nNOT GIVEN — there is no information on this\n📌 Tip: The questions follow the order of information in the passage.'},
+      desc:'Do the following statements agree with the information given in the Reading Passage?\nWrite TRUE if the statement agrees with the information\nWrite FALSE if the statement contradicts the information\nWrite NOT GIVEN if there is no information on this'},
     ynng:{label:'YES / NO / NOT GIVEN',color:'#f59e0b',icon:'💬',
-      desc:'Do the following statements agree with the claims of the writer? Write YES if the statement agrees with the claims, NO if it contradicts them, or NOT GIVEN if it is impossible to say.'},
+      desc:'Do the following statements agree with the views of the writer?\nWrite YES if the statement agrees with the views of the writer\nWrite NO if the statement contradicts the views of the writer\nWrite NOT GIVEN if it is impossible to say what the writer thinks about this'},
     multiple:{label:'MULTIPLE CHOICE',color:'#8b5cf6',icon:'🔘',
-      desc:'Choose the correct letter A, B, C or D.'},
+      desc:'Choose the correct letter, A, B, C or D.\nClick your chosen answer.'},
     matchheading:{label:'MATCHING HEADINGS',color:'#6366f1',icon:'🔗',
-      desc:'The Reading Passage has several paragraphs. Choose the correct heading for each paragraph from the list of headings below. Drag each heading to its paragraph or click to select.'},
+      desc:'The Reading Passage has several paragraphs, A–G.\nChoose the correct heading for each paragraph from the list of headings below.\nWrite the correct number, i–x, in the boxes.'},
     matchpara:{label:'MATCHING INFORMATION',color:'#3b82f6',icon:'📌',
-      desc:'Which paragraph contains the following information? Write the correct paragraph letter A–F (or as indicated). Paragraphs may be used more than once. Questions follow the order of information in the passage.'},
+      desc:'The Reading Passage has several paragraphs, A–G.\nWhich paragraph contains the following information?\nWrite the correct letter in the boxes. You may use any letter more than once.'},
     matchsent:{label:'MATCHING SENTENCE ENDINGS',color:'#a855f7',icon:'🔚',
-      desc:'Complete each sentence with the correct ending A–G below. Choose NO MORE THAN ONE ending for each sentence.'},
-    sentence:{label:'SENTENCE COMPLETION',color:'#22c55e',icon:'✏️',
-      desc:'Complete the sentences below. Choose NO MORE THAN TWO WORDS from the passage for each answer.'},
-    shortans:{label:'SHORT-ANSWER QUESTIONS',color:'#22c55e',icon:'✍️',
-      desc:'Answer the questions below. Choose NO MORE THAN TWO WORDS AND/OR A NUMBER from the passage for each answer.'},
+      desc:'Complete each sentence with the correct ending, A–G, below.\nWrite the correct letter in the box provided.'},
     summary:{label:'SUMMARY COMPLETION',color:'#14b8a6',icon:'📝',
-      desc:'Complete the summary below. Choose the correct word from the box. Each word may only be used once.'},
-    table:{label:'TABLE / NOTE COMPLETION',color:'#14b8a6',icon:'📊',
-      desc:'Complete the table/notes below. Choose NO MORE THAN TWO WORDS from the passage for each answer.'},
-    flowchart:{label:'FLOW-CHART COMPLETION',color:'#f97316',icon:'🔄',
-      desc:'Complete the flow-chart below. Choose NO MORE THAN TWO WORDS from the passage for each answer.'},
-    diagram:{label:'DIAGRAM LABEL COMPLETION',color:'#ec4899',icon:'🗺️',
-      desc:'Label the diagram below. Choose NO MORE THAN TWO WORDS from the passage for each answer.'},
+      desc:'Complete the summary below.\nChoose the correct word from the box.\nWrite your answers in the boxes provided.'},
   };
+
+  // Types whose instruction depends on wordLimit from question data
+  const dynamicTypes={
+    sentence:{label:'SENTENCE COMPLETION',color:'#22c55e',icon:'✏️',
+      template:(wlStr)=>`Complete the sentences below.\nChoose ${wlStr} from the passage for each answer.\nWrite your answers in the boxes provided.`},
+    shortans:{label:'SHORT-ANSWER QUESTIONS',color:'#22c55e',icon:'✍️',
+      template:(wlStr)=>`Answer the questions below.\nChoose ${wlStr} from the passage for each answer.\nWrite your answers in the boxes provided.`},
+    table:{label:'TABLE / NOTE COMPLETION',color:'#14b8a6',icon:'📊',
+      template:(wlStr)=>`Complete the table below.\nChoose ${wlStr} from the passage for each answer.\nWrite your answers in the boxes provided.`},
+    flowchart:{label:'FLOW-CHART COMPLETION',color:'#f97316',icon:'🔄',
+      template:(wlStr)=>`Complete the flow-chart below.\nChoose ${wlStr} from the passage for each answer.\nWrite your answers in the boxes provided.`},
+    diagram:{label:'DIAGRAM LABEL COMPLETION',color:'#ec4899',icon:'🗺️',
+      template:(wlStr)=>`Label the diagram below.\nChoose ${wlStr} from the passage for each answer.\nWrite your answers in the boxes provided.`},
+  };
+
+  function _buildHeader(type, groupStart, endIdx, firstQ){
+    const isStatic = !!staticInstr[type];
+    const isDynamic = !!dynamicTypes[type];
+    if(!isStatic && !isDynamic) return null;
+
+    const color = isStatic ? staticInstr[type].color : dynamicTypes[type].color;
+    const icon  = isStatic ? staticInstr[type].icon  : dynamicTypes[type].icon;
+    const label = isStatic ? staticInstr[type].label : dynamicTypes[type].label;
+
+    let desc;
+    if(isStatic){
+      desc = staticInstr[type].desc;
+    } else {
+      const wlStr = _wordLimitStr(type, firstQ && firstQ.wordLimit);
+      desc = dynamicTypes[type].template(wlStr);
+    }
+
+    const numLabel = groupStart===endIdx
+      ? `Question ${groupStart+qOffset+1}`
+      : `Questions ${groupStart+qOffset+1}–${endIdx+qOffset+1}`;
+
+    return `<div style="background:rgba(0,0,0,0.04);border-left:3px solid ${color};border-radius:0 8px 8px 0;padding:0.65rem 0.85rem;margin-bottom:0.55rem;margin-top:${groupStart>0?'0.85rem':'0'};">
+      <div style="font-size:0.68rem;font-weight:900;color:${color};text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.22rem;">${icon} ${numLabel}</div>
+      <div style="font-size:0.72rem;font-style:italic;color:var(--text-primary);font-weight:600;margin-bottom:0.18rem;">${label}</div>
+      <div style="font-size:0.7rem;color:var(--text-secondary);line-height:1.6;white-space:pre-line;">${desc}</div>
+    </div>`;
+  }
+
   let lastType=null;
   let groupStart=null;
+  let firstQInGroup=null;
   questions.forEach((q,qi)=>{
     if(q.type!==lastType){
       if(lastType!==null){
-        const inst=typeInstructions[lastType];
-        if(inst){
-          const endIdx=qi-1;
-          const numLabel=groupStart===endIdx?`Question ${groupStart+1}`:`Questions ${groupStart+1}–${endIdx+1}`;
-          headers[groupStart]=`<div style="background:rgba(0,0,0,0.04);border-left:3px solid ${inst.color};border-radius:0 8px 8px 0;padding:0.65rem 0.85rem;margin-bottom:0.55rem;margin-top:${groupStart>0?'0.85rem':'0'};">
-            <div style="font-size:0.68rem;font-weight:900;color:${inst.color};text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.22rem;">${inst.icon} ${numLabel}</div>
-            <div style="font-size:0.72rem;font-style:italic;color:var(--text-primary);font-weight:600;margin-bottom:0.18rem;">${inst.label}</div>
-            <div style="font-size:0.7rem;color:var(--text-secondary);line-height:1.5;white-space:pre-line;">${inst.desc}</div>
-          </div>`;
-        }
+        const h=_buildHeader(lastType, groupStart, qi-1, firstQInGroup);
+        if(h) headers[groupStart]=h;
       }
       lastType=q.type;
       groupStart=qi;
+      firstQInGroup=q;
     }
   });
   // Last group
-  if(lastType!==null&& groupStart!==null){
-    const inst=typeInstructions[lastType];
-    if(inst){
-      const endIdx=questions.length-1;
-      const numLabel=groupStart===endIdx?`Question ${groupStart+1}`:`Questions ${groupStart+1}–${endIdx+1}`;
-      headers[groupStart]=`<div style="background:rgba(0,0,0,0.04);border-left:3px solid ${inst.color};border-radius:0 8px 8px 0;padding:0.65rem 0.85rem;margin-bottom:0.55rem;margin-top:${groupStart>0?'0.85rem':'0'};">
-        <div style="font-size:0.68rem;font-weight:900;color:${inst.color};text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.22rem;">${inst.icon} ${numLabel}</div>
-        <div style="font-size:0.72rem;font-style:italic;color:var(--text-primary);font-weight:600;margin-bottom:0.18rem;">${inst.label}</div>
-        <div style="font-size:0.7rem;color:var(--text-secondary);line-height:1.5;white-space:pre-line;">${inst.desc}</div>
-      </div>`;
-    }
+  if(lastType!==null && groupStart!==null){
+    const h=_buildHeader(lastType, groupStart, questions.length-1, firstQInGroup);
+    if(h) headers[groupStart]=h;
   }
   return headers;
 }
@@ -7615,12 +7729,8 @@ function rdFontAdj(delta){
 
 // ── Highlight helpers ──
 function _initRdHlSwatches(){
-  const colors=['rgba(255,214,0,0.5)','rgba(144,238,144,0.55)','rgba(135,206,250,0.55)','rgba(255,160,122,0.55)','rgba(221,160,221,0.55)'];
-  colors.forEach((col,i)=>{
-    const sw=document.getElementById('rdSwatch_'+i);
-    if(!sw)return;
-    sw.classList.toggle('active',col===readingState.rdHighlightColor);
-  });
+  // Real IELTS CBT uses yellow highlight only — no color swatches
+  readingState.rdHighlightColor='rgba(255,214,0,0.55)';
   const btn=document.getElementById('rdHlBtn');
   if(btn)btn.classList.toggle('active',readingState.rdHighlightOn);
 }
@@ -10806,72 +10916,76 @@ function _renderWritingTestOverlay(){
   const r=writingTestState.remaining;
   const m=Math.floor(r/60),s=r%60;
   const minWords=task===1?150:250;
+  const w1=writingTestState.text1.trim().split(/\s+/).filter(Boolean).length;
+  const w2=writingTestState.text2.trim().split(/\s+/).filter(Boolean).length;
 
   overlay.innerHTML=`
     <div class="writing-test-topbar">
-      <button onclick="closeWritingTest()" style="background:var(--bg-tertiary);border:none;border-radius:8px;padding:0.35rem 0.68rem;cursor:pointer;color:var(--text-secondary);font-size:0.8rem;font-weight:700;flex-shrink:0;">← Exit</button>
-      <div style="font-weight:800;color:var(--ielts);font-size:0.88rem;flex-shrink:0;">IELTS Writing Test</div>
-      <div class="wt-task-tabs">
-        <button class="wt-task-tab ${task===1?'active':writingTestState.text1.trim().split(/\s+/).filter(Boolean).length>=150?'has-words':''}" onclick="switchWritingTask(1)">
-          Task 1 <span style="font-size:0.65rem;opacity:0.8;">150+w</span>
-        </button>
-        <button class="wt-task-tab ${task===2?'active':writingTestState.text2.trim().split(/\s+/).filter(Boolean).length>=250?'has-words':''}" onclick="switchWritingTask(2)">
-          Task 2 <span style="font-size:0.65rem;opacity:0.8;">250+w</span>
-        </button>
+      <button onclick="closeWritingTest()" style="background:var(--bg-tertiary);border:none;border-radius:6px;padding:0.3rem 0.65rem;cursor:pointer;color:var(--text-secondary);font-size:0.78rem;font-weight:700;flex-shrink:0;">Exit</button>
+      <div style="font-size:0.72rem;color:var(--text-secondary);flex-shrink:0;">IELTS Academic Writing Test</div>
+      <div class="wt-task-tabs" style="flex-shrink:0;">
+        <button class="wt-task-tab ${task===1?'active':w1>=150?'has-words':''}" onclick="switchWritingTask(1)">Task 1</button>
+        <button class="wt-task-tab ${task===2?'active':w2>=250?'has-words':''}" onclick="switchWritingTask(2)">Task 2</button>
       </div>
       <div style="flex:1;"></div>
-      <div style="display:flex;gap:0.3rem;flex-shrink:0;">
-        <span style="background:rgba(245,158,11,0.1);color:#f59e0b;border-radius:5px;padding:0.15rem 0.42rem;font-size:0.62rem;font-weight:700;">T1 ~20min</span>
-        <span style="background:rgba(139,92,246,0.1);color:var(--ielts);border-radius:5px;padding:0.15rem 0.42rem;font-size:0.62rem;font-weight:700;">T2 ~40min</span>
+      <div style="font-size:0.68rem;color:var(--text-secondary);flex-shrink:0;">
+        <span style="opacity:0.7;">T1 ~20min &nbsp;·&nbsp; T2 ~40min</span>
       </div>
-      <div style="display:flex;align-items:center;gap:0.4rem;flex-shrink:0;">
-        <span style="font-size:0.7rem;color:var(--text-secondary);">⏱</span>
-        <div id="wtTimer" style="font-size:1.25rem;font-weight:900;color:${r<=600?'var(--error)':r<=1200?'#f59e0b':'var(--ielts)'};font-variant-numeric:tabular-nums;">${m}:${String(s).padStart(2,'0')}</div>
+      <div style="display:flex;align-items:center;gap:0.5rem;flex-shrink:0;">
+        <span style="font-size:0.7rem;color:var(--text-secondary);">Time Remaining</span>
+        <div id="wtTimer" style="font-size:1.3rem;font-weight:900;color:${r<=600?'var(--error)':r<=1200?'#f59e0b':'var(--ielts)'};font-variant-numeric:tabular-nums;min-width:3.5rem;">${m}:${String(s).padStart(2,'0')}</div>
       </div>
-      <button onclick="wtShowSubmitReview()" style="background:linear-gradient(135deg,var(--ielts),#6d28d9);color:#fff;border:none;border-radius:8px;padding:0.35rem 0.85rem;cursor:pointer;font-size:0.77rem;font-weight:800;flex-shrink:0;">Submit Test</button>
+      <button onclick="wtShowSubmitReview()" style="background:linear-gradient(135deg,var(--ielts),#6d28d9);color:#fff;border:none;border-radius:6px;padding:0.32rem 0.85rem;cursor:pointer;font-size:0.78rem;font-weight:800;flex-shrink:0;">Submit</button>
     </div>
     <div class="writing-test-body">
       <div class="wt-prompt-pane" id="wtPromptPane">
         ${task===1?_renderTask1Prompt(t1Item):_renderTask2Prompt()}
-        ${_buildCriteriaPanel(task)}
       </div>
       <div class="wt-write-pane">
-        ${_buildScratchpad(task)}
-        <div class="wt-edit-toolbar" id="wtEditBar">
-          <button class="wt-edit-btn" onclick="wtExecCmd('undo')" title="Undo (Ctrl+Z)">↩ Undo</button>
-          <button class="wt-edit-btn" onclick="wtExecCmd('redo')" title="Redo (Ctrl+Y)">↪ Redo</button>
+        <div class="wt-edit-toolbar" id="wtEditBar" style="margin-bottom:0.4rem;">
+          <button class="wt-edit-btn" onclick="wtExecCmd('undo')">Undo</button>
+          <button class="wt-edit-btn" onclick="wtExecCmd('redo')">Redo</button>
           <div class="wt-edit-divider"></div>
-          <button class="wt-edit-btn" onclick="wtCut()" title="Cut selected text">✂️ Cut</button>
-          <button class="wt-edit-btn" onclick="wtCopy()" title="Copy selected text">📋 Copy</button>
-          <button class="wt-edit-btn" onclick="wtPaste()" title="Paste">📌 Paste</button>
-          <div class="wt-edit-divider"></div>
-          <button class="wt-edit-btn" onclick="wtSelectAll()" title="Select All">⬜ Select All</button>
-          <div style="margin-left:auto;font-size:0.68rem;color:var(--text-secondary);">Use keyboard shortcuts too: Ctrl+Z/Y/X/C/V</div>
+          <button class="wt-edit-btn" onclick="wtCut()">Cut</button>
+          <button class="wt-edit-btn" onclick="wtCopy()">Copy</button>
+          <button class="wt-edit-btn" onclick="wtPaste()">Paste</button>
+          <div style="margin-left:auto;display:flex;align-items:center;gap:0.3rem;">
+            <button onclick="wtFontAdj(-1)" style="background:var(--bg-primary);border:1.5px solid var(--bg-tertiary);border-radius:5px;color:var(--text-secondary);cursor:pointer;font-size:0.78rem;padding:0.15rem 0.42rem;font-weight:700;" title="Smaller text">A−</button>
+            <span id="wtFontLabel" style="font-size:0.65rem;color:var(--text-secondary);min-width:2rem;text-align:center;font-weight:700;">${Math.round((writingTestState.fontSize||1)*16)}px</span>
+            <button onclick="wtFontAdj(1)" style="background:var(--bg-primary);border:1.5px solid var(--bg-tertiary);border-radius:5px;color:var(--text-secondary);cursor:pointer;font-size:0.78rem;padding:0.15rem 0.42rem;font-weight:700;" title="Larger text">A+</button>
+          </div>
         </div>
         <textarea class="wt-textarea" id="wtTextarea"
-          placeholder="${task===1?'Write your Task 1 response here (minimum 150 words)...':'Write your Task 2 essay here (minimum 250 words)...'}"
+          placeholder="${task===1?'Write your response here…':'Write your essay here…'}"
           oninput="wtHandleInput(this)"
-          spellcheck="true"
-          autocorrect="off">${task===1?writingTestState.text1:writingTestState.text2}</textarea>
-        <div class="wt-meta">
-          <div style="flex:1;min-width:0;">
-            <div style="display:flex;align-items:center;gap:0.65rem;flex-wrap:wrap;">
-              <span class="wt-wordcount" id="wtWordCount">0 words</span>
-              <span id="wtCharCount" style="font-size:0.72rem;color:var(--text-secondary);">0 chars</span>
-              <span id="wtMinHint" style="font-size:0.7rem;color:var(--text-secondary);">Min: ${minWords} words</span>
-              <span id="wtRecommended" style="font-size:0.7rem;color:var(--text-secondary);">${task===1?'Rec: ~20 min':'Rec: ~40 min'}</span>
-            </div>
-            <div class="wt-wc-bar-wrap" style="margin-top:5px;">
-              <div class="wt-wc-bar" id="wtWcBar" style="width:0%;background:var(--ielts);"></div>
-            </div>
-          </div>
+          spellcheck="false"
+          autocorrect="off"
+          autocomplete="off"
+          style="font-size:${(writingTestState.fontSize||1)*16}px;"
+          >${task===1?writingTestState.text1:writingTestState.text2}</textarea>
+        <div class="wt-meta" style="padding:0.38rem 0.2rem;">
+          <span id="wtWordCount" style="font-size:0.8rem;font-weight:700;color:var(--text-secondary);">Word count: 0</span>
+          <span id="wtMinHint" style="font-size:0.72rem;color:var(--text-secondary);margin-left:0.7rem;"></span>
+          <div style="margin-left:auto;font-size:0.68rem;color:var(--text-secondary);">Min: ${minWords} words</div>
         </div>
       </div>
     </div>`;
 
-  // Set word count
   const ta=document.getElementById('wtTextarea');
   if(ta)wtHandleInput(ta);
+}
+
+// Writing font size
+function wtFontAdj(delta){
+  const steps=[0.8,0.85,0.9,0.95,1.0,1.05,1.1,1.15,1.2];
+  let cur=steps.findIndex(s=>Math.abs(s-(writingTestState.fontSize||1))<0.03);
+  if(cur===-1)cur=4;
+  cur=Math.max(0,Math.min(steps.length-1,cur+delta));
+  writingTestState.fontSize=steps[cur];
+  const ta=document.getElementById('wtTextarea');
+  if(ta)ta.style.fontSize=(writingTestState.fontSize*16)+'px';
+  const lbl=document.getElementById('wtFontLabel');
+  if(lbl)lbl.textContent=Math.round(writingTestState.fontSize*16)+'px';
 }
 
 function _buildCriteriaPanel(task){
@@ -11149,33 +11263,20 @@ function wtHandleInput(el){
   if(writingTestState.task===1)writingTestState.text1=el.value;
   else writingTestState.text2=el.value;
   const words=el.value.trim().split(/\s+/).filter(Boolean).length;
-  const chars=el.value.length;
   const minWords=writingTestState.task===1?150:250;
-  const recWords=writingTestState.task===1?180:300;
 
+  // Word count — exactly as shown in real IELTS CBT: "Word count: X"
   const wc=document.getElementById('wtWordCount');
   if(wc){
-    wc.textContent=words+' words';
-    if(words>=minWords&&words<=recWords*1.4){wc.className='wt-wordcount ok';}
-    else if(words>recWords*1.4){wc.className='wt-wordcount over';}
-    else{wc.className='wt-wordcount';}
-  }
-  const cc=document.getElementById('wtCharCount');
-  if(cc)cc.textContent=chars+' chars';
-
-  // Progress bar
-  const bar=document.getElementById('wtWcBar');
-  if(bar){
-    const pct=Math.min(100,Math.round((words/minWords)*100));
-    bar.style.width=pct+'%';
-    bar.style.background=words>=minWords?'var(--success)':words>minWords*0.7?'#f59e0b':'var(--ielts)';
+    wc.textContent='Word count: '+words;
+    wc.style.color=words>=minWords?'var(--success)':words>minWords*0.85?'#f59e0b':'var(--text-secondary)';
   }
 
-  // Hint text
+  // Min hint
   const hint=document.getElementById('wtMinHint');
   if(hint){
     if(words>=minWords){hint.textContent='✓ Minimum met';hint.style.color='var(--success)';}
-    else{hint.textContent=`${minWords-words} more words needed`;hint.style.color=words>minWords*0.85?'#f59e0b':'var(--text-secondary)';}
+    else{hint.textContent=(minWords-words)+' more words needed';hint.style.color='var(--text-secondary)';}
   }
 }
 
@@ -11268,7 +11369,7 @@ function wtShowSubmitReview(){
   document.getElementById('writingTestOverlay').appendChild(div);
 }
 
-
+function submitWritingTest(timedOut){
   if(writingTestState.submitted)return;
   // Save current text
   const ta=document.getElementById('wtTextarea');
@@ -11338,7 +11439,7 @@ function wtShowSubmitReview(){
       </div>
     </div>
   </div>`;
-}
+} // end submitWritingTest
 
 function closeWritingTest(){
   clearInterval(writingTestState.timerInterval);
@@ -11374,3 +11475,7 @@ self.addEventListener('fetch',e=>{
     .then(()=>console.log('MT Typing: offline ready ✓'))
     .catch(e=>console.warn('SW registration skipped:',e.message));
 }
+
+</script>
+</body>
+</html>
