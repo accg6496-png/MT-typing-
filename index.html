@@ -533,6 +533,40 @@ body{padding-top:22px;}
 .rd-shortans-wrap{position:relative;}
 .rd-shortans-counter{position:absolute;right:0.5rem;top:50%;transform:translateY(-50%);font-size:0.6rem;color:var(--text-secondary);pointer-events:none;font-weight:700;}
 .rd-shortans-counter.over{color:var(--error);}
+/* ── Word Card (rich vocab popup) ── */
+.word-card{position:fixed;z-index:10000;background:var(--bg-secondary);border:2px solid var(--ielts);border-radius:14px;padding:1rem 1.1rem 0.9rem;width:300px;max-width:92vw;box-shadow:0 12px 40px rgba(0,0,0,0.55);pointer-events:auto;opacity:0;transform:translateY(8px) scale(0.97);transition:opacity 0.18s,transform 0.18s;overflow:hidden;}
+.word-card.show{opacity:1;transform:translateY(0) scale(1);}
+.word-card-header{display:flex;align-items:flex-start;justify-content:space-between;gap:0.5rem;margin-bottom:0.6rem;}
+.word-card-word{font-size:1.12rem;font-weight:900;color:var(--ielts);line-height:1.2;}
+.word-card-pos{font-size:0.7rem;font-weight:700;color:#a855f7;background:rgba(168,85,247,0.12);border-radius:4px;padding:0.08rem 0.38rem;display:inline-block;margin-top:0.18rem;}
+.word-card-cefr{font-size:0.62rem;font-weight:900;border-radius:4px;padding:0.06rem 0.32rem;margin-left:0.3rem;}
+.word-card-close{background:none;border:none;cursor:pointer;color:var(--text-secondary);font-size:1rem;line-height:1;padding:0.1rem;flex-shrink:0;opacity:0.6;transition:opacity 0.12s;}
+.word-card-close:hover{opacity:1;}
+.word-card-section{margin-bottom:0.5rem;}
+.word-card-label{font-size:0.58rem;font-weight:900;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.2rem;}
+.word-card-def{font-size:0.82rem;color:var(--text-primary);line-height:1.55;}
+.word-card-coll-list{display:flex;flex-wrap:wrap;gap:0.25rem;margin-top:0.18rem;}
+.word-card-coll-tag{font-size:0.7rem;background:rgba(139,92,246,0.1);color:var(--ielts);border:1px solid rgba(139,92,246,0.2);border-radius:5px;padding:0.1rem 0.4rem;font-style:italic;}
+.word-card-sentence{font-size:0.76rem;color:var(--text-secondary);font-style:italic;line-height:1.5;padding:0.28rem 0.5rem;border-left:2.5px solid rgba(139,92,246,0.3);margin-top:0.18rem;}
+.word-card-synonyms{font-size:0.73rem;color:var(--success);margin-top:0.15rem;}
+.word-card-antonyms{font-size:0.73rem;color:#ef4444;margin-top:0.08rem;}
+.word-card-divider{border:none;border-top:1px solid var(--bg-tertiary);margin:0.45rem 0;}
+/* ── Definition Mode toggle bar ── */
+.rd-def-bar{display:flex;align-items:center;gap:0.6rem;padding:0.38rem 1rem;background:var(--bg-secondary);border-top:1.5px solid var(--bg-tertiary);font-size:0.72rem;color:var(--text-secondary);flex-shrink:0;}
+.rd-def-toggle{display:flex;align-items:center;gap:0.35rem;cursor:pointer;padding:0.22rem 0.65rem;border-radius:6px;border:1.5px solid var(--bg-tertiary);background:var(--bg-primary);color:var(--text-secondary);font-size:0.72rem;font-weight:700;transition:all 0.13s;white-space:nowrap;}
+.rd-def-toggle:hover{border-color:var(--ielts);color:var(--ielts);}
+.rd-def-toggle.active{border-color:var(--ielts);background:rgba(139,92,246,0.1);color:var(--ielts);}
+.rd-def-toggle.locked{opacity:0.45;cursor:not-allowed;}
+.rd-def-word{cursor:pointer;border-bottom:1.5px dashed rgba(139,92,246,0.45);color:inherit;transition:background 0.1s;}
+.rd-def-word:hover{background:rgba(139,92,246,0.1);border-radius:2px;}
+/* ── Matching Features ── */
+.mf-item{display:flex;align-items:flex-start;gap:0.45rem;background:var(--bg-primary);border:1.5px solid var(--bg-tertiary);border-radius:8px;padding:0.55rem 0.65rem;margin-bottom:0.32rem;}
+.mf-statement{font-size:0.8rem;color:var(--text-primary);flex:1;line-height:1.45;}
+.mf-select{background:var(--bg-secondary);border:1.5px solid var(--bg-tertiary);border-radius:6px;padding:0.28rem 0.45rem;color:var(--text-primary);font-size:0.76rem;font-weight:700;cursor:pointer;outline:none;flex-shrink:0;min-width:100px;transition:border-color 0.13s;}
+.mf-select:focus{border-color:var(--ielts);}
+.mf-select.answered{border-color:var(--ielts);background:rgba(139,92,246,0.06);}
+.mf-select.correct{border-color:var(--success)!important;background:rgba(34,197,94,0.08)!important;}
+.mf-select.wrong{border-color:var(--error)!important;background:rgba(239,68,68,0.08)!important;}
 .reading-options{display:flex;flex-direction:column;gap:0.28rem;}
 .reading-option{display:flex;align-items:center;gap:0.38rem;padding:0.4rem 0.58rem;background:var(--bg-secondary);border:1.5px solid var(--bg-tertiary);border-radius:7px;cursor:pointer;font-size:0.8rem;transition:all 0.12s;color:var(--text-secondary);user-select:none;}
 .reading-option:hover{border-color:var(--ielts);background:rgba(139,92,246,0.05);}
@@ -716,6 +750,77 @@ body{padding-top:22px;}
 .rd-time-warn-modal{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:200;background:var(--bg-secondary);border:2px solid #f59e0b;border-radius:14px;padding:1.2rem 1.5rem;max-width:300px;width:calc(100% - 2rem);text-align:center;box-shadow:0 10px 40px rgba(0,0,0,0.35);animation:rdFadeIn 0.2s ease;}
 .rd-time-warn-backdrop{position:absolute;inset:0;z-index:199;background:rgba(0,0,0,0.45);}
 
+/* ── IELTS Speaking Section ── */
+.speaking-panel{padding:0.3rem 0 0.5rem;}
+.speaking-header{font-weight:900;color:var(--ielts);font-size:1rem;margin-bottom:0.65rem;}
+.speaking-intro{font-size:0.75rem;color:var(--text-secondary);margin-bottom:0.85rem;line-height:1.6;}
+.speaking-part-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:0.6rem;margin-top:0.5rem;}
+.speaking-part-card{background:var(--bg-primary);border:1.5px solid rgba(139,92,246,0.2);border-radius:12px;padding:1rem;cursor:pointer;transition:all 0.18s;position:relative;overflow:hidden;}
+.speaking-part-card:hover{border-color:var(--ielts);transform:translateY(-3px);box-shadow:0 8px 24px rgba(139,92,246,0.15);}
+.speaking-part-card.active-card{border-color:var(--ielts);background:rgba(139,92,246,0.06);}
+.speaking-part-num{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--ielts),#6d28d9);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:900;margin-bottom:0.55rem;}
+.speaking-part-title{font-size:0.88rem;font-weight:800;color:var(--text-primary);margin-bottom:0.25rem;}
+.speaking-part-desc{font-size:0.72rem;color:var(--text-secondary);line-height:1.5;}
+.speaking-part-time{display:inline-block;background:rgba(139,92,246,0.1);color:var(--ielts);border-radius:4px;padding:0.12rem 0.4rem;font-size:0.65rem;font-weight:800;margin-top:0.4rem;}
+/* Cue Card */
+.cue-card{background:linear-gradient(135deg,rgba(139,92,246,0.08),rgba(109,40,217,0.04));border:2px solid rgba(139,92,246,0.25);border-radius:14px;padding:1.25rem;margin:0.75rem 0;position:relative;}
+.cue-card-label{position:absolute;top:-1px;right:1rem;background:linear-gradient(135deg,var(--ielts),#6d28d9);color:#fff;font-size:0.6rem;font-weight:800;padding:0.15rem 0.65rem;border-radius:0 0 8px 8px;letter-spacing:0.08em;text-transform:uppercase;}
+.cue-card-topic{font-size:0.95rem;font-weight:800;color:var(--ielts);margin-bottom:0.55rem;line-height:1.4;}
+.cue-card-bullets{display:flex;flex-direction:column;gap:0.35rem;padding-left:0.5rem;}
+.cue-card-bullet{display:flex;align-items:flex-start;gap:0.45rem;font-size:0.82rem;color:var(--text-secondary);line-height:1.55;}
+.cue-card-bullet::before{content:'◆';color:var(--ielts);font-size:0.6rem;margin-top:0.2rem;flex-shrink:0;}
+/* Speaking Timer */
+.sp-timer-display{font-size:2.8rem;font-weight:900;text-align:center;color:var(--ielts);line-height:1;margin:0.5rem 0;font-variant-numeric:tabular-nums;}
+.sp-timer-display.running{animation:pulseTimer 1s infinite alternate;}
+.sp-timer-display.finished{color:var(--success);}
+@keyframes pulseTimer{from{transform:scale(1)}to{transform:scale(1.05);}}
+.sp-timer-bar{height:4px;background:var(--bg-tertiary);border-radius:2px;overflow:hidden;margin-top:0.5rem;}
+.sp-timer-fill{height:100%;background:linear-gradient(90deg,var(--ielts),#6d28d9);border-radius:2px;transition:width 1s linear;width:0%;}
+.sp-controls{display:flex;gap:0.5rem;justify-content:center;margin-top:0.75rem;flex-wrap:wrap;}
+.sp-btn{padding:0.55rem 1.2rem;border-radius:10px;border:none;cursor:pointer;font-size:0.85rem;font-weight:700;transition:all 0.15s;display:flex;align-items:center;gap:0.35rem;}
+.sp-btn-start{background:var(--ielts);color:#fff;box-shadow:0 3px 12px rgba(139,92,246,0.3);}
+.sp-btn-start:hover{transform:translateY(-1px);box-shadow:0 5px 18px rgba(139,92,246,0.4);}
+.sp-btn-stop{background:var(--error);color:#fff;}
+.sp-btn-reset{background:var(--bg-tertiary);color:var(--text-primary);}
+.sp-notes{width:100%;min-height:120px;background:var(--bg-primary);border:1.5px solid rgba(139,92,246,0.2);border-radius:10px;padding:0.85rem;color:var(--text-primary);font-family:inherit;font-size:0.9rem;line-height:1.7;resize:vertical;outline:none;margin-top:0.75rem;}
+.sp-notes:focus{border-color:var(--ielts);box-shadow:0 0 0 3px var(--ielts-glow);}
+.sp-notes-label{font-size:0.7rem;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.35rem;display:flex;align-items:center;gap:0.4rem;}
+/* Sample question list */
+.sp-q-list{display:flex;flex-direction:column;gap:0.32rem;margin-top:0.5rem;}
+.sp-q-item{background:var(--bg-primary);border:1.5px solid var(--bg-tertiary);border-radius:9px;padding:0.65rem 0.85rem;font-size:0.82rem;color:var(--text-primary);line-height:1.5;transition:all 0.13s;cursor:default;}
+.sp-q-item:hover{border-color:rgba(139,92,246,0.3);background:rgba(139,92,246,0.03);}
+
+/* ── Band Score Implications Panel ── */
+.band-impl-panel{background:var(--bg-primary);border:1.5px solid rgba(139,92,246,0.2);border-radius:14px;padding:1.1rem;margin-top:0.75rem;}
+.band-impl-title{font-size:0.82rem;font-weight:900;color:var(--ielts);margin-bottom:0.65rem;display:flex;align-items:center;gap:0.4rem;text-transform:uppercase;letter-spacing:0.04em;}
+.band-impl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:0.55rem;}
+.band-impl-card{background:var(--bg-secondary);border:1.5px solid var(--bg-tertiary);border-radius:10px;padding:0.85rem;transition:all 0.15s;}
+.band-impl-card:hover{border-color:rgba(139,92,246,0.3);}
+.band-impl-card-title{font-size:0.78rem;font-weight:800;color:var(--text-primary);margin-bottom:0.35rem;display:flex;align-items:center;gap:0.35rem;}
+.band-impl-card-body{font-size:0.75rem;color:var(--text-secondary);line-height:1.6;}
+.band-impl-highlight{display:inline-block;background:rgba(139,92,246,0.12);color:var(--ielts);border-radius:4px;padding:0.1rem 0.4rem;font-size:0.72rem;font-weight:700;margin:0.15rem 0.15rem 0 0;}
+.band-impl-meter{height:6px;background:var(--bg-tertiary);border-radius:3px;overflow:hidden;margin:0.5rem 0 0.35rem;}
+.band-impl-fill{height:100%;border-radius:3px;transition:width 0.6s ease;background:linear-gradient(90deg,var(--ielts),#6d28d9);}
+.band-impl-score-row{display:flex;justify-content:space-between;align-items:center;font-size:0.72rem;color:var(--text-secondary);margin-top:0.15rem;}
+.band-impl-score-val{font-weight:900;color:var(--ielts);}
+/* Score implication tags */
+.impl-tag{display:inline-flex;align-items:center;gap:0.25rem;padding:0.2rem 0.55rem;border-radius:6px;font-size:0.72rem;font-weight:700;margin:0.1rem;border:1.5px solid transparent;}
+.impl-tag.uni{border-color:rgba(59,130,246,0.3);background:rgba(59,130,246,0.1);color:#3b82f6;}
+.impl-tag.visa{border-color:rgba(34,197,94,0.3);background:rgba(34,197,94,0.1);color:#22c55e;}
+.impl-tag.work{border-color:rgba(245,158,11,0.3);background:rgba(245,158,11,0.1);color:#f59e0b;}
+.impl-tag.warning{border-color:rgba(239,68,68,0.3);background:rgba(239,68,68,0.1);color:#ef4444;}
+/* Recommendation cards */
+.rec-card{background:var(--bg-primary);border:1.5px solid var(--bg-tertiary);border-radius:10px;padding:0.75rem;margin-bottom:0.4rem;display:flex;gap:0.65rem;align-items:flex-start;transition:all 0.15s;}
+.rec-card:hover{border-color:rgba(139,92,246,0.25);}
+.rec-icon{font-size:1.1rem;flex-shrink:0;margin-top:0.05rem;}
+.rec-content{flex:1;}
+.rec-title{font-size:0.8rem;font-weight:800;color:var(--text-primary);margin-bottom:0.2rem;}
+.rec-body{font-size:0.75rem;color:var(--text-secondary);line-height:1.55;}
+.rec-priority{display:inline-block;border-radius:4px;padding:0.08rem 0.35rem;font-size:0.62rem;font-weight:900;margin-left:0.35rem;vertical-align:middle;}
+.rec-priority.high{background:rgba(239,68,68,0.15);color:var(--error);}
+.rec-priority.medium{background:rgba(245,158,11,0.15);color:var(--warning);}
+.rec-priority.low{background:rgba(34,197,94,0.15);color:var(--success);}
+
 </style>
 </head>
 <body>
@@ -792,10 +897,11 @@ body{padding-top:22px;}
       </div>
     </div>
     <!-- IELTS Hub tabs (shown in IELTS mode) -->
-    <!-- 3 MAIN SECTIONS: Writing, Reading, Extra -->
+    <!-- 4 MAIN SECTIONS: Writing, Reading, Speaking, Extra -->
     <div id="ieltsTabs" style="display:none;gap:0.4rem;flex-wrap:wrap;">
       <button class="ielts-sub-tab active" id="ieltsTab_writing" onclick="selectIELTSTab('writing')">✍️ Writing</button>
       <button class="ielts-sub-tab" id="ieltsTab_reading" onclick="selectIELTSTab('reading')">📖 Reading</button>
+      <button class="ielts-sub-tab" id="ieltsTab_speaking" onclick="selectIELTSTab('speaking')">🎙️ Speaking</button>
       <button class="ielts-sub-tab" id="ieltsTab_extra" onclick="selectIELTSTab('extra')">📚 Extra</button>
     </div>
     <!-- Writing section now unified: Topics shown directly with Model Answer + Practice -->
@@ -825,8 +931,10 @@ body{padding-top:22px;}
         <textarea class="library-textarea" id="libTextInput" placeholder="Paste text here..."></textarea>
       </div>
     </div>
-    <!-- IELTS inline content (Vocab / Grammar / Collocations) -->
+    <!-- IELTS inline content (Vocab / Grammar / Collocations / Speaking) -->
     <div id="ieltsContentPanel" class="ielts-content-panel" style="display:none;"></div>
+    <!-- IELTS Reading Panel (separate from contentPanel for split-screen reading) -->
+    <div id="readingPanel" style="display:none;"></div>
     <!-- IELTS My Writing panel -->
     <div id="myWritingPanel" style="display:none;flex-direction:column;gap:0.6rem;"></div>
   </div>
@@ -1113,6 +1221,38 @@ body{padding-top:22px;}
   </div>
   <div class="def-popup-def" id="defPopupDef"></div>
   <div class="def-popup-ex" id="defPopupEx"></div>
+</div>
+
+<!-- WORD CARD (rich vocab card for vocab section + reading definition mode) -->
+<div class="word-card" id="wordCard">
+  <div class="word-card-header">
+    <div>
+      <div class="word-card-word" id="wcWord"></div>
+      <div style="display:flex;align-items:center;gap:0.3rem;margin-top:0.15rem;">
+        <span class="word-card-pos" id="wcPos"></span>
+        <span class="word-card-cefr" id="wcCefr"></span>
+      </div>
+    </div>
+    <button class="word-card-close" onclick="hideWordCard()">✕</button>
+  </div>
+  <div class="word-card-section">
+    <div class="word-card-label">Definition</div>
+    <div class="word-card-def" id="wcDef"></div>
+  </div>
+  <hr class="word-card-divider">
+  <div class="word-card-section" id="wcCollSection">
+    <div class="word-card-label">Collocations</div>
+    <div class="word-card-coll-list" id="wcColl"></div>
+  </div>
+  <hr class="word-card-divider" id="wcCollDivider">
+  <div class="word-card-section" id="wcSentSection">
+    <div class="word-card-label">Example Sentences</div>
+    <div id="wcSents"></div>
+  </div>
+  <div id="wcSynSection" style="margin-top:0.35rem;">
+    <span class="word-card-label">Synonyms </span><span class="word-card-synonyms" id="wcSyn"></span>
+    <br><span class="word-card-label">Antonyms </span><span class="word-card-antonyms" id="wcAnt"></span>
+  </div>
 </div>
 
 <!-- TYPING GAME MODAL -->
@@ -1622,6 +1762,23 @@ questions:[
 {type:"tfng",num:5,text:"Some migratory elephant populations follow routes learned from older group members.",answer:"TRUE",explanation:"The passage states 'long-lived social mammals such as elephants and whales rely heavily on learned knowledge passed down through generations'."},
 {type:"tfng",num:6,text:"Phenological mismatch occurs when migratory animals arrive before their food resources are available.",answer:"NOT GIVEN",explanation:"The passage says mismatch occurs when animals arrive to find resources 'have already peaked and declined' — after, not before. The passage does not describe early arrival as phenological mismatch."},
 {type:"multiple",num:7,text:"According to the passage, what is the primary evolutionary advantage of migration?",options:["A. It reduces competition between species in any one location","B. It allows animals to exploit seasonal resources in multiple locations","C. It enables animals to escape predators more effectively","D. It allows genetic mixing between geographically separated populations"],answer:"B",explanation:"The passage states migration 'allows animals to exploit the seasonal availability of resources in multiple locations rather than committing to a single habitat year-round'."},
+{type:"matchfeature",num:8,
+  features:[
+    {key:"A",label:"Arctic tern"},
+    {key:"B",label:"Monarch butterfly"},
+    {key:"C",label:"Salmon"},
+    {key:"D",label:"Elephant"},
+    {key:"E",label:"Zooplankton"}
+  ],
+  statements:[
+    {text:"Navigates using chemical detection of a specific location's distinctive smell.",answer:"C"},
+    {text:"Completes a migration route without guidance from experienced individuals.",answer:"B"},
+    {text:"Relies on knowledge passed down through generations within a social group.",answer:"D"},
+    {text:"Performs daily vertical movement to avoid predators during daylight.",answer:"E"}
+  ],
+  text:"Questions 8–11: Match each statement with the correct animal.",
+  answer:["C","B","D","E"],
+  explanation:"Salmon — chemical detection of home stream odour. Monarch butterfly — no experienced companions. Elephant — learned knowledge from older group members. Zooplankton — daily vertical migration to avoid visual predators."},
 {type:"multiple",num:8,text:"What does the passage identify as a consequence of climate change for migratory animals?",options:["A. Longer migration distances due to shifting resource locations","B. Reduced predation pressure along migration routes","C. Arrival at destinations when key resources have already declined","D. Faster migration speeds due to warmer air temperatures"],answer:"C",explanation:"The passage describes phenological mismatch: animals arrive 'to find that the resources they depend upon have already peaked and declined'."},
 {type:"multiple",num:9,text:"Why does conservation of migratory animals present particular challenges?",options:["A. Migratory animals are more difficult to study than sedentary ones","B. Effective protection requires coordinated action across multiple countries","C. International agreements have never been established for migratory species","D. Migration routes are too unpredictable to protect effectively"],answer:"B",explanation:"The passage states conservation 'requires coordinated international action across multiple countries and jurisdictions'."},
 {type:"matchpara",num:10,
@@ -2875,6 +3032,8 @@ let readingState={
   rdFontSize:parseFloat(localStorage.getItem('mt_rd_font')||'0.95'),
   rdHighlightOn:false,
   rdHighlightColor:'rgba(255,214,0,0.45)',
+  rdDefMode:false,       // definition mode in practice
+  reviewDefMode:false,   // definition mode in post-test review
   // test
   testSetId:null,
   testPassages:[],       // array of passage objects
@@ -4132,12 +4291,12 @@ function renderVocabMenuContent(){
     <div style="font-size:0.68rem;color:var(--text-secondary);margin-top:0.3rem;">${diffDesc[d]}</div>
   </div>
   <div style="display:flex;flex-direction:column;gap:0.4rem;">
-    <button onclick="startVocabMode('flashcard')" style="background:var(--accent);color:#fff;border:none;border-radius:8px;padding:0.6rem;font-weight:700;cursor:pointer;font-size:0.9rem;">🃏 Flashcard Mode</button>
-    <button onclick="startVocabMode('definition')" style="background:var(--bg-tertiary);color:var(--text-primary);border:none;border-radius:8px;padding:0.6rem;font-weight:700;cursor:pointer;font-size:0.9rem;">📖 Definition Quiz</button>
+    <button onclick="startVocabMode('definition')" style="background:var(--accent);color:#fff;border:none;border-radius:8px;padding:0.6rem;font-weight:700;cursor:pointer;font-size:0.9rem;">📖 Definition Quiz</button>
     <button onclick="startVocabMode('synonym')" style="background:rgba(34,197,94,0.12);color:var(--success);border:1.5px solid rgba(34,197,94,0.3);border-radius:8px;padding:0.6rem;font-weight:700;cursor:pointer;font-size:0.9rem;">🔄 Synonym Quiz</button>
     <button onclick="startVocabMode('antonym')" style="background:rgba(239,68,68,0.1);color:#ef4444;border:1.5px solid rgba(239,68,68,0.25);border-radius:8px;padding:0.6rem;font-weight:700;cursor:pointer;font-size:0.9rem;">↔️ Antonym Quiz</button>
     <button onclick="startVocabMode('collocation')" style="background:var(--bg-tertiary);color:var(--text-primary);border:none;border-radius:8px;padding:0.6rem;font-weight:700;cursor:pointer;font-size:0.9rem;">🔗 Collocation Quiz</button>
     <button onclick="startVocabMode('sentence')" style="background:var(--bg-tertiary);color:var(--text-primary);border:none;border-radius:8px;padding:0.6rem;font-weight:700;cursor:pointer;font-size:0.9rem;">✍️ Sentence Fill-in</button>
+    <button onclick="showVocabBrowse()" style="background:rgba(139,92,246,0.1);color:var(--ielts);border:1.5px solid rgba(139,92,246,0.25);border-radius:8px;padding:0.6rem;font-weight:700;cursor:pointer;font-size:0.9rem;">📚 Browse All Words</button>
   </div>`;
 }
 
@@ -4170,13 +4329,50 @@ function renderCollocationContent(){
 }
 
 const VOCAB_SESSION=15;
+function showVocabBrowse(){
+  const box=document.getElementById('vocabBox');
+  const cefrColors={b1:'#22c55e',b2:'#3b82f6',c1:'#8b5cf6',c2:'#ef4444'};
+  const cefrOrder=['B1','B2','C1','C2'];
+  // Group by CEFR
+  const groups={};
+  vocabData.forEach(v=>{
+    const k=(v.cefr||'B2').toUpperCase();
+    if(!groups[k])groups[k]=[];
+    groups[k].push(v);
+  });
+  const groupHtml=cefrOrder.filter(k=>groups[k]).map(k=>{
+    const col=cefrColors[k.toLowerCase()]||'#8b5cf6';
+    const chips=groups[k].map(v=>`<span
+      onclick="showWordCard('${v.word}',this)"
+      style="display:inline-block;cursor:pointer;padding:0.22rem 0.58rem;border-radius:20px;font-size:0.78rem;font-weight:600;border:1.5px solid ${col}33;color:var(--text-primary);background:${col}11;margin:0.18rem;transition:all 0.12s;"
+      onmouseover="this.style.background='${col}22';this.style.borderColor='${col}'"
+      onmouseout="this.style.background='${col}11';this.style.borderColor='${col}33'"
+    >${v.word}</span>`).join('');
+    return`<div style="margin-bottom:0.8rem;">
+      <div style="font-size:0.62rem;font-weight:900;color:${col};text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.35rem;display:flex;align-items:center;gap:0.4rem;">
+        <span style="background:${col}22;border:1px solid ${col}44;border-radius:4px;padding:0.06rem 0.4rem;">${k}</span>
+        <span style="color:var(--text-secondary);font-weight:600;">${groups[k].length} words</span>
+      </div>
+      <div style="line-height:1.8;">${chips}</div>
+    </div>`;
+  }).join('');
+
+  box.innerHTML=`
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;">
+      <h2 style="color:var(--accent);font-size:1.1rem;">📚 Browse All Words</h2>
+      <button onclick="renderVocabMenu()" style="background:none;border:none;font-size:0.85rem;cursor:pointer;color:var(--text-secondary);font-weight:700;">← Back</button>
+    </div>
+    <div style="font-size:0.72rem;color:var(--text-secondary);margin-bottom:0.7rem;">Click any word to see its full definition, collocations, and example sentences.</div>
+    <div style="max-height:65vh;overflow-y:auto;padding-right:0.3rem;">${groupHtml}</div>`;
+}
+
 function startVocabMode(mode){
   _clearVocabKeyHandler();
   const diff=vocabState.diff||'medium';
   const numChoices={easy:3,medium:4,hard:5}[diff];
   const pool=shuffle(vocabData.slice()).slice(0,VOCAB_SESSION);
   vocabState={mode,diff,numChoices,cardIdx:0,score:0,streak:0,shuffled:pool,currentAnswer:'',typedAnswer:'',_choiceLocked:false,_keyHandler:null,collDiff:vocabState.collDiff||'medium'};
-  if(mode==='flashcard')renderFlashcard(false);else renderVocabTypingQuiz();
+  renderVocabTypingQuiz();
 }
 function shuffle(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}return arr;}
 function currentVocab(){return vocabState.shuffled[vocabState.cardIdx%vocabState.shuffled.length];}
@@ -4198,47 +4394,7 @@ function renderVocabSessionResult(){
     </div>`;
 }
 
-function renderFlashcard(revealed){
-  const v=currentVocab();const box=document.getElementById('vocabBox');
-  const scoreBar=`<div style="display:flex;justify-content:space-between;font-size:0.75rem;color:var(--text-secondary);margin-bottom:0.75rem;">
-    <span>Card ${vocabState.cardIdx+1}/${vocabState.shuffled.length}</span>
-    <span>Streak: ${vocabState.streak}</span>
-  </div>`;
-  if(!revealed){
-    box.innerHTML=scoreBar+`
-      <div onclick="renderFlashcard(true)" style="background:var(--bg-primary);border:2px solid var(--bg-tertiary);border-radius:12px;padding:2rem;text-align:center;cursor:pointer;min-height:120px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.4rem;margin-bottom:0.75rem;">
-        <div style="font-size:1.75rem;font-weight:800;color:var(--accent);">${v.word}</div>
-        <div style="font-size:0.8rem;color:var(--text-secondary);font-style:italic;">${v.pos}</div>
-        <div style="font-size:0.75rem;color:var(--text-secondary);margin-top:0.5rem;">Tap to reveal</div>
-      </div>
-      <div style="display:flex;gap:0.4rem;">
-        <button onclick="renderFlashcard(true)" style="flex:1;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:0.55rem;font-weight:700;cursor:pointer;">Reveal</button>
-        <button onclick="renderVocabMenu()" style="background:var(--bg-tertiary);color:var(--text-primary);border:none;border-radius:8px;padding:0.55rem 0.9rem;cursor:pointer;">Menu</button>
-      </div>`;
-  }else{
-    box.innerHTML=scoreBar+`
-      <div style="text-align:center;margin-bottom:0.6rem;">
-        <span style="font-size:1.35rem;font-weight:800;color:var(--accent);">${v.word}</span>
-        <span style="font-size:0.75rem;color:var(--text-secondary);font-style:italic;margin-left:0.3rem;">${v.pos}</span>
-      </div>
-      <div style="background:var(--bg-primary);border-radius:8px;padding:0.7rem;margin-bottom:0.5rem;">
-        <div style="font-size:0.65rem;color:var(--accent);font-weight:700;text-transform:uppercase;margin-bottom:0.25rem;">Definition</div>
-        <div style="font-size:0.85rem;">${v.definition}</div>
-      </div>
-      <div style="background:var(--bg-primary);border-radius:8px;padding:0.7rem;margin-bottom:0.5rem;">
-        <div style="font-size:0.65rem;color:var(--warning);font-weight:700;text-transform:uppercase;margin-bottom:0.25rem;">Collocations</div>
-        ${v.collocations.map(c=>`<span style="background:var(--bg-tertiary);padding:0.12rem 0.4rem;border-radius:4px;font-size:0.72rem;margin:0.08rem;display:inline-block;">${c}</span>`).join('')}
-      </div>
-      <div style="background:var(--bg-primary);border-radius:8px;padding:0.7rem;margin-bottom:0.6rem;">
-        <div style="font-size:0.65rem;color:var(--success);font-weight:700;text-transform:uppercase;margin-bottom:0.3rem;">Examples</div>
-        <ul style="padding-left:1rem;margin:0;">${v.sentences.map(s=>`<li style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:0.2rem;">${s}</li>`).join('')}</ul>
-      </div>
-      <div style="display:flex;gap:0.4rem;">
-        <button onclick="vocabState.cardIdx++;renderFlashcard(false)" style="flex:1;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:0.55rem;font-weight:700;cursor:pointer;">Next</button>
-        <button onclick="renderVocabMenu()" style="background:var(--bg-tertiary);color:var(--text-primary);border:none;border-radius:8px;padding:0.55rem 0.9rem;cursor:pointer;">Menu</button>
-      </div>`;
-  }
-}
+
 
 // ============================================================
 //  TYPING QUIZ FOR VOCABULARY (multiple choice + type)
@@ -5982,7 +6138,7 @@ function switchSection(section){
 
   // Subtitle
   document.getElementById('appSubtitle').textContent=isIELTS
-    ?'📚 IELTS Hub · Writing · Reading · Extra'
+    ?'📚 IELTS Hub · Writing · Reading · Speaking · Extra'
     :'⌨️ Typing practice · Short & long articles · Library';
 
   if(isIELTS){
@@ -6068,12 +6224,25 @@ function selectIELTSTab(tab){
     articleList.style.display='none';
     typingArea.style.display='none';
     keyHint.style.display='none';
-    contentPanel.style.display='none';
+    // Show contentPanel for reading — renderReadingPanel renders into ieltsContentPanel
+    contentPanel.style.display='block';
+    if(readingPanel)readingPanel.style.display='none';
     // Hide word-count progress bar — irrelevant in reading mode
     const pb=document.getElementById('topProgressBar');
     if(pb)pb.style.display='none';
-    if(readingPanel)readingPanel.style.display='block';
-    else renderReadingPanel();
+    renderReadingPanel();
+  } else if(tab==='speaking'){
+    // SPEAKING section
+    typingStats.style.display='none';
+    ieltsStats.style.display='grid';
+    articleList.style.display='none';
+    typingArea.style.display='none';
+    keyHint.style.display='none';
+    const pb=document.getElementById('topProgressBar');
+    if(pb)pb.style.display='none';
+    if(readingPanel)readingPanel.style.display='none';
+    contentPanel.style.display='block';
+    renderSpeakingPanel();
   } else if(tab==='extra'){
     // EXTRA section: show sub-tabs (Vocabulary + Grammar + Collocations)
     extraSubTabs.style.display='flex';
@@ -6214,6 +6383,314 @@ function selectExtraSubTab(subTab){
   if(subTab==='vocab')renderIELTSVocabPanel();
   else if(subTab==='grammar')renderIELTSGrammarPanel();
   else if(subTab==='collocations')renderIELTSCollPanel();
+}
+
+// ============================================================
+//  IELTS SPEAKING — Cue cards, timer, sample questions
+// ============================================================
+
+const speakingData={
+  cueCards:[
+    {topic:"Describe a book that had a significant impact on you.",bullets:["What the book is and who wrote it","When you read it and what it is about","Why it made such a strong impression on you","How it changed your thinking or behaviour"]},
+    {topic:"Describe a place you have visited that was affected by pollution.",bullets:["Where the place is and when you visited","What kind of pollution you saw","How the pollution affected the area","What could be done to improve the situation"]},
+    {topic:"Describe a skill you would like to learn in the future.",bullets:["What the skill is and why you want to learn it","How you would learn this skill","How difficult you think it would be","How it might benefit your life or career"]},
+    {topic:"Describe a time when you had to solve a difficult problem.",bullets:["What the problem was and when it occurred","What made it particularly challenging","The steps you took to solve it","What you learned from the experience"]},
+    {topic:"Describe a person you know who is very health-conscious.",bullets:["Who the person is and how you know them","What they do to stay healthy","How long they have been health-conscious","Why you think their approach is effective"]},
+    {topic:"Describe an important tradition in your country.",bullets:["What the tradition is and when it takes place","How people celebrate or observe it","Why it has remained important over time","How it might change in the future"]},
+    {topic:"Describe a piece of technology you find particularly useful.",bullets:["What the technology is and how it works","When and why you started using it","How it compares to alternatives","What you would do without it"]},
+    {topic:"Describe a time when you received some helpful advice.",bullets:["Who gave you the advice and what the situation was","Exactly what advice they gave you","How you followed or applied the advice","Why the advice turned out to be valuable"]},
+    {topic:"Describe a public facility that has been improved recently.",bullets:["What the facility is and where it is located","What improvements were made","How people in the community have responded","Whether you think further changes are needed"]},
+    {topic:"Describe a goal you are currently working towards.",bullets:["What the goal is and why you set it","The specific steps you are taking","Any challenges or obstacles you face","How you will know when you have succeeded"]},
+    {topic:"Describe a memorable meal you have had.",bullets:["When and where you had the meal","Who you were with and what the occasion was","What you ate and why it was special","Whether you would want to have the same meal again"]},
+    {topic:"Describe a time when you helped someone in your community.",bullets:["Who you helped and what the situation was","What you did to help them","How they responded to your help","Why you felt motivated to assist them"]}
+  ],
+  part1:[
+    {category:"Work & Study",questions:["Do you work or are you a student?","What do you enjoy most about your studies / job?","Is there anything you would like to change about your work or studies?","What kind of job would you like to have in the future?"]},
+    {category:"Home & Accommodation",questions:["Do you live in a house or an apartment?","What is your favourite room in your home?","Is there anything you would like to change about your home?","Do you prefer living in a city or in the countryside?"]},
+    {category:"Hobbies & Interests",questions:["What do you like to do in your free time?","Have your hobbies changed since you were a child?","Do you prefer to spend your free time alone or with others?","Is there a hobby you would like to take up in the future?"]},
+    {category:"Technology",questions:["How often do you use a computer or smartphone?","Do you think people spend too much time on their devices?","Has technology made communication easier or more difficult?","What app or website do you use most frequently?"]},
+    {category:"Transport & Travel",questions:["How do you usually travel to work or school?","What is your favourite mode of transport?","Do you prefer travelling alone or with other people?","What is the most interesting place you have travelled to?"]},
+    {category:"Food & Cooking",questions:["What kind of food do you enjoy eating?","Do you prefer cooking at home or eating out?","Is there a traditional dish from your country that you particularly like?","Has your diet changed much over the years?"]}
+  ],
+  part3:[
+    {theme:"Education",questions:["Do you think the education system in your country prepares students well for working life?","Should education be free for everyone, regardless of their background?","What role do you think technology should play in the classroom?","How has the purpose of university education changed over the last few decades?"]},
+    {theme:"Technology & Society",questions:["Do you think artificial intelligence will create more jobs than it destroys?","Should governments regulate social media companies more strictly?","How has the internet changed the way people form relationships?","What responsibilities do technology companies have towards their users?"]},
+    {theme:"Environment",questions:["Do you think individuals or governments should take more responsibility for protecting the environment?","Is it realistic to expect all countries to meet the same environmental targets?","How might cities need to change to become more sustainable?","What role should businesses play in addressing climate change?"]},
+    {theme:"Work & Employment",questions:["Do you think the traditional nine-to-five working day will disappear in the future?","Should employees be allowed to work remotely permanently?","What skills do you think will be most valuable in the future job market?","How can governments reduce unemployment in their countries?"]},
+    {theme:"Health",questions:["Do you think healthcare should be provided free by the state?","How can governments encourage people to live healthier lifestyles?","What impact does stress have on modern working life?","Should unhealthy foods be taxed more heavily?"]},
+    {theme:"Culture & Society",questions:["Do you think globalization has led to the loss of traditional cultures?","How important is it for young people to learn about their country's history?","What can be done to preserve endangered languages?","Do you think immigration has a positive or negative effect on society?"]}
+  ]
+};
+
+let speakingState={currentCueCard:0,part:1,timerInterval:null,secondsElapsed:0,isRunning:false,currentCueIndex:-1};
+
+function renderSpeakingPanel(){
+  const cp=document.getElementById('ieltsContentPanel');
+  if(!cp)return;
+  cp.innerHTML=`<div class="speaking-panel">
+    <div class="speaking-header">🎙️ IELTS Speaking Practice</div>
+    <div class="speaking-intro">Practise all three parts of the IELTS Speaking test. Part 2 includes a built-in 2-minute timer to simulate real exam conditions. Click any cue card to begin.</div>
+    
+    <div class="rd-mode-tabs" style="margin-bottom:1rem;">
+      <button class="rd-mode-tab active" id="sp_tab1" onclick="switchSpeakingPart(1)">💬 Part 1 — Introduction</button>
+      <button class="rd-mode-tab" id="sp_tab2" onclick="switchSpeakingPart(2)">🎴 Part 2 — Cue Card</button>
+      <button class="rd-mode-tab" id="sp_tab3" onclick="switchSpeakingPart(3)">🗣️ Part 3 — Discussion</button>
+    </div>
+    
+    <div id="speakingContent">${renderSpeakingPart1()}</div>
+    
+    <hr style="border:none;border-top:1.5px solid rgba(139,92,246,0.15);margin:1.25rem 0;">
+    
+    <!-- Band Score Implications -->
+    <div class="band-impl-title">🎯 What Your Practice Means</div>
+    <div class="band-impl-grid">
+      <div class="band-impl-card">
+        <div class="band-impl-card-title">📋 Band Score Guide</div>
+        <div class="band-impl-card-body">
+          <div style="margin-bottom:0.35rem;"><span class="band-impl-highlight">Band 9</span> Expert user — full fluency</div>
+          <div style="margin-bottom:0.35rem;"><span class="band-impl-highlight">Band 7–8</span> Good/Very good user</div>
+          <div style="margin-bottom:0.35rem;"><span class="band-impl-highlight">Band 5–6</span> Modest/Competent user</div>
+          <div><span class="band-impl-highlight">Band 4 below</span> Limited/Basic user</div>
+        </div>
+      </div>
+      <div class="band-impl-card">
+        <div class="band-impl-card-title">🎓 University Requirements</div>
+        <div class="band-impl-card-body">
+          <div class="impl-tag uni">Oxford / Cambridge: 7.5+</div>
+          <div class="impl-tag uni">Other UK Russell Group: 6.5–7.5</div>
+          <div class="impl-tag uni">Australian Group of Eight: 6.5–7.0</div>
+          <div class="impl-tag uni">Canadian Top Universities: 6.5–7.0</div>
+        </div>
+      </div>
+      <div class="band-impl-card">
+        <div class="band-impl-card-title">🛂 Visa Requirements</div>
+        <div class="band-impl-card-body">
+          <div class="impl-tag visa">UK Student Visa: 5.5–6.5</div>
+          <div class="impl-tag visa">Australia Student Visa: 5.5–6.0</div>
+          <div class="impl-tag visa">Canada SDS Stream: 6.0+</div>
+          <div class="impl-tag visa">NZ Skilled Migrant: 6.5+</div>
+        </div>
+      </div>
+      <div class="band-impl-card">
+        <div class="band-impl-card-title">💼 Professional Registration</div>
+        <div class="band-impl-card-body">
+          <div class="impl-tag work">UK NMC (Nursing): 7.0+</div>
+          <div class="impl-tag work">GMC (Medicine): 7.5+</div>
+          <div class="impl-tag work">Engineering Council: 6.5+</div>
+          <div class="impl-tag work">Teaching (QTS): 6.5+</div>
+        </div>
+      </div>
+    </div>
+    
+    ${renderStudyRecommendations()}
+  </div>`;
+}
+
+function renderStudyRecommendations(){
+  const essaysDone=[...completedTexts].filter(k=>articlesDB['ielts'].some(a=>a.text.slice(0,60)===k)).length;
+  const readingDone=readingState.completedPassages.size;
+  const quizScores=JSON.parse(localStorage.getItem('mt_vocab_quiz_scores')||'[]');
+  const avgQuiz=quizScores.length?Math.round(quizScores.reduce((a,b)=>a+b,0)/quizScores.length):0;
+  
+  let recs=[];
+  if(essaysDone<3) recs.push({icon:'📝',title:'Write more essays',body:'You have completed '+essaysDone+' essay(s). Aim for at least 10 practice essays to build confidence in Task 1 and Task 2. Focus on timing — 20 minutes for Task 1 and 40 minutes for Task 2.',priority:'high'});
+  else if(essaysDone<8) recs.push({icon:'📝',title:'Keep writing regularly',body:'Good progress with '+essaysDone+' essays done. Try writing under timed conditions and review model answers to identify gaps in structure and vocabulary.',priority:'medium'});
+  else recs.push({icon:'📝',title:'Essay practice on track',body:'Excellent! You have completed '+essaysDone+' essays. Focus on refining complex grammatical structures and advanced vocabulary.',priority:'low'});
+  
+  if(readingDone<5) recs.push({icon:'📖',title:'Do more reading passages',body:'You have completed '+readingDone+' reading passage(s). The IELTS Reading test has 3 passages in 60 minutes. Aim to complete at least 15 practice passages to build speed and accuracy.',priority:'high'});
+  else if(readingDone<12) recs.push({icon:'📖',title:'Build reading speed',body:'Good with '+readingDone+' passages done. Work on skimming and scanning techniques. Try completing passages within 20 minutes each.',priority:'medium'});
+  else recs.push({icon:'📖',title:'Reading practice strong',body:'Excellent! '+readingDone+' passages completed. Focus on the most difficult question types: Matching Headings and True/False/Not Given.',priority:'low'});
+  
+  if(avgQuiz<60) recs.push({icon:'📚',title:'Expand vocabulary',body:'Your quiz average is '+avgQuiz+'%. Building academic vocabulary is essential for Band 7+. Use the Vocabulary section daily and aim for 80%+ in quizzes.',priority:'high'});
+  else if(avgQuiz<80) recs.push({icon:'📚',title:'Refine vocabulary usage',body:'Good quiz average at '+avgQuiz+'%. Focus on collocations and using new words in your writing and speaking practice.',priority:'medium'});
+  else recs.push({icon:'📚',title:'Vocabulary level advanced',body:'Excellent quiz average at '+avgQuiz+'%. Continue learning C1–C2 level words and practise using them in context.',priority:'low'});
+  
+  recs.push({icon:'🎙️',title:'Practise speaking aloud',body:'Use the Speaking section cue cards and record yourself. Listen back for hesitations, filler words, and pronunciation issues. Aim for 2 uninterrupted minutes in Part 2.',priority:'high'});
+  
+  return`<div class="band-impl-panel" style="margin-top:1rem;">
+    <div class="band-impl-title">📊 Personalized Study Recommendations</div>
+    <div>
+      ${recs.map(r=>`<div class="rec-card">
+        <div class="rec-icon">${r.icon}</div>
+        <div class="rec-content">
+          <div class="rec-title">${r.title}<span class="rec-priority ${r.priority}">${r.priority.toUpperCase()}</span></div>
+          <div class="rec-body">${r.body}</div>
+        </div>
+      </div>`).join('')}
+    </div>
+    <div style="margin-top:0.75rem;padding:0.65rem;background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.2);border-radius:8px;font-size:0.75rem;color:#f59e0b;line-height:1.6;">
+      <b>💡 Implication:</b> Based on your activity, ${getImplicationText(essaysDone,readingDone,avgQuiz)}
+    </div>
+  </div>`;
+}
+
+function getImplicationText(essays,reading,quiz){
+  const score=(essays*5)+(reading*3)+(quiz*0.5);
+  if(score<30) return "you are in the <b>early stages</b> of preparation. Consistent daily practice is the most important factor at this stage. Focus on building vocabulary and understanding the test format.";
+  if(score<70) return "you are making <b>solid progress</b>. Keep up the regular practice and start timing yourself. Your estimated band range is <b>5.5–6.5</b> with continued effort.";
+  if(score<120) return "you are at an <b>intermediate–advanced</b> level of preparation. Focus on refining accuracy and complex language. Your estimated band range is <b>6.5–7.5</b>.";
+  return "you are at an <b>advanced</b> level of preparation. Fine-tune your weakest sections and practise under full test conditions. Your estimated band range is <b>7.0–8.5+</b>.";
+}
+
+function switchSpeakingPart(part){
+  speakingState.part=part;
+  document.querySelectorAll('.rd-mode-tab').forEach(b=>b.classList.remove('active'));
+  const btn=document.getElementById('sp_tab'+part);
+  if(btn)btn.classList.add('active');
+  const content=document.getElementById('speakingContent');
+  if(!content)return;
+  if(part===1) content.innerHTML=renderSpeakingPart1();
+  else if(part===2) content.innerHTML=renderSpeakingPart2();
+  else if(part===3) content.innerHTML=renderSpeakingPart3();
+}
+
+function renderSpeakingPart1(){
+  return`<div>
+    <div style="font-size:0.75rem;color:var(--text-secondary);margin-bottom:0.65rem;">Part 1 lasts <b>4–5 minutes</b>. The examiner asks general questions about yourself and familiar topics. Practise answering aloud — fluency and naturalness matter more than perfect grammar.</div>
+    ${speakingData.part1.map((cat,i)=>`
+    <div style="margin-bottom:0.75rem;">
+      <div style="font-size:0.7rem;font-weight:800;text-transform:uppercase;letter-spacing:0.07em;color:var(--ielts);margin-bottom:0.35rem;">${cat.category}</div>
+      <div class="sp-q-list">
+        ${cat.questions.map(q=>`<div class="sp-q-item">${q}</div>`).join('')}
+      </div>
+    </div>`).join('')}
+  </div>`;
+}
+
+function renderSpeakingPart2(){
+  return`<div>
+    <div style="font-size:0.75rem;color:var(--text-secondary);margin-bottom:0.65rem;">Part 2 is the <b>individual long turn</b>. You have <b>1 minute</b> to prepare notes, then speak for <b>1–2 minutes</b> on the topic. Click any cue card to start the timer.</div>
+    <div class="speaking-part-grid">
+      ${speakingData.cueCards.map((card,i)=>`
+      <div class="speaking-part-card${speakingState.currentCueIndex===i?' active-card':''}" onclick="openCueCard(${i})">
+        <div class="speaking-part-num">${i+1}</div>
+        <div class="speaking-part-title">${card.topic}</div>
+        <div class="speaking-part-desc">${card.bullets.length} bullet points · Click to practise</div>
+        <div class="speaking-part-time">⏱ 2 min</div>
+      </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+function renderSpeakingPart3(){
+  return`<div>
+    <div style="font-size:0.75rem;color:var(--text-secondary);margin-bottom:0.65rem;">Part 3 is a <b>two-way discussion</b> lasting <b>4–5 minutes</b>. The examiner asks abstract questions related to the Part 2 topic. You need to give opinions, justify them, and discuss broader implications.</div>
+    ${speakingData.part3.map((theme,i)=>`
+    <div style="margin-bottom:0.75rem;">
+      <div style="font-size:0.7rem;font-weight:800;text-transform:uppercase;letter-spacing:0.07em;color:var(--ielts);margin-bottom:0.35rem;">${theme.theme}</div>
+      <div class="sp-q-list">
+        ${theme.questions.map(q=>`<div class="sp-q-item">${q}</div>`).join('')}
+      </div>
+    </div>`).join('')}
+  </div>`;
+}
+
+function openCueCard(idx){
+  speakingState.currentCueIndex=idx;
+  const card=speakingData.cueCards[idx];
+  const cp=document.getElementById('ieltsContentPanel');
+  if(!cp)return;
+  cp.innerHTML=`<div class="speaking-panel">
+    <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.75rem;">
+      <button onclick="renderSpeakingPanel();switchSpeakingPart(2);" style="background:var(--bg-tertiary);border:none;border-radius:8px;padding:0.35rem 0.7rem;cursor:pointer;color:var(--text-secondary);font-size:0.78rem;font-weight:700;">← Back</button>
+      <div style="font-weight:800;color:var(--ielts);font-size:0.9rem;">Cue Card ${idx+1} of ${speakingData.cueCards.length}</div>
+    </div>
+    
+    <div class="cue-card">
+      <div class="cue-card-label">Cue Card</div>
+      <div class="cue-card-topic">${card.topic}</div>
+      <div class="cue-card-bullets">
+        <div style="font-size:0.72rem;color:var(--text-secondary);margin-bottom:0.35rem;font-weight:600;">You should say:</div>
+        ${card.bullets.map(b=>`<div class="cue-card-bullet">${b}</div>`).join('')}
+        <div class="cue-card-bullet" style="margin-top:0.35rem;font-style:italic;">And explain why this topic is meaningful to you.</div>
+      </div>
+    </div>
+    
+    <div style="background:var(--bg-primary);border:1.5px solid var(--bg-tertiary);border-radius:12px;padding:1rem;margin-top:0.75rem;text-align:center;">
+      <div style="font-size:0.7rem;color:var(--text-secondary);font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.4rem;">⏱ Speaking Timer</div>
+      <div class="sp-timer-display" id="spTimerDisplay">00:00</div>
+      <div class="sp-timer-bar"><div class="sp-timer-fill" id="spTimerFill"></div></div>
+      <div style="display:flex;justify-content:space-between;font-size:0.65rem;color:var(--text-secondary);margin-top:0.25rem;">
+        <span>0s</span><span>60s prep done</span><span>120s target</span>
+      </div>
+      <div class="sp-controls">
+        <button class="sp-btn sp-btn-start" id="spStartBtn" onclick="startSpeakingTimer()">▶ Start 2-Min Talk</button>
+        <button class="sp-btn sp-btn-stop" id="spStopBtn" onclick="stopSpeakingTimer()" style="display:none;">⏹ Stop</button>
+        <button class="sp-btn sp-btn-reset" onclick="resetSpeakingTimer()">↺ Reset</button>
+      </div>
+      <div style="font-size:0.7rem;color:var(--text-secondary);margin-top:0.5rem;line-height:1.5;" id="spTimerHint">Press Start and speak for 2 minutes without stopping.</div>
+    </div>
+    
+    <div>
+      <div class="sp-notes-label">📝 Preparation Notes (optional — you have 1 min in the real test)</div>
+      <textarea class="sp-notes" id="spNotes" placeholder="Jot down keywords and ideas here before you start speaking..."></textarea>
+    </div>
+    
+    <div style="margin-top:0.75rem;padding:0.65rem;background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.2);border-radius:8px;font-size:0.73rem;color:var(--text-secondary);line-height:1.65;">
+      <b style="color:var(--success);">💡 Speaking Tips:</b> Use discourse markers (<i>firstly, furthermore, on the other hand, to sum up</i>). Include personal examples. Vary your vocabulary — avoid repeating the same words. Pay attention to pronunciation and intonation.
+    </div>
+  </div>`;
+}
+
+function startSpeakingTimer(){
+  speakingState.isRunning=true;
+  speakingState.secondsElapsed=0;
+  const display=document.getElementById('spTimerDisplay');
+  const fill=document.getElementById('spTimerFill');
+  const startBtn=document.getElementById('spStartBtn');
+  const stopBtn=document.getElementById('spStopBtn');
+  const hint=document.getElementById('spTimerHint');
+  if(startBtn)startBtn.style.display='none';
+  if(stopBtn)stopBtn.style.display='';
+  if(display)display.classList.add('running');
+  if(hint)hint.textContent='Keep going! Aim for the full 2 minutes. Speak continuously.';
+  
+  speakingState.timerInterval=setInterval(()=>{
+    speakingState.secondsElapsed++;
+    const mins=Math.floor(speakingState.secondsElapsed/60);
+    const secs=speakingState.secondsElapsed%60;
+    if(display)display.textContent=String(mins).padStart(2,'0')+':'+String(secs).padStart(2,'0');
+    if(fill)fill.style.width=Math.min((speakingState.secondsElapsed/120)*100,100)+'%';
+    
+    if(speakingState.secondsElapsed>=120){
+      if(display){display.classList.remove('running');display.classList.add('finished');}
+      if(hint){hint.innerHTML='<b style="color:var(--success);">✓ Target reached!</b> You spoke for 2 minutes. Great job!';}
+      if(fill)fill.style.background='linear-gradient(90deg,var(--success),#16a34a)';
+      clearInterval(speakingState.timerInterval);
+      speakingState.isRunning=false;
+      if(startBtn)startBtn.style.display='';
+      if(stopBtn)stopBtn.style.display='none';
+    }
+  },1000);
+}
+
+function stopSpeakingTimer(){
+  if(speakingState.timerInterval)clearInterval(speakingState.timerInterval);
+  speakingState.isRunning=false;
+  const display=document.getElementById('spTimerDisplay');
+  const startBtn=document.getElementById('spStartBtn');
+  const stopBtn=document.getElementById('spStopBtn');
+  if(display)display.classList.remove('running');
+  if(startBtn)startBtn.style.display='';
+  if(stopBtn)stopBtn.style.display='none';
+}
+
+function resetSpeakingTimer(){
+  if(speakingState.timerInterval)clearInterval(speakingState.timerInterval);
+  speakingState.isRunning=false;
+  speakingState.secondsElapsed=0;
+  const display=document.getElementById('spTimerDisplay');
+  const fill=document.getElementById('spTimerFill');
+  const startBtn=document.getElementById('spStartBtn');
+  const stopBtn=document.getElementById('spStopBtn');
+  const hint=document.getElementById('spTimerHint');
+  if(display){display.textContent='00:00';display.classList.remove('running','finished');}
+  if(fill){fill.style.width='0%';fill.style.background='linear-gradient(90deg,var(--ielts),#6d28d9)';}
+  if(startBtn)startBtn.style.display='';
+  if(stopBtn)stopBtn.style.display='none';
+  if(hint)hint.textContent='Press Start and speak for 2 minutes without stopping.';
+  const notes=document.getElementById('spNotes');
+  if(notes)notes.value='';
 }
 
 // ============================================================
@@ -6408,7 +6885,7 @@ function _renderTestOverlay(){
         <div class="reading-passage-pane" id="testPassagePane">
           <span class="passage-label">READING PASSAGE ${readingState.testCurrentP+1}</span>
           <h3>${p.title}</h3>
-          ${p.passage.split('\n\n').filter(x=>x.trim()).map(x=>{const lbl=x.trim().match(/^\[([A-G])\]\s*/);return lbl?`<p><span class="para-sec-lbl">${lbl[1]}</span>${x.trim().replace(/^\[[A-G]\]\s*/,'')}</p>`:`<p>${x.trim()}</p>`;}).join('')}
+          ${_buildClickablePassage(p.passage)}
         </div>
         <div class="rd-highlight-bar">
           <button class="rd-hl-btn" id="rdHlBtn" onclick="toggleRdHighlight()" title="Select text to highlight">🖊 Highlight</button>
@@ -6418,6 +6895,11 @@ function _renderTestOverlay(){
             <span id="rdFontLabel" style="font-size:0.68rem;color:var(--text-secondary);min-width:2rem;text-align:center;font-weight:700;">${Math.round(readingState.rdFontSize*16)}px</span>
             <button onclick="rdFontAdj(1)" style="background:var(--bg-primary);border:1.5px solid var(--bg-tertiary);border-radius:6px;color:var(--text-secondary);cursor:pointer;font-size:0.78rem;padding:0.18rem 0.45rem;font-weight:700;" title="Larger text">A+</button>
           </div>
+        </div>
+        <div class="rd-def-bar">
+          <button class="rd-def-toggle locked" title="Definition Mode unlocks after submitting the test" onclick="rdDefLockedNotice()">
+            🔒 Definition Mode (unlocks after submission)
+          </button>
         </div>
       </div>
       <div class="reading-questions-pane" id="testQPane">
@@ -6744,6 +7226,7 @@ function _showTestResults(totalCorrect,totalQ,timeUsed,perPassage,timedOut){
 
 function _reviewTestAnswers(){
   document.getElementById('rdResultsOverlay')?.remove();
+  readingState.reviewDefMode=false;
   const overlay=document.getElementById('readingOverlay');
   if(!overlay)return;
   const ts=ieltsTestSets.find(t=>t.id===readingState.testSetId);
@@ -6767,10 +7250,16 @@ function _reviewTestAnswers(){
     </div>
     <div class="reading-splitscreen">
       <div style="display:flex;flex-direction:column;flex:1;min-width:0;overflow:hidden;">
-        <div class="reading-passage-pane" style="flex:1;overflow-y:auto;">
+        <div class="reading-passage-pane" style="flex:1;overflow-y:auto;" id="reviewPassagePane">
           <span class="passage-label">PASSAGE ${pIdx+1}</span>
           <h3>${p.title}</h3>
-          ${p.passage.split('\n\n').filter(x=>x.trim()).map(x=>{const lbl=x.trim().match(/^\[([A-G])\]\s*/);return lbl?`<p><span class="para-sec-lbl">${lbl[1]}</span>${x.trim().replace(/^\[[A-G]\]\s*/,'')}</p>`:`<p>${x.trim()}</p>`;}).join('')}
+          ${_buildClickablePassage(p.passage)}
+        </div>
+        <div class="rd-def-bar">
+          <button class="rd-def-toggle ${readingState.reviewDefMode?'active':''}" id="reviewDefToggle" onclick="toggleRdDefMode('review')">
+            📖 ${readingState.reviewDefMode?'Defs ON':'Definition Mode'}
+          </button>
+          <span style="opacity:0.6;">Unlocked — click any word to look it up</span>
         </div>
       </div>
       <div class="reading-questions-pane" id="reviewQPane">
@@ -6907,7 +7396,7 @@ function _renderReadingOverlayContent(){
         <div class="reading-passage-pane" id="rdPassagePane" style="flex:1;overflow-y:auto;">
           <span class="passage-label">READING PASSAGE ${pNum}</span>
           <h3>${test.title}</h3>
-          ${test.passage.split('\n\n').filter(p=>p.trim()).map(p=>{const lbl=p.trim().match(/^\[([A-G])\]\s*/);return lbl?`<p><span class="para-sec-lbl">${lbl[1]}</span>${p.trim().replace(/^\[[A-G]\]\s*/,'')}</p>`:`<p>${p.trim()}</p>`;}).join('')}
+          ${_buildClickablePassage(test.passage)}
         </div>
         <div class="rd-highlight-bar" id="rdHlBar">
           <button class="rd-hl-btn" id="rdHlBtn" onclick="toggleRdHighlight()" title="Select text then click to highlight">
@@ -6920,6 +7409,12 @@ function _renderReadingOverlayContent(){
             <span id="rdFontLabel" style="font-size:0.68rem;color:var(--text-secondary);min-width:2.2rem;text-align:center;font-weight:700;">${Math.round(readingState.rdFontSize*16)}px</span>
             <button onclick="rdFontAdj(1)" style="background:var(--bg-primary);border:1.5px solid var(--bg-tertiary);border-radius:6px;color:var(--text-secondary);cursor:pointer;font-size:0.8rem;padding:0.18rem 0.5rem;font-weight:700;transition:all 0.12s;" onmouseover="this.style.color='var(--ielts)'" onmouseout="this.style.color='var(--text-secondary)'">A+</button>
           </div>
+        </div>
+        <div class="rd-def-bar">
+          <button class="rd-def-toggle ${readingState.rdDefMode?'active':''}" id="rdDefToggle" onclick="toggleRdDefMode('practice')">
+            📖 ${readingState.rdDefMode?'Defs ON':'Definition Mode'}
+          </button>
+          <span style="opacity:0.6;">Click any word in the passage to look it up</span>
         </div>
       </div>
       <div class="reading-questions-pane" id="rdQPane">
@@ -6981,6 +7476,8 @@ function _buildQuestionsHtml(test,prefix,qOffset){
       inputHtml=_buildMatchParaHtml(q,qi,prefix);
     }else if(q.type==='matchsent'){
       inputHtml=_buildMatchSentHtml(q,qi,prefix);
+    }else if(q.type==='matchfeature'){
+      inputHtml=_buildMatchFeatHtml(q,qi,prefix);
     }else if(q.type==='table'){
       inputHtml=_buildTableHtml(q,qi,prefix);
     }else if(q.type==='flowchart'){
@@ -7001,6 +7498,9 @@ function _buildQuestionsHtml(test,prefix,qOffset){
           oninput="rdShortAnsInput(this,${wl},${qi},'${prefix}')" onblur="rdShortAnsBlur(this,${wl},${qi},'${prefix}')">
         <span class="rd-shortans-counter" id="${prefix}SAC_${qi}">0/${wl}</span>
       </div>`;
+    }else{
+      inputHtml=`<input type="text" class="reading-input-answer" id="${prefix}Inp_${qi}" placeholder="Type your answer…"
+        oninput="saveReadingTextAnswer(${qi},this.value,'${prefix}')" onblur="saveReadingTextAnswer(${qi},this.value,'${prefix}')">`;
     }
     const isFlagged=readingState.flagged&& readingState.flagged.has(prefix+'_'+qi);
     return`${headerHtml}<div class="reading-question-item" id="${prefix}QItem_${qi}">
@@ -7017,21 +7517,17 @@ function _buildQuestionsHtml(test,prefix,qOffset){
 }
 
 // Build group instruction banners — groups consecutive same-type questions
-// ── Helper: generate the correct word-limit instruction string ──
 function _wordLimitStr(type, wordLimit){
-  // wordLimit: number of words allowed (1, 2, 3, 4). undefined = default per type.
-  const wl = wordLimit || (type==='shortans' ? 3 : 2);
-  const hasNum = type !== 'sentence'; // sentence completion rarely allows a number
-  if(wl === 1) return 'ONE WORD ONLY';
-  const numPart = hasNum ? ' AND/OR A NUMBER' : '';
-  return `NO MORE THAN ${['','ONE','TWO','THREE','FOUR'][wl]} WORD${wl>1?'S':''}${numPart}`;
+  const wl=wordLimit||(type==='shortans'?3:2);
+  const hasNum=(type!=='sentence');
+  if(wl===1)return'ONE WORD ONLY';
+  const numPart=hasNum?' AND/OR A NUMBER':'';
+  return`NO MORE THAN ${['','ONE','TWO','THREE','FOUR'][wl]||wl} WORD${wl>1?'S':''}${numPart}`;
 }
 
 function _buildGroupInstructions(questions, qOffset){
   qOffset=qOffset||0;
   const headers={};
-
-  // Static instructions (no word limit needed)
   const staticInstr={
     tfng:{label:'TRUE / FALSE / NOT GIVEN',color:'#3b82f6',icon:'📋',
       desc:'Do the following statements agree with the information given in the Reading Passage?\nWrite TRUE if the statement agrees with the information\nWrite FALSE if the statement contradicts the information\nWrite NOT GIVEN if there is no information on this'},
@@ -7045,11 +7541,11 @@ function _buildGroupInstructions(questions, qOffset){
       desc:'The Reading Passage has several paragraphs, A–G.\nWhich paragraph contains the following information?\nWrite the correct letter in the boxes. You may use any letter more than once.'},
     matchsent:{label:'MATCHING SENTENCE ENDINGS',color:'#a855f7',icon:'🔚',
       desc:'Complete each sentence with the correct ending, A–G, below.\nWrite the correct letter in the box provided.'},
+    matchfeature:{label:'MATCHING FEATURES',color:'#6366f1',icon:'🔗',
+      desc:'Look at the following statements and the list of features in the box.\nMatch each statement with the correct feature.\nWrite the correct letter in the boxes provided.\nNB You may use any letter more than once.'},
     summary:{label:'SUMMARY COMPLETION',color:'#14b8a6',icon:'📝',
       desc:'Complete the summary below.\nChoose the correct word from the box.\nWrite your answers in the boxes provided.'},
   };
-
-  // Types whose instruction depends on wordLimit from question data
   const dynamicTypes={
     sentence:{label:'SENTENCE COMPLETION',color:'#22c55e',icon:'✏️',
       template:(wlStr)=>`Complete the sentences below.\nChoose ${wlStr} from the passage for each answer.\nWrite your answers in the boxes provided.`},
@@ -7062,54 +7558,26 @@ function _buildGroupInstructions(questions, qOffset){
     diagram:{label:'DIAGRAM LABEL COMPLETION',color:'#ec4899',icon:'🗺️',
       template:(wlStr)=>`Label the diagram below.\nChoose ${wlStr} from the passage for each answer.\nWrite your answers in the boxes provided.`},
   };
-
-  function _buildHeader(type, groupStart, endIdx, firstQ){
-    const isStatic = !!staticInstr[type];
-    const isDynamic = !!dynamicTypes[type];
-    if(!isStatic && !isDynamic) return null;
-
-    const color = isStatic ? staticInstr[type].color : dynamicTypes[type].color;
-    const icon  = isStatic ? staticInstr[type].icon  : dynamicTypes[type].icon;
-    const label = isStatic ? staticInstr[type].label : dynamicTypes[type].label;
-
-    let desc;
-    if(isStatic){
-      desc = staticInstr[type].desc;
-    } else {
-      const wlStr = _wordLimitStr(type, firstQ && firstQ.wordLimit);
-      desc = dynamicTypes[type].template(wlStr);
-    }
-
-    const numLabel = groupStart===endIdx
-      ? `Question ${groupStart+qOffset+1}`
-      : `Questions ${groupStart+qOffset+1}–${endIdx+qOffset+1}`;
-
-    return `<div style="background:rgba(0,0,0,0.04);border-left:3px solid ${color};border-radius:0 8px 8px 0;padding:0.65rem 0.85rem;margin-bottom:0.55rem;margin-top:${groupStart>0?'0.85rem':'0'};">
-      <div style="font-size:0.68rem;font-weight:900;color:${color};text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.22rem;">${icon} ${numLabel}</div>
-      <div style="font-size:0.72rem;font-style:italic;color:var(--text-primary);font-weight:600;margin-bottom:0.18rem;">${label}</div>
+  let lastType=null, groupStart=null, firstQInGroup=null;
+  function _makeHeader(type, groupStart, endIdx, firstQ){
+    const isStatic=!!staticInstr[type], isDynamic=!!dynamicTypes[type];
+    if(!isStatic&&!isDynamic)return null;
+    const src=isStatic?staticInstr[type]:dynamicTypes[type];
+    const desc=isStatic?src.desc:src.template(_wordLimitStr(type,firstQ&&firstQ.wordLimit));
+    const numLabel=groupStart===endIdx?`Question ${groupStart+qOffset+1}`:`Questions ${groupStart+qOffset+1}–${endIdx+qOffset+1}`;
+    return`<div style="background:rgba(0,0,0,0.04);border-left:3px solid ${src.color};border-radius:0 8px 8px 0;padding:0.65rem 0.85rem;margin-bottom:0.55rem;margin-top:${groupStart>0?'0.85rem':'0'};">
+      <div style="font-size:0.68rem;font-weight:900;color:${src.color};text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.22rem;">${src.icon} ${numLabel}</div>
+      <div style="font-size:0.72rem;font-style:italic;color:var(--text-primary);font-weight:600;margin-bottom:0.18rem;">${src.label}</div>
       <div style="font-size:0.7rem;color:var(--text-secondary);line-height:1.6;white-space:pre-line;">${desc}</div>
     </div>`;
   }
-
-  let lastType=null;
-  let groupStart=null;
-  let firstQInGroup=null;
   questions.forEach((q,qi)=>{
     if(q.type!==lastType){
-      if(lastType!==null){
-        const h=_buildHeader(lastType, groupStart, qi-1, firstQInGroup);
-        if(h) headers[groupStart]=h;
-      }
-      lastType=q.type;
-      groupStart=qi;
-      firstQInGroup=q;
+      if(lastType!==null){const h=_makeHeader(lastType,groupStart,qi-1,firstQInGroup);if(h)headers[groupStart]=h;}
+      lastType=q.type; groupStart=qi; firstQInGroup=q;
     }
   });
-  // Last group
-  if(lastType!==null && groupStart!==null){
-    const h=_buildHeader(lastType, groupStart, questions.length-1, firstQInGroup);
-    if(h) headers[groupStart]=h;
-  }
+  if(lastType!==null&&groupStart!==null){const h=_makeHeader(lastType,groupStart,questions.length-1,firstQInGroup);if(h)headers[groupStart]=h;}
   return headers;
 }
 
@@ -7641,6 +8109,15 @@ function _scoreQuestion(q,given){
       });
       return{correct:correct===q.stems.length,partial:correct,total:q.stems.length};
     }catch{return{correct:false,partial:0,total:q.stems?q.stems.length:1};}
+  }else if(q.type==='matchfeature'){
+    try{
+      const answers=JSON.parse(given||'{}');
+      let correct=0;
+      q.statements.forEach((st,si)=>{
+        if((answers[si]||'').toUpperCase().trim()===(st.answer||'').toUpperCase().trim())correct++;
+      });
+      return{correct:correct===q.statements.length,partial:correct,total:q.statements.length};
+    }catch{return{correct:false,partial:0,total:q.statements?q.statements.length:1};}
   }
   // Simple text/sentence types
   const expSafe=(q.answer||'').toLowerCase().trim();
@@ -8133,31 +8610,243 @@ function typeIELTSAnswer(){
 function renderIELTSVocabPanel(){
   const panel=document.getElementById('ieltsContentPanel');
   const cefrColors={A1:'#06b6d4',A2:'#06b6d4',B1:'#22c55e',B2:'#22c55e',C1:'#8b5cf6',C2:'#ef4444'};
-  const html=vocabData.map(v=>{
-    const cc=cefrColors[v.cefr]||'#8b5cf6';
-    return`<div class="ielts-vocab-card">
-      <div style="display:flex;align-items:center;justify-content:space-between;gap:0.4rem;margin-bottom:0.15rem;">
-        <div class="ielts-vocab-word">${v.word}</div>
-        ${v.cefr?`<span style="font-size:0.58rem;font-weight:900;padding:0.06rem 0.38rem;border-radius:4px;background:${cc}22;color:${cc};border:1px solid ${cc};flex-shrink:0;">${v.cefr}</span>`:''}
+  // Group by CEFR
+  const groups={B1:[],B2:[],C1:[],C2:[]};
+  vocabData.forEach(v=>{const g=groups[v.cefr];if(g)g.push(v);});
+  const groupOrder=['B1','B2','C1','C2'];
+  const groupLabels={B1:'B1 — Intermediate',B2:'B2 — Upper-Intermediate',C1:'C1 — Advanced',C2:'C2 — Proficiency'};
+  let html='';
+  groupOrder.forEach(lvl=>{
+    const words=groups[lvl];
+    if(!words||!words.length)return;
+    const cc=cefrColors[lvl]||'#8b5cf6';
+    html+=`<div style="margin-bottom:1.1rem;">
+      <div style="font-size:0.68rem;font-weight:800;color:${cc};text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.45rem;display:flex;align-items:center;gap:0.4rem;">
+        <span style="background:${cc}22;border:1px solid ${cc};border-radius:4px;padding:0.06rem 0.4rem;">${lvl}</span>
+        <span style="color:var(--text-secondary);font-weight:500;">${groupLabels[lvl]}</span>
+        <span style="color:var(--text-secondary);font-weight:400;">(${words.length})</span>
       </div>
-      <div class="ielts-vocab-pos">${v.pos}</div>
-      <div class="ielts-vocab-def">${v.definition}</div>
-      <div style="margin-top:0.4rem;display:flex;flex-wrap:wrap;gap:0.2rem;">
-        ${v.collocations.slice(0,2).map(c=>`<span style="font-size:0.63rem;background:rgba(139,92,246,0.1);color:var(--ielts);border-radius:4px;padding:0.08rem 0.35rem;">${c}</span>`).join('')}
+      <div style="display:flex;flex-wrap:wrap;gap:0.4rem;">
+        ${words.map(v=>`<button onclick="openVocabDetailPage('${v.word.replace(/'/g,"\\\'")}')"
+          style="background:var(--bg-primary);border:1.5px solid rgba(139,92,246,0.2);border-radius:8px;
+                 padding:0.4rem 0.75rem;cursor:pointer;font-size:0.88rem;font-weight:700;
+                 color:var(--ielts);transition:all 0.14s;font-family:inherit;"
+          onmouseover="this.style.borderColor='var(--ielts)';this.style.background='rgba(139,92,246,0.08)'"
+          onmouseout="this.style.borderColor='rgba(139,92,246,0.2)';this.style.background='var(--bg-primary)'"
+        >${v.word}</button>`).join('')}
       </div>
     </div>`;
-  }).join('');
+  });
   panel.innerHTML=`
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.85rem;flex-wrap:wrap;gap:0.5rem;">
       <div>
         <span style="color:var(--ielts);font-weight:800;font-size:0.95rem;">📖 IELTS Vocabulary</span>
-        <span style="margin-left:0.5rem;font-size:0.75rem;color:var(--text-secondary);">${vocabData.length} academic words</span>
+        <span style="margin-left:0.5rem;font-size:0.75rem;color:var(--text-secondary);">${vocabData.length} words — tap any word to study it</span>
       </div>
-      <div style="display:flex;gap:0.4rem;">
-        <button onclick="openVocabGame()" style="background:var(--ielts);color:#fff;border:none;border-radius:8px;padding:0.4rem 0.8rem;cursor:pointer;font-size:0.82rem;font-weight:700;">🎯 Quiz Mode</button>
+      <button onclick="openVocabGame()" style="background:var(--ielts);color:#fff;border:none;border-radius:8px;padding:0.4rem 0.8rem;cursor:pointer;font-size:0.82rem;font-weight:700;">🎯 Quiz Mode</button>
+    </div>
+    ${html}`;
+}
+
+// ── Vocab Detail Full Page ─────────────────────────────────────────────────
+let _vocabDetailWord=null;
+let _vocabQuizState={step:0,answered:false,chosen:''};
+
+function openVocabDetailPage(word){
+  _vocabDetailWord=word;
+  _vocabQuizState={step:0,answered:false,chosen:''};
+  const pb=document.getElementById('topProgressBar');
+  if(pb)pb.style.display='none';
+  _buildVocabDetailShell();
+  _renderVocabDetail();
+}
+
+function _buildVocabDetailShell(){
+  let overlay=document.getElementById('vocabDetailPage');
+  if(!overlay){overlay=document.createElement('div');overlay.id='vocabDetailPage';document.body.appendChild(overlay);}
+  overlay.style.cssText='position:fixed;inset:0;z-index:1500;display:flex;flex-direction:column;background:var(--bg-primary);overflow:hidden;';
+  const v=vocabData.find(x=>x.word===_vocabDetailWord)||vocabData[0];
+  const idx=vocabData.indexOf(v);
+  const prev=idx>0?vocabData[idx-1].word:null;
+  const next=idx<vocabData.length-1?vocabData[idx+1].word:null;
+  const cefrColors={A1:'#06b6d4',A2:'#06b6d4',B1:'#22c55e',B2:'#22c55e',C1:'#8b5cf6',C2:'#ef4444'};
+  const cc=cefrColors[v.cefr]||'#8b5cf6';
+  overlay.innerHTML=`
+    <div style="flex-shrink:0;display:flex;align-items:center;gap:0.5rem;padding:0.6rem 0.75rem;background:var(--bg-secondary);border-bottom:1px solid var(--bg-tertiary);">
+      <button onclick="closeVocabDetailPage()" style="background:var(--bg-tertiary);border:none;border-radius:8px;padding:0.38rem 0.65rem;cursor:pointer;color:var(--text-secondary);font-size:0.8rem;font-weight:700;white-space:nowrap;">← Back</button>
+      <div style="flex:1;display:flex;align-items:baseline;gap:0.5rem;overflow:hidden;">
+        <span style="font-size:1.1rem;font-weight:900;color:var(--ielts);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${v.word}</span>
+        <span style="font-size:0.72rem;color:var(--text-secondary);font-style:italic;white-space:nowrap;">${v.pos}</span>
+        ${v.cefr?`<span style="font-size:0.6rem;font-weight:900;padding:0.06rem 0.38rem;border-radius:4px;background:${cc}22;color:${cc};border:1px solid ${cc};flex-shrink:0;">${v.cefr}</span>`:''}
+      </div>
+      <div style="display:flex;gap:0.3rem;">
+        ${prev?`<button onclick="openVocabDetailPage('${prev.replace(/'/g,"\\\'")}')" style="background:var(--bg-tertiary);border:none;border-radius:7px;padding:0.35rem 0.6rem;cursor:pointer;color:var(--text-secondary);font-size:0.78rem;font-weight:700;">‹</button>`:''}
+        ${next?`<button onclick="openVocabDetailPage('${next.replace(/'/g,"\\\'")}')" style="background:var(--bg-tertiary);border:none;border-radius:7px;padding:0.35rem 0.6rem;cursor:pointer;color:var(--text-secondary);font-size:0.78rem;font-weight:700;">›</button>`:''}
       </div>
     </div>
-    <div class="ielts-vocab-grid">${html}</div>`;
+    <div id="vdpContent" style="flex:1;overflow-y:auto;padding:1rem 1rem 2.5rem;"></div>`;
+}
+
+function _renderVocabDetail(){
+  const v=vocabData.find(x=>x.word===_vocabDetailWord);
+  if(!v)return;
+  const el=document.getElementById('vdpContent');
+  if(!el)return;
+
+  // ── Word forms inference (since data doesn't have them, we generate smart hints) ──
+  function inferForms(word,pos){
+    const p=pos.toLowerCase();
+    const forms=[];
+    if(p.includes('verb')){
+      forms.push({label:'Noun form',hint:'e.g. '+word.replace(/e$/,'')+'tion / '+word+'ing / '+word+'er (varies)'});
+      forms.push({label:'Adjective form',hint:'e.g. '+word.replace(/e$/,'')+'ed / '+word.replace(/e$/,'')+'ive (varies)'});
+    } else if(p.includes('adj')){
+      forms.push({label:'Noun form',hint:'e.g. '+word.replace(/y$/,'i')+'ness / '+word.replace(/t$/,'ce')+' (varies)'});
+      forms.push({label:'Adverb form',hint:'e.g. '+word.replace(/y$/,'i')+'ly / '+word+'ly (varies)'});
+    } else if(p.includes('noun')){
+      forms.push({label:'Verb form',hint:'e.g. '+word.replace(/tion$/,'te').replace(/ity$/,'ise')+'… (varies)'});
+      forms.push({label:'Adjective form',hint:'e.g. '+word.replace(/tion$/,'tional').replace(/ty$/,'tic')+'… (varies)'});
+    }
+    return forms;
+  }
+
+  const wordForms=inferForms(v.word,v.pos);
+
+  // ── Quick exercise (3-choice pick the right definition gap) ──
+  const qs=v;
+  const wrongPool=vocabData.filter(x=>x.word!==v.word);
+  const shuffledWrong=[...wrongPool].sort(()=>Math.random()-0.5).slice(0,2);
+  const choices=[v,...shuffledWrong].sort(()=>Math.random()-0.5);
+  const qSentence=v.sentences[0].replace(new RegExp(`\\b${v.word}\\b`,'i'),'________');
+
+  const answered=_vocabQuizState.answered;
+  const chosen=_vocabQuizState.chosen;
+
+  el.innerHTML=`
+    <!-- DEFINITION -->
+    <div style="background:var(--bg-secondary);border:1px solid var(--bg-tertiary);border-radius:12px;padding:1rem;margin-bottom:0.75rem;">
+      <div style="font-size:0.62rem;color:var(--ielts);font-weight:800;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.35rem;">📘 Definition</div>
+      <div style="font-size:0.95rem;color:var(--text-primary);line-height:1.55;">${v.definition}</div>
+    </div>
+
+    <!-- HOW & WHEN TO USE -->
+    <div style="background:var(--bg-secondary);border:1px solid var(--bg-tertiary);border-radius:12px;padding:1rem;margin-bottom:0.75rem;">
+      <div style="font-size:0.62rem;color:#f59e0b;font-weight:800;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.5rem;">💡 How & When to Use</div>
+      <div style="display:flex;flex-direction:column;gap:0.45rem;">
+        <div style="font-size:0.82rem;color:var(--text-secondary);line-height:1.5;">
+          <span style="color:var(--text-primary);font-weight:700;">Register: </span>
+          ${v.cefr==='C1'||v.cefr==='C2'?'Formal/academic — ideal for IELTS essays, reports, and formal writing.':'Semi-formal — suitable for essays and formal discussion.'}
+        </div>
+        <div style="font-size:0.82rem;color:var(--text-secondary);line-height:1.5;">
+          <span style="color:var(--text-primary);font-weight:700;">Best used in: </span>
+          ${v.pos.toLowerCase().includes('verb')?'Argument sentences, topic sentences, and body paragraph analysis.':v.pos.toLowerCase().includes('adj')?'Describing trends, situations, or nouns in IELTS Task 1 & 2.':'Introducing or summarising ideas; thesis statements and conclusions.'}
+        </div>
+        <div style="font-size:0.82rem;color:var(--text-secondary);line-height:1.5;">
+          <span style="color:var(--text-primary);font-weight:700;">Avoid: </span>
+          Using this word in informal contexts, casual speech, or overusing it (once per essay is ideal).
+        </div>
+      </div>
+    </div>
+
+    <!-- COLLOCATIONS -->
+    <div style="background:var(--bg-secondary);border:1px solid var(--bg-tertiary);border-radius:12px;padding:1rem;margin-bottom:0.75rem;">
+      <div style="font-size:0.62rem;color:#22c55e;font-weight:800;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.45rem;">🔗 Collocations</div>
+      <div style="display:flex;flex-wrap:wrap;gap:0.35rem;">
+        ${v.collocations.map(c=>`<span style="background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);color:#22c55e;border-radius:6px;padding:0.25rem 0.6rem;font-size:0.8rem;font-weight:600;">${c}</span>`).join('')}
+      </div>
+    </div>
+
+    <!-- EXAMPLE SENTENCES -->
+    <div style="background:var(--bg-secondary);border:1px solid var(--bg-tertiary);border-radius:12px;padding:1rem;margin-bottom:0.75rem;">
+      <div style="font-size:0.62rem;color:#3b82f6;font-weight:800;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.45rem;">✍️ Example Sentences</div>
+      <div style="display:flex;flex-direction:column;gap:0.5rem;">
+        ${v.sentences.map((s,i)=>`
+          <div style="display:flex;gap:0.5rem;align-items:flex-start;">
+            <span style="background:rgba(59,130,246,0.12);color:#3b82f6;border-radius:4px;padding:0.06rem 0.35rem;font-size:0.65rem;font-weight:800;flex-shrink:0;margin-top:0.15rem;">${i+1}</span>
+            <span style="font-size:0.85rem;color:var(--text-secondary);line-height:1.55;">${s.replace(new RegExp(`\\b(${v.word}[a-z]*)\\b`,'gi'),m=>`<strong style="color:var(--ielts);">${m}</strong>`)}</span>
+          </div>`).join('')}
+      </div>
+    </div>
+
+    <!-- SYNONYMS & ANTONYMS -->
+    ${(v.synonyms&&v.synonyms.length)||(v.antonyms&&v.antonyms.length)?`
+    <div style="background:var(--bg-secondary);border:1px solid var(--bg-tertiary);border-radius:12px;padding:1rem;margin-bottom:0.75rem;">
+      <div style="font-size:0.62rem;color:#ec4899;font-weight:800;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.45rem;">🔄 Synonyms & Antonyms</div>
+      <div style="display:flex;flex-direction:column;gap:0.45rem;">
+        ${v.synonyms&&v.synonyms.length?`<div style="display:flex;gap:0.4rem;flex-wrap:wrap;align-items:center;">
+          <span style="font-size:0.7rem;color:var(--text-secondary);font-weight:700;width:60px;flex-shrink:0;">Synonyms</span>
+          ${v.synonyms.map(s=>`<span style="background:rgba(236,72,153,0.08);border:1px solid rgba(236,72,153,0.2);color:#ec4899;border-radius:5px;padding:0.18rem 0.5rem;font-size:0.78rem;">${s}</span>`).join('')}
+        </div>`:''}
+        ${v.antonyms&&v.antonyms.length?`<div style="display:flex;gap:0.4rem;flex-wrap:wrap;align-items:center;">
+          <span style="font-size:0.7rem;color:var(--text-secondary);font-weight:700;width:60px;flex-shrink:0;">Antonyms</span>
+          ${v.antonyms.map(s=>`<span style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);color:#ef4444;border-radius:5px;padding:0.18rem 0.5rem;font-size:0.78rem;">${s}</span>`).join('')}
+        </div>`:''}
+      </div>
+    </div>`:''}
+
+    <!-- OTHER FORMS -->
+    ${wordForms.length?`
+    <div style="background:var(--bg-secondary);border:1px solid var(--bg-tertiary);border-radius:12px;padding:1rem;margin-bottom:0.75rem;">
+      <div style="font-size:0.62rem;color:#f97316;font-weight:800;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.45rem;">📐 Other Word Forms</div>
+      <div style="display:flex;flex-direction:column;gap:0.4rem;">
+        ${wordForms.map(f=>`<div style="font-size:0.82rem;"><span style="color:var(--text-primary);font-weight:700;">${f.label}:</span> <span style="color:var(--text-secondary);">${f.hint}</span></div>`).join('')}
+        <div style="font-size:0.73rem;color:var(--text-secondary);margin-top:0.2rem;font-style:italic;">Tip: Look up the exact form in a dictionary — word family rules have many exceptions.</div>
+      </div>
+    </div>`:''}
+
+    <!-- IELTS TIP -->
+    <div style="background:rgba(139,92,246,0.07);border:1px solid rgba(139,92,246,0.18);border-radius:12px;padding:1rem;margin-bottom:0.75rem;">
+      <div style="font-size:0.62rem;color:var(--ielts);font-weight:800;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.4rem;">🎯 IELTS Writing Tip</div>
+      <div style="font-size:0.82rem;color:var(--text-secondary);line-height:1.55;">
+        Try using <strong style="color:var(--ielts);">${v.word}</strong> in your next practice essay. 
+        A strong collocation to remember: <em style="color:var(--text-primary);">"${v.collocations[0]}"</em>.
+        ${v.synonyms&&v.synonyms.length?`You can vary your vocabulary by occasionally replacing it with <em style="color:var(--text-primary);">${v.synonyms[0]}</em>.`:''}
+      </div>
+    </div>
+
+    <!-- QUICK EXERCISE -->
+    <div style="background:var(--bg-secondary);border:2px solid rgba(139,92,246,0.3);border-radius:12px;padding:1rem;margin-bottom:0.75rem;">
+      <div style="font-size:0.62rem;color:var(--ielts);font-weight:800;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.6rem;">⚡ Quick Exercise — Choose the Correct Word</div>
+      <div style="font-size:0.88rem;color:var(--text-primary);line-height:1.6;margin-bottom:0.75rem;background:var(--bg-primary);border-radius:8px;padding:0.7rem;">
+        ${qSentence}
+      </div>
+      <div style="display:flex;flex-direction:column;gap:0.35rem;">
+        ${choices.map(c=>{
+          let bg='var(--bg-primary)';let border='1px solid var(--bg-tertiary)';let col='var(--text-primary)';
+          if(answered){
+            if(c.word===v.word){bg='rgba(34,197,94,0.12)';border='1.5px solid #22c55e';col='#22c55e';}
+            else if(c.word===chosen){bg='rgba(239,68,68,0.08)';border='1.5px solid #ef4444';col='#ef4444';}
+          }
+          return`<button onclick="_vocabDetailAnswer('${c.word}')" ${answered?'disabled':''} 
+            style="background:${bg};border:${border};border-radius:8px;padding:0.55rem 0.8rem;
+                   cursor:${answered?'default':'pointer'};text-align:left;font-size:0.84rem;font-weight:600;
+                   color:${col};font-family:inherit;transition:all 0.12s;">${c.word}</button>`;
+        }).join('')}
+      </div>
+      ${answered?`<div style="margin-top:0.6rem;padding:0.55rem 0.75rem;border-radius:8px;background:${chosen===v.word?'rgba(34,197,94,0.1)':'rgba(239,68,68,0.08)'};font-size:0.82rem;color:${chosen===v.word?'#22c55e':'#ef4444'};">
+        ${chosen===v.word?'✅ Correct! Well done.':'❌ Incorrect. The answer is <strong>'+v.word+'</strong>.'}
+      </div>`:''}
+    </div>
+
+    <!-- NAV FOOTER -->
+    <div style="display:flex;gap:0.5rem;margin-top:0.5rem;">
+      <button onclick="closeVocabDetailPage()" style="flex:1;background:var(--bg-tertiary);color:var(--text-secondary);border:none;border-radius:10px;padding:0.65rem;cursor:pointer;font-size:0.85rem;font-weight:700;">← Word List</button>
+      <button onclick="openVocabGame()" style="flex:1;background:var(--ielts);color:#fff;border:none;border-radius:10px;padding:0.65rem;cursor:pointer;font-size:0.85rem;font-weight:700;">🎯 Quiz Mode</button>
+    </div>`;
+}
+
+function _vocabDetailAnswer(word){
+  if(_vocabQuizState.answered)return;
+  _vocabQuizState.answered=true;
+  _vocabQuizState.chosen=word;
+  _renderVocabDetail();
+}
+
+function closeVocabDetailPage(){
+  const overlay=document.getElementById('vocabDetailPage');
+  if(overlay)overlay.remove();
+  const pb=document.getElementById('topProgressBar');
+  if(pb)pb.style.display='';
 }
 
 function renderIELTSGrammarPanel(){
@@ -9000,6 +9689,189 @@ function showDefPopup(word,anchor){
   });
   clearTimeout(popup._hideTimer);
   popup._hideTimer=setTimeout(()=>{if(!popup.classList.contains('pinned'))hideDefPopup();},6000);
+}
+
+// ── Word Card (rich vocab card) ──
+function showWordCard(word, anchorEl){
+  const v=vocabData.find(x=>x.word.toLowerCase()===word.toLowerCase());
+  if(!v)return;
+  const card=document.getElementById('wordCard');
+  if(!card)return;
+
+  // Populate
+  document.getElementById('wcWord').textContent=v.word;
+  document.getElementById('wcPos').textContent=v.pos||'';
+  const cefrEl=document.getElementById('wcCefr');
+  if(v.cefr){
+    cefrEl.textContent=v.cefr;
+    cefrEl.className=`word-card-cefr cefr-${v.cefr.toLowerCase()}`;
+    cefrEl.style.display='inline-block';
+  } else cefrEl.style.display='none';
+  document.getElementById('wcDef').textContent=v.definition||'';
+
+  // Collocations
+  const collSec=document.getElementById('wcCollSection');
+  const collDiv=document.getElementById('wcColl');
+  const collDivider=document.getElementById('wcCollDivider');
+  if(v.collocations&&v.collocations.length){
+    collDiv.innerHTML=v.collocations.slice(0,5).map(c=>`<span class="word-card-coll-tag">${c}</span>`).join('');
+    collSec.style.display='block';
+    collDivider.style.display='block';
+  } else { collSec.style.display='none'; collDivider.style.display='none'; }
+
+  // Sentences
+  const sentSec=document.getElementById('wcSentSection');
+  const sentsDiv=document.getElementById('wcSents');
+  if(v.sentences&&v.sentences.length){
+    sentsDiv.innerHTML=v.sentences.slice(0,2).map(s=>`<div class="word-card-sentence">${s}</div>`).join('');
+    sentSec.style.display='block';
+  } else sentSec.style.display='none';
+
+  // Synonyms / Antonyms
+  const synSec=document.getElementById('wcSynSection');
+  const synEl=document.getElementById('wcSyn');
+  const antEl=document.getElementById('wcAnt');
+  const hasSyn=v.synonyms&&v.synonyms.length;
+  const hasAnt=v.antonyms&&v.antonyms.length;
+  if(hasSyn||hasAnt){
+    synEl.textContent=hasSyn?v.synonyms.slice(0,4).join(', '):'—';
+    antEl.textContent=hasAnt?v.antonyms.slice(0,4).join(', '):'—';
+    synSec.style.display='block';
+  } else synSec.style.display='none';
+
+  // Position
+  card.classList.remove('show');
+  card.style.left='';card.style.top='';
+  requestAnimationFrame(()=>{
+    card.classList.add('show');
+    const vw=window.innerWidth,vh=window.innerHeight;
+    const cw=card.offsetWidth||300,ch=card.offsetHeight||260;
+    let left, top;
+    if(anchorEl){
+      const rect=anchorEl.getBoundingClientRect();
+      left=rect.left;
+      top=rect.bottom+10;
+      if(top+ch>vh-10) top=rect.top-ch-10;
+      if(left+cw>vw-12) left=vw-cw-12;
+      if(left<8) left=8;
+    } else {
+      left=Math.max(8,(vw-cw)/2);
+      top=Math.max(8,(vh-ch)/2);
+    }
+    card.style.left=left+'px';
+    card.style.top=top+'px';
+  });
+  clearTimeout(card._hideTimer);
+  card._hideTimer=setTimeout(()=>hideWordCard(),12000);
+}
+
+function hideWordCard(){
+  const card=document.getElementById('wordCard');
+  if(card){card.classList.remove('show');}
+}
+
+document.addEventListener('click',function(e){
+  const card=document.getElementById('wordCard');
+  if(card&&card.classList.contains('show')&&!e.target.closest('#wordCard')&&!e.target.closest('.rd-def-word')){
+    hideWordCard();
+  }
+});
+
+// ── Build clickable passage (for definition mode) ──
+function _buildClickablePassage(passageText){
+  return passageText.split('\n\n').filter(p=>p.trim()).map(para=>{
+    const lbl=para.trim().match(/^\[([A-G])\]\s*/);
+    const clean=lbl?para.trim().replace(/^\[[A-G]\]\s*/,''):para.trim();
+    const lblHtml=lbl?`<span class="para-sec-lbl">${lbl[1]}</span>`:'';
+    // Wrap each word in a span for click-to-lookup
+    const wordified=clean.replace(/([a-zA-Z]{3,})/g,(match)=>{
+      const key=match.toLowerCase();
+      const hasData=vocabData.some(v=>v.word.toLowerCase()===key);
+      if(hasData) return`<span class="rd-def-word" data-word="${key}" onclick="rdPassageWordClick(event,'${key}')">${match}</span>`;
+      return match;
+    });
+    return`<p>${lblHtml}${wordified}</p>`;
+  }).join('');
+}
+
+// ── Reading Passage Word Click ──
+function rdPassageWordClick(e,word){
+  if(!readingState.rdDefMode&&!readingState.reviewDefMode)return;
+  e.stopPropagation();
+  const v=vocabData.find(x=>x.word.toLowerCase()===word);
+  if(!v)return;
+  showWordCard(word,e.target);
+}
+
+// ── Definition Mode toggle ──
+let _rdDefGlobalMode={practice:false,review:false};
+
+function toggleRdDefMode(ctx){
+  if(ctx==='practice'){
+    readingState.rdDefMode=!readingState.rdDefMode;
+    _rdDefGlobalMode.practice=readingState.rdDefMode;
+    const btn=document.getElementById('rdDefToggle');
+    if(btn){btn.classList.toggle('active',readingState.rdDefMode);btn.textContent=(readingState.rdDefMode?'📖 Defs ON':'📖 Definition Mode');}
+    if(!readingState.rdDefMode)hideWordCard();
+  } else if(ctx==='review'){
+    readingState.reviewDefMode=!readingState.reviewDefMode;
+    const btn=document.getElementById('reviewDefToggle');
+    if(btn){btn.classList.toggle('active',readingState.reviewDefMode);btn.textContent=(readingState.reviewDefMode?'📖 Defs ON':'📖 Definition Mode');}
+    if(!readingState.reviewDefMode)hideWordCard();
+  }
+}
+
+function rdDefLockedNotice(){
+  // Brief flash on the locked button
+  const btn=document.querySelector('.rd-def-toggle.locked');
+  if(!btn)return;
+  btn.style.background='rgba(239,68,68,0.12)';
+  btn.style.borderColor='var(--error)';
+  btn.textContent='🔒 Locked until test submitted';
+  setTimeout(()=>{btn.style.background='';btn.style.borderColor='';btn.textContent='🔒 Definition Mode (unlocks after submission)';},1800);
+}
+
+// ── Matching Features builder ──
+function _buildMatchFeatHtml(q,qi,prefix){
+  const featureOptions=q.features.map((f,i)=>`<option value="${f.key}">${f.label}</option>`).join('');
+  return`<div style="background:rgba(99,102,241,0.05);border:1px solid rgba(99,102,241,0.18);border-radius:8px;padding:0.55rem 0.75rem;margin-bottom:0.55rem;">
+    <div style="font-size:0.65rem;font-weight:900;color:#6366f1;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.35rem;">Feature Options</div>
+    ${q.features.map(f=>`<div style="font-size:0.72rem;color:var(--text-secondary);padding:0.15rem 0;"><b style="color:#6366f1;min-width:48px;display:inline-block;">${f.key}</b>${f.label}</div>`).join('')}
+  </div>
+  <div style="font-size:0.68rem;color:var(--text-secondary);margin-bottom:0.38rem;">Match each statement with the correct feature.</div>
+  ${q.statements.map((st,si)=>`
+    <div class="mf-item">
+      <div class="mf-statement">${st.text}</div>
+      <select class="mf-select" id="${prefix}MF_${qi}_${si}" onchange="saveMFAnswer('${prefix}',${qi},${si},this.value)">
+        <option value="">— select —</option>
+        ${featureOptions}
+      </select>
+    </div>`).join('')}`;
+}
+
+function saveMFAnswer(prefix,qi,si,val){
+  // Build the per-question answers object
+  const test=prefix==='rd'?ieltsReadingTests[readingState.passageIdx]:readingState.testPassages[parseInt(prefix.replace('t',''))];
+  if(!test)return;
+  // Collect current select values
+  const q=test.questions[qi];
+  const answers={};
+  q.statements.forEach((_,idx)=>{
+    const sel=document.getElementById(prefix+'MF_'+qi+'_'+idx);
+    if(sel)answers[idx]=sel.value;
+  });
+  const json=JSON.stringify(answers);
+  if(prefix==='rd'){
+    readingState.answers[qi]=json;
+  } else {
+    const pIdx=parseInt(prefix.replace('t',''));
+    if(!readingState.testAnswers[pIdx])readingState.testAnswers[pIdx]={};
+    readingState.testAnswers[pIdx][qi]=json;
+  }
+  const anyFilled=Object.values(answers).some(v=>v);
+  const qEl=document.getElementById(prefix+'QItem_'+qi);
+  if(qEl&&anyFilled)qEl.classList.add('answered');
+  _updateAnsweredCount(prefix);
 }
 
 function pinDefPopup(){
