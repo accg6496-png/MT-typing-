@@ -570,7 +570,7 @@ body{padding-top:22px;}
 .reading-filter-btn{padding:0.32rem 0.78rem;border:1.5px solid var(--bg-tertiary);background:var(--bg-primary);color:var(--text-secondary);border-radius:8px;cursor:pointer;font-size:0.77rem;font-weight:700;transition:all 0.14s;}
 .reading-filter-btn:hover{border-color:var(--ielts);color:var(--ielts);}
 .reading-filter-btn.active{background:var(--ielts);color:#fff;border-color:var(--ielts);}
-@media(max-width:860px){.reading-splitscreen{flex-direction:column;}.reading-passage-pane{border-right:none;border-bottom:2px solid var(--bg-tertiary);max-height:44vh;padding:1rem;}.reading-questions-pane{width:100%;max-height:56vh;}.reading-topbar-title{max-width:130px;}}
+@media(max-width:860px){.reading-overlay{overflow-y:auto;}.reading-splitscreen{flex-direction:column;}.reading-passage-pane{border-right:none;border-bottom:2px solid var(--bg-tertiary);max-height:none;height:auto;min-height:45vh;padding:1rem;}.reading-questions-pane{width:100%;max-height:none;height:auto;min-height:45vh;padding:1rem;}.reading-topbar-title{max-width:130px;}.reading-topbar{position:sticky;top:0;}}
 @media(max-width:520px){.reading-card-grid{grid-template-columns:1fr 1fr;}}
 /* ── Writing Practice/Test tabs ── */
 .writing-mode-tabs{display:flex;gap:0;background:var(--bg-primary);border:2px solid var(--bg-tertiary);border-radius:12px;padding:3px;margin-bottom:1rem;width:fit-content;}
@@ -6693,6 +6693,30 @@ function renderSpeakingPanel(){
   cp.innerHTML=`<div class="speaking-panel">
     <div class="speaking-header">🎙️ IELTS Speaking Practice</div>
     <div class="speaking-intro">Practise all three parts of the IELTS Speaking test. Part 2 includes a built-in 2-minute timer to simulate real exam conditions. Click any cue card to begin.</div>
+
+    <div style="background:linear-gradient(135deg,rgba(139,92,246,0.08),rgba(109,40,217,0.04));border:1.5px solid rgba(139,92,246,0.25);border-radius:12px;padding:1rem;margin:0.75rem 0;">
+      <div style="font-weight:800;color:var(--ielts);font-size:0.85rem;margin-bottom:0.5rem;display:flex;align-items:center;gap:0.4rem;">💡 IELTS Speaking Tips (British Council / IDP / Cambridge)</div>
+      <div style="display:grid;grid-template-columns:1fr;gap:0.45rem;">
+        <div style="font-size:0.78rem;color:var(--text-secondary);line-height:1.6;background:var(--bg-primary);border-radius:8px;padding:0.55rem 0.7rem;">
+          <b style="color:var(--ielts);">Part 1:</b> Keep answers natural but developed. Aim for 2–3 sentences. Avoid one-word answers. Use personal examples.
+        </div>
+        <div style="font-size:0.78rem;color:var(--text-secondary);line-height:1.6;background:var(--bg-primary);border-radius:8px;padding:0.55rem 0.7rem;">
+          <b style="color:var(--ielts);">Part 2 (Cue Card):</b> Use the 1-minute prep time to jot down keyword ideas. Cover all bullet points. Add a personal story or specific example. Don't memorise scripts — examiners notice.
+        </div>
+        <div style="font-size:0.78rem;color:var(--text-secondary);line-height:1.6;background:var(--bg-primary);border-radius:8px;padding:0.55rem 0.7rem;">
+          <b style="color:var(--ielts);">Part 3:</b> Give balanced, analytical answers. Use discourse markers: <i>"On the one hand… on the other hand…"</i>, <i>"Having said that…"</i>. Speculate with <i>"I suppose…"</i>, <i>"I would imagine…"</i>
+        </div>
+        <div style="font-size:0.78rem;color:var(--text-secondary);line-height:1.6;background:var(--bg-primary);border-radius:8px;padding:0.55rem 0.7rem;">
+          <b style="color:var(--ielts);">Fluency &amp; Pronunciation:</b> It's okay to self-correct briefly. Focus on clear rhythm and sentence stress rather than a fake accent. Record yourself and listen back.
+        </div>
+        <div style="font-size:0.78rem;color:var(--text-secondary);line-height:1.6;background:var(--bg-primary);border-radius:8px;padding:0.55rem 0.7rem;">
+          <b style="color:var(--ielts);">Vocabulary:</b> Avoid repeating the same words. Use collocations (e.g. <i>"make a decision"</i>, <i>"take into account"</i>). Learn topic-specific phrases for common themes: work, education, environment, technology.
+        </div>
+        <div style="font-size:0.78rem;color:var(--text-secondary);line-height:1.6;background:var(--bg-primary);border-radius:8px;padding:0.55rem 0.7rem;">
+          <b style="color:var(--ielts);">Grammar:</b> Demonstrate a range — present/past tenses, conditionals (<i>"If I had… I would…"</i>), comparatives, and relative clauses. Accuracy matters more than complexity.
+        </div>
+      </div>
+    </div>
     
     <div class="rd-mode-tabs" style="margin-bottom:1rem;">
       <button class="rd-mode-tab active" id="sp_tab1" onclick="switchSpeakingPart(1)">💬 Part 1 — Introduction</button>
@@ -10848,342 +10872,342 @@ const SPELL_WORDS={
     {word:'young',hint:'In an early stage of life — not *yung*'},
   ],
   medium:[
-    {word:'absence',hint:'Not being present — not *absense*'},
-    {word:'accessible',hint:'Easy to approach, use, or obtain — double s'},
-    {word:'accommodate',hint:'To provide lodging or adapt — double c, double m'},
-    {word:'acknowledge',hint:'To recognise or admit — not *aknowledge*'},
-    {word:'acquire',hint:'To gain possession of — not *aquire*'},
-    {word:'address',hint:'A location; to speak to — double d, double s'},
-    {word:'adequate',hint:'Satisfactory or sufficient — not *adequate* mispelled as *adaquate*'},
-    {word:'adherence',hint:'Sticking to a rule or belief — not *adherance*'},
-    {word:'adjacent',hint:'Next to or near — not *adjecent*'},
-    {word:'adolescent',hint:'A young person — not *adolecent*'},
-    {word:'aggregate',hint:'A collection of items — not *agregate*'},
-    {word:'aggressive',hint:'Ready to attack; assertive — double g, double s'},
-    {word:'alleviate',hint:'To make suffering less severe — not *aleviate*'},
-    {word:'allotment',hint:'A share or portion — double l'},
-    {word:'although',hint:'In spite of the fact — not *altho*'},
-    {word:'amendment',hint:'A change to a law — not *ammendment*'},
-    {word:'analysis',hint:'Detailed examination — not *analysys*; plural is analyses'},
-    {word:'apparent',hint:'Clearly visible; seeming — double p'},
-    {word:'appreciate',hint:'To recognise the value of something — not *apreciate*'},
-    {word:'approach',hint:'To come near; a method — not *approch*'},
-    {word:'appropriate',hint:'Suitable for the circumstances — double p'},
-    {word:'approximate',hint:'Close to the actual value — not *aproximate*'},
-    {word:'argument',hint:'A reason given in support — not *arguement*'},
-    {word:'assessment',hint:'Evaluation or judgement of something — double s'},
-    {word:'association',hint:'A connection or organisation — not *asosiation*'},
-    {word:'assumption',hint:'A thing accepted as true — double s'},
-    {word:'attendance',hint:'The action of being present — not *attendence*'},
-    {word:'attribute',hint:'A quality or characteristic — not *atribute*'},
-    {word:'authority',hint:'Power or right to give orders — not *athority*'},
-    {word:'available',hint:'Able to be used — not *availible*'},
-    {word:'behaviour',hint:'The way one acts — British spelling, not *behavior*'},
-    {word:'beneficial',hint:'Resulting in good — not *benificial*'},
-    {word:'boundary',hint:'A line marking limits — not *boundery*'},
-    {word:'bureaucracy',hint:'A system of complex rules — not *beureaucracy*'},
-    {word:'capacity',hint:'The ability to contain or do — not *capassity*'},
-    {word:'category',hint:'A class or division — not *catagory*'},
-    {word:'characteristic',hint:'A typical quality — not *charachteristic*'},
-    {word:'circumstance',hint:'A condition affecting a situation — not *circumstanse*'},
-    {word:'collaboration',hint:'Working jointly — not *colaboration*'},
-    {word:'commitment',hint:'A pledge or obligation — double m, double t'},
-    {word:'committee',hint:'A group for decision-making — double m, double t, double e'},
-    {word:'communicate',hint:'To share information — not *comunicate*'},
-    {word:'community',hint:'A group living in the same area — not *comunity*'},
-    {word:'competence',hint:'Ability to do something well — not *competanse*'},
-    {word:'competition',hint:'The activity of competing — not *compitition*'},
-    {word:'complement',hint:'Something that completes — not *compliment* (different meaning)'},
-    {word:'completely',hint:'In every way; totally — not *completley*'},
-    {word:'complexity',hint:'The state of being complicated — not *complaxity*'},
-    {word:'component',hint:'A part of a larger whole — not *componant*'},
-    {word:'concentrate',hint:'To focus attention — not *concantrate*'},
-    {word:'conclusion',hint:'The final part or judgement — not *conclussion*'},
-    {word:'consequence',hint:'A result or effect — not *consequense*'},
-    {word:'considerable',hint:'Large in size or amount — not *considarable*'},
-    {word:'consistent',hint:'Acting in the same way — not *consistant*'},
-    {word:'contemporary',hint:'Existing at the same time — not *contempory*'},
-    {word:'contribution',hint:'Something given to a common purpose — not *contibution*'},
-    {word:'controversial',hint:'Giving rise to disagreement — not *contraversial*'},
-    {word:'convenience',hint:'The state of being handy — not *convienence*'},
-    {word:'correlation',hint:'A mutual relationship — double r'},
-    {word:'curriculum',hint:'The subjects studied — double r, double l, -um ending'},
-    {word:'definitely',hint:'Without doubt — not *definitley* or *defintely*'},
-    {word:'democracy',hint:'Government by the people — not *democarcy*'},
-    {word:'demonstrate',hint:'To show or prove — not *demenstrate*'},
-    {word:'dependent',hint:'Relying on another — not *dependant* (adjective form)'},
-    {word:'depression',hint:'A state of low mood — double s'},
-    {word:'description',hint:'A written account — not *discription*'},
-    {word:'deteriorate',hint:'To become progressively worse — not *deteriate*'},
-    {word:'difference',hint:'The way in which things differ — not *differance*'},
-    {word:'dilemma',hint:'A situation with difficult choices — double m'},
-    {word:'disappear',hint:'To cease to be visible — one s, double p'},
-    {word:'discipline',hint:'Training to obey rules — not *disipline*'},
-    {word:'dominance',hint:'Power and influence — not *dominence*'},
-    {word:'effectively',hint:'In a way that achieves the result — not *effectivley*'},
-    {word:'efficiency',hint:'Producing maximum output — not *eficiency*'},
-    {word:'eliminate',hint:'Completely remove — not *elimate*'},
-    {word:'emphasis',hint:'Special importance given to — not *emphises*'},
-    {word:'empirical',hint:'Based on observation — not *empiracle*'},
-    {word:'environment',hint:'The natural world and surroundings — not *enviroment*'},
-    {word:'evidence',hint:'Facts indicating something is true — not *evidance*'},
-    {word:'exaggerate',hint:'To overstate — double g'},
-    {word:'exception',hint:'A case not following the rule — not *excepsion*'},
-    {word:'existence',hint:'The state of being real — not *existance*'},
-    {word:'experience',hint:'Practical contact with events — not *experiance*'},
-    {word:'explanation',hint:'A statement that makes something clear — not *explation*'},
-    {word:'facilitate',hint:'To make easier — not *facillitate*'},
-    {word:'flexibility',hint:'Willingness to change — not *flexability*'},
-    {word:'frequently',hint:'Often; at short intervals — not *frequentley*'},
-    {word:'fulfilment',hint:'Satisfaction of a requirement — single l in British English'},
-    {word:'fundamental',hint:'Central and important — not *fundemental*'},
-    {word:'government',hint:'The group that rules a state — not *goverment*'},
-    {word:'guarantee',hint:'A formal assurance — not *guarentee*'},
-    {word:'hierarchy',hint:'A ranking system — not *heirarchy*'},
-    {word:'hypothesis',hint:'A proposed explanation — not *hypothasis*'},
-    {word:'identical',hint:'Exactly alike — not *identicle*'},
-    {word:'ignorance',hint:'Lack of knowledge — not *ignorence*'},
-    {word:'immediately',hint:'At once — not *imediatley*'},
-    {word:'implement',hint:'To put into effect — not *implament*'},
-    {word:'implication',hint:'A conclusion drawn from evidence — not *implecation*'},
-    {word:'independent',hint:'Free from outside control — not *independant*'},
-    {word:'indigenous',hint:'Originating in a region — not *indiginous*'},
-    {word:'inequality',hint:'Difference in status or wealth — not *inequallity*'},
-    {word:'inevitable',hint:'Certain to happen — not *inevetable*'},
-    {word:'influence',hint:'Power to affect others — not *influance*'},
-    {word:'initiative',hint:'The power to begin something — not *initative*'},
-    {word:'integrate',hint:'To combine parts into a whole — not *intergrate*'},
-    {word:'intelligence',hint:'The ability to learn — not *intelligance*'},
-    {word:'interpretation',hint:'An explanation of meaning — not *interpretaion*'},
-    {word:'intervention',hint:'Action taken to improve a situation — not *intervenion*'},
-    {word:'investigate',hint:'To examine systematically — not *investigat*'},
-    {word:'judgement',hint:'The ability to make decisions — not *judgement* vs *judgment*; both acceptable'},
-    {word:'legislation',hint:'Laws collectively — not *legistation*'},
-    {word:'legitimate',hint:'Conforming to the law — not *legitamite*'},
-    {word:'lieutenant',hint:'A rank in the military — not *lieutenent*'},
-    {word:'maintenance',hint:'The process of keeping in order — not *maintenence*'},
-    {word:'management',hint:'The control of something — not *managment*'},
-    {word:'manufacture',hint:'To make on a large scale — not *manufactur*'},
-    {word:'marginalise',hint:'To treat as unimportant — not *marginalze*'},
-    {word:'mathematics',hint:'The study of numbers — not *mathmatics*'},
-    {word:'mechanism',hint:'A system of parts — not *mechanisim*'},
-    {word:'millennium',hint:'A period of 1,000 years — double l, double n'},
-    {word:'miniature',hint:'A smaller version — not *minature*'},
-    {word:'misconception',hint:'A false idea — not *misconsception*'},
-    {word:'narrative',hint:'A story or account — not *narative*'},
-    {word:'necessary',hint:'Required; essential — one c, double s'},
-    {word:'negotiate',hint:'To reach an agreement by discussion — not *negociate*'},
-    {word:'nuisance',hint:'A person or thing causing annoyance — not *nuisence*'},
-    {word:'objective',hint:'A goal; not influenced by feelings — not *objetive*'},
-    {word:'occurrence',hint:'An event or incident — double c, double r'},
-    {word:'opportunity',hint:'A favourable set of circumstances — not *oportunity*'},
-    {word:'opposition',hint:'Resistance or conflict — double p'},
-    {word:'organise',hint:'To arrange systematically — British spelling'},
-    {word:'parallel',hint:'Running side by side — single r, double l'},
-    {word:'parliament',hint:'A legislative body — not *parliment*'},
-    {word:'participate',hint:'To take part — not *partcipate*'},
-    {word:'particularly',hint:'Especially — not *particuarly*'},
-    {word:'perceive',hint:'To become aware of — ei after c'},
-    {word:'permanent',hint:'Lasting indefinitely — not *permanant*'},
-    {word:'persistence',hint:'Continuing firmly — not *persistance*'},
-    {word:'perspective',hint:'A particular viewpoint — not *perspektive*'},
-    {word:'phenomenon',hint:'A remarkable occurrence — plural is *phenomena*'},
-    {word:'population',hint:'All the inhabitants of a place — not *popuotion*'},
-    {word:'possession',hint:'The state of having something — double s twice'},
-    {word:'practice',hint:'The application of a method (noun) — not *practise* (verb)'},
-    {word:'precede',hint:'To come before — not *preceed*'},
-    {word:'predominant',hint:'Present as the strongest element — not *predominent*'},
-    {word:'preference',hint:'Greater liking for one — not *preferance*'},
-    {word:'principle',hint:'A rule or belief — not *principal* (different meaning)'},
-    {word:'privilege',hint:'A special right or advantage — not *privelege*'},
-    {word:'procedure',hint:'A series of actions — not *proceedure*'},
-    {word:'profession',hint:'A paid occupation — double s'},
-    {word:'prominent',hint:'Important or well-known — not *prominant*'},
-    {word:'pronounce',hint:'To make the sound of — not *pronunce*'},
-    {word:'proportion',hint:'A part in relation to the whole — not *proporsion*'},
-    {word:'psychology',hint:'The study of the mind — note silent p'},
-    {word:'questionnaire',hint:'A set of questions — not *questionaire*'},
-    {word:'recommend',hint:'To suggest as suitable — one c, double m'},
-    {word:'reference',hint:'A citation or mention — not *referance*'},
-    {word:'relevant',hint:'Closely connected — not *relevent*'},
-    {word:'renaissance',hint:'A revival of interest — not *renaisance*'},
-    {word:'repetition',hint:'The action of repeating — not *repitition*'},
-    {word:'representative',hint:'A person acting for others — not *representitive*'},
-    {word:'resistance',hint:'The refusal to accept — not *resistanse*'},
-    {word:'responsibility',hint:'The state of being accountable — not *responsability*'},
-    {word:'significant',hint:'Sufficiently large or important — not *signifcant*'},
-    {word:'sovereignty',hint:'Supreme power or authority — not *soverignty*'},
-    {word:'specifically',hint:'In a precise way — not *specificaly*'},
-    {word:'stereotype',hint:'A fixed idea about a type of person — not *sterotype*'},
-    {word:'straightforward',hint:'Uncomplicated and honest — not *straigthforward*'},
-    {word:'substantial',hint:'Of considerable importance — not *substancial*'},
-    {word:'sufficient',hint:'Enough — not *suffiecient*'},
-    {word:'sustainable',hint:'Able to be maintained long-term — not *sustainible*'},
-    {word:'symbolise',hint:'To be a symbol of — British spelling'},
-    {word:'technology',hint:'Application of scientific knowledge — not *technolegy*'},
-    {word:'temperature',hint:'The degree of heat — not *temperture*'},
-    {word:'tendency',hint:'An inclination to do something — not *tendancy*'},
-    {word:'theoretical',hint:'Based on theory rather than practice — not *theoretial*'},
-    {word:'tolerance',hint:'Willingness to accept difference — not *tolerence*'},
-    {word:'transparent',hint:'Open, honest, and not secretive — not *transparant*'},
-    {word:'unemployment',hint:'The state of not having a job — not *unemplyment*'},
-    {word:'unfortunately',hint:'It is regrettable that — not *unfortunatley*'},
-    {word:'university',hint:'A higher education institution — not *univercity*'},
-    {word:'unnecessary',hint:'Not needed — double n'},
-    {word:'volunteer',hint:'A person who offers to do something — not *voluntear*'},
-    {word:'vulnerable',hint:'Susceptible to harm — not *vulnerble*'},
-    {word:'widespread',hint:'Found over a large area — one word, not *wide spread*'},
+    {word:'absence',hint:'Not being present'},
+    {word:'accessible',hint:'Easy to approach, use, or obtain'},
+    {word:'accommodate',hint:'To provide lodging or adapt'},
+    {word:'acknowledge',hint:'To recognise or admit'},
+    {word:'acquire',hint:'To gain possession of'},
+    {word:'address',hint:'A location; to speak to'},
+    {word:'adequate',hint:'Satisfactory or sufficient'},
+    {word:'adherence',hint:'Sticking to a rule or belief'},
+    {word:'adjacent',hint:'Next to or near'},
+    {word:'adolescent',hint:'A young person'},
+    {word:'aggregate',hint:'A collection of items'},
+    {word:'aggressive',hint:'Ready to attack; assertive'},
+    {word:'alleviate',hint:'To make suffering less severe'},
+    {word:'allotment',hint:'A share or portion'},
+    {word:'although',hint:'In spite of the fact'},
+    {word:'amendment',hint:'A change to a law'},
+    {word:'analysis',hint:'Detailed examination'},
+    {word:'apparent',hint:'Clearly visible; seeming'},
+    {word:'appreciate',hint:'To recognise the value of something'},
+    {word:'approach',hint:'To come near; a method'},
+    {word:'appropriate',hint:'Suitable for the circumstances'},
+    {word:'approximate',hint:'Close to the actual value'},
+    {word:'argument',hint:'A reason given in support'},
+    {word:'assessment',hint:'Evaluation or judgement of something'},
+    {word:'association',hint:'A connection or organisation'},
+    {word:'assumption',hint:'A thing accepted as true'},
+    {word:'attendance',hint:'The action of being present'},
+    {word:'attribute',hint:'A quality or characteristic'},
+    {word:'authority',hint:'Power or right to give orders'},
+    {word:'available',hint:'Able to be used'},
+    {word:'behaviour',hint:'The way one acts'},
+    {word:'beneficial',hint:'Resulting in good'},
+    {word:'boundary',hint:'A line marking limits'},
+    {word:'bureaucracy',hint:'A system of complex rules'},
+    {word:'capacity',hint:'The ability to contain or do'},
+    {word:'category',hint:'A class or division'},
+    {word:'characteristic',hint:'A typical quality'},
+    {word:'circumstance',hint:'A condition affecting a situation'},
+    {word:'collaboration',hint:'Working jointly'},
+    {word:'commitment',hint:'A pledge or obligation'},
+    {word:'committee',hint:'A group for decision-making'},
+    {word:'communicate',hint:'To share information'},
+    {word:'community',hint:'A group living in the same area'},
+    {word:'competence',hint:'Ability to do something well'},
+    {word:'competition',hint:'The activity of competing'},
+    {word:'complement',hint:'Something that completes'},
+    {word:'completely',hint:'In every way; totally'},
+    {word:'complexity',hint:'The state of being complicated'},
+    {word:'component',hint:'A part of a larger whole'},
+    {word:'concentrate',hint:'To focus attention'},
+    {word:'conclusion',hint:'The final part or judgement'},
+    {word:'consequence',hint:'A result or effect'},
+    {word:'considerable',hint:'Large in size or amount'},
+    {word:'consistent',hint:'Acting in the same way'},
+    {word:'contemporary',hint:'Existing at the same time'},
+    {word:'contribution',hint:'Something given to a common purpose'},
+    {word:'controversial',hint:'Giving rise to disagreement'},
+    {word:'convenience',hint:'The state of being handy'},
+    {word:'correlation',hint:'A mutual relationship'},
+    {word:'curriculum',hint:'The subjects studied'},
+    {word:'definitely',hint:'Without doubt'},
+    {word:'democracy',hint:'Government by the people'},
+    {word:'demonstrate',hint:'To show or prove'},
+    {word:'dependent',hint:'Relying on another'},
+    {word:'depression',hint:'A state of low mood'},
+    {word:'description',hint:'A written account'},
+    {word:'deteriorate',hint:'To become progressively worse'},
+    {word:'difference',hint:'The way in which things differ'},
+    {word:'dilemma',hint:'A situation with difficult choices'},
+    {word:'disappear',hint:'To cease to be visible'},
+    {word:'discipline',hint:'Training to obey rules'},
+    {word:'dominance',hint:'Power and influence'},
+    {word:'effectively',hint:'In a way that achieves the result'},
+    {word:'efficiency',hint:'Producing maximum output'},
+    {word:'eliminate',hint:'Completely remove'},
+    {word:'emphasis',hint:'Special importance given to'},
+    {word:'empirical',hint:'Based on observation'},
+    {word:'environment',hint:'The natural world and surroundings'},
+    {word:'evidence',hint:'Facts indicating something is true'},
+    {word:'exaggerate',hint:'To overstate'},
+    {word:'exception',hint:'A case not following the rule'},
+    {word:'existence',hint:'The state of being real'},
+    {word:'experience',hint:'Practical contact with events'},
+    {word:'explanation',hint:'A statement that makes something clear'},
+    {word:'facilitate',hint:'To make easier'},
+    {word:'flexibility',hint:'Willingness to change'},
+    {word:'frequently',hint:'Often; at short intervals'},
+    {word:'fulfilment',hint:'Satisfaction of a requirement'},
+    {word:'fundamental',hint:'Central and important'},
+    {word:'government',hint:'The group that rules a state'},
+    {word:'guarantee',hint:'A formal assurance'},
+    {word:'hierarchy',hint:'A ranking system'},
+    {word:'hypothesis',hint:'A proposed explanation'},
+    {word:'identical',hint:'Exactly alike'},
+    {word:'ignorance',hint:'Lack of knowledge'},
+    {word:'immediately',hint:'At once'},
+    {word:'implement',hint:'To put into effect'},
+    {word:'implication',hint:'A conclusion drawn from evidence'},
+    {word:'independent',hint:'Free from outside control'},
+    {word:'indigenous',hint:'Originating in a region'},
+    {word:'inequality',hint:'Difference in status or wealth'},
+    {word:'inevitable',hint:'Certain to happen'},
+    {word:'influence',hint:'Power to affect others'},
+    {word:'initiative',hint:'The power to begin something'},
+    {word:'integrate',hint:'To combine parts into a whole'},
+    {word:'intelligence',hint:'The ability to learn'},
+    {word:'interpretation',hint:'An explanation of meaning'},
+    {word:'intervention',hint:'Action taken to improve a situation'},
+    {word:'investigate',hint:'To examine systematically'},
+    {word:'judgement',hint:'The ability to make decisions'},
+    {word:'legislation',hint:'Laws collectively'},
+    {word:'legitimate',hint:'Conforming to the law'},
+    {word:'lieutenant',hint:'A rank in the military'},
+    {word:'maintenance',hint:'The process of keeping in order'},
+    {word:'management',hint:'The control of something'},
+    {word:'manufacture',hint:'To make on a large scale'},
+    {word:'marginalise',hint:'To treat as unimportant'},
+    {word:'mathematics',hint:'The study of numbers'},
+    {word:'mechanism',hint:'A system of parts'},
+    {word:'millennium',hint:'A period of 1,000 years'},
+    {word:'miniature',hint:'A smaller version'},
+    {word:'misconception',hint:'A false idea'},
+    {word:'narrative',hint:'A story or account'},
+    {word:'necessary',hint:'Required; essential'},
+    {word:'negotiate',hint:'To reach an agreement by discussion'},
+    {word:'nuisance',hint:'A person or thing causing annoyance'},
+    {word:'objective',hint:'A goal; not influenced by feelings'},
+    {word:'occurrence',hint:'An event or incident'},
+    {word:'opportunity',hint:'A favourable set of circumstances'},
+    {word:'opposition',hint:'Resistance or conflict'},
+    {word:'organise',hint:'To arrange systematically'},
+    {word:'parallel',hint:'Running side by side'},
+    {word:'parliament',hint:'A legislative body'},
+    {word:'participate',hint:'To take part'},
+    {word:'particularly',hint:'Especially'},
+    {word:'perceive',hint:'To become aware of'},
+    {word:'permanent',hint:'Lasting indefinitely'},
+    {word:'persistence',hint:'Continuing firmly'},
+    {word:'perspective',hint:'A particular viewpoint'},
+    {word:'phenomenon',hint:'A remarkable occurrence'},
+    {word:'population',hint:'All the inhabitants of a place'},
+    {word:'possession',hint:'The state of having something'},
+    {word:'practice',hint:'The application of a method (noun)'},
+    {word:'precede',hint:'To come before'},
+    {word:'predominant',hint:'Present as the strongest element'},
+    {word:'preference',hint:'Greater liking for one'},
+    {word:'principle',hint:'A rule or belief'},
+    {word:'privilege',hint:'A special right or advantage'},
+    {word:'procedure',hint:'A series of actions'},
+    {word:'profession',hint:'A paid occupation'},
+    {word:'prominent',hint:'Important or well-known'},
+    {word:'pronounce',hint:'To make the sound of'},
+    {word:'proportion',hint:'A part in relation to the whole'},
+    {word:'psychology',hint:'The study of the mind'},
+    {word:'questionnaire',hint:'A set of questions'},
+    {word:'recommend',hint:'To suggest as suitable'},
+    {word:'reference',hint:'A citation or mention'},
+    {word:'relevant',hint:'Closely connected'},
+    {word:'renaissance',hint:'A revival of interest'},
+    {word:'repetition',hint:'The action of repeating'},
+    {word:'representative',hint:'A person acting for others'},
+    {word:'resistance',hint:'The refusal to accept'},
+    {word:'responsibility',hint:'The state of being accountable'},
+    {word:'significant',hint:'Sufficiently large or important'},
+    {word:'sovereignty',hint:'Supreme power or authority'},
+    {word:'specifically',hint:'In a precise way'},
+    {word:'stereotype',hint:'A fixed idea about a type of person'},
+    {word:'straightforward',hint:'Uncomplicated and honest'},
+    {word:'substantial',hint:'Of considerable importance'},
+    {word:'sufficient',hint:'Enough'},
+    {word:'sustainable',hint:'Able to be maintained long-term'},
+    {word:'symbolise',hint:'To be a symbol of'},
+    {word:'technology',hint:'Application of scientific knowledge'},
+    {word:'temperature',hint:'The degree of heat'},
+    {word:'tendency',hint:'An inclination to do something'},
+    {word:'theoretical',hint:'Based on theory rather than practice'},
+    {word:'tolerance',hint:'Willingness to accept difference'},
+    {word:'transparent',hint:'Open, honest, and not secretive'},
+    {word:'unemployment',hint:'The state of not having a job'},
+    {word:'unfortunately',hint:'It is regrettable that'},
+    {word:'university',hint:'A higher education institution'},
+    {word:'unnecessary',hint:'Not needed'},
+    {word:'volunteer',hint:'A person who offers to do something'},
+    {word:'vulnerable',hint:'Susceptible to harm'},
+    {word:'widespread',hint:'Found over a large area'},
   ],
   hard:[
-    {word:'aberration',hint:'A departure from what is normal — double r'},
-    {word:'abhorrence',hint:'Extreme disgust — double r'},
-    {word:'abstemious',hint:'Moderate in eating and drinking — rare vowel sequence'},
+    {word:'aberration',hint:'A departure from what is normal'},
+    {word:'abhorrence',hint:'Extreme disgust'},
+    {word:'abstemious',hint:'Moderate in eating and drinking'},
     {word:'accountability',hint:'Responsibility for one\'s actions — not *accountibility*'},
-    {word:'acquiesce',hint:'To accept reluctantly — not *aquiese*'},
-    {word:'acquaintance',hint:'A person one knows slightly — not *aquaintance*'},
-    {word:'aggravate',hint:'To make worse; to irritate — not *agravate*'},
-    {word:'alleviate',hint:'To make suffering less severe — not *aleviate*'},
-    {word:'ambiguous',hint:'Open to more than one interpretation — not *ambigous*'},
-    {word:'ameliorate',hint:'To make something better — not *ameleorate*'},
-    {word:'anarchism',hint:'Belief in abolishing authority — not *anachism*'},
-    {word:'annihilate',hint:'To destroy utterly — double n'},
-    {word:'anthropological',hint:'Relating to the study of humans — not *anthropologicle*'},
-    {word:'apprehension',hint:'Anxiety or understanding — double p'},
-    {word:'archaeological',hint:'Relating to archaeology — note ae'},
-    {word:'asphyxiation',hint:'Deprivation of oxygen — not *asphixiation*'},
-    {word:'assimilation',hint:'Absorption into a cultural tradition — double s'},
-    {word:'authoritarian',hint:'Favouring strict obedience — not *authoratarian*'},
+    {word:'acquiesce',hint:'To accept reluctantly'},
+    {word:'acquaintance',hint:'A person one knows slightly'},
+    {word:'aggravate',hint:'To make worse; to irritate'},
+    {word:'alleviate',hint:'To make suffering less severe'},
+    {word:'ambiguous',hint:'Open to more than one interpretation'},
+    {word:'ameliorate',hint:'To make something better'},
+    {word:'anarchism',hint:'Belief in abolishing authority'},
+    {word:'annihilate',hint:'To destroy utterly'},
+    {word:'anthropological',hint:'Relating to the study of humans'},
+    {word:'apprehension',hint:'Anxiety or understanding'},
+    {word:'archaeological',hint:'Relating to archaeology'},
+    {word:'asphyxiation',hint:'Deprivation of oxygen'},
+    {word:'assimilation',hint:'Absorption into a cultural tradition'},
+    {word:'authoritarian',hint:'Favouring strict obedience'},
     {word:'autobiography',hint:'An account of one\'s own life — not *autobiograpy*'},
-    {word:'beleaguered',hint:'Surrounded by difficulty — not *beleagured*'},
-    {word:'belligerent',hint:'Hostile and aggressive — not *beligerent*'},
-    {word:'bureaucratic',hint:'Relating to excessive official rules — not *beureacratic*'},
-    {word:'cataclysmic',hint:'Involving sudden violent change — not *cateclysmic*'},
-    {word:'catastrophic',hint:'Involving sudden great damage — not *catastrofic*'},
-    {word:'chronological',hint:'Arranged in order of time — not *cronological*'},
-    {word:'circumspect',hint:'Wary and unwilling to take risks — not *circumspecht*'},
-    {word:'cognitive',hint:'Relating to mental processes — not *cognative*'},
-    {word:'commemorate',hint:'To honour the memory of — not *comemmorate*'},
-    {word:'commensurate',hint:'Corresponding in size — double m'},
+    {word:'beleaguered',hint:'Surrounded by difficulty'},
+    {word:'belligerent',hint:'Hostile and aggressive'},
+    {word:'bureaucratic',hint:'Relating to excessive official rules'},
+    {word:'cataclysmic',hint:'Involving sudden violent change'},
+    {word:'catastrophic',hint:'Involving sudden great damage'},
+    {word:'chronological',hint:'Arranged in order of time'},
+    {word:'circumspect',hint:'Wary and unwilling to take risks'},
+    {word:'cognitive',hint:'Relating to mental processes'},
+    {word:'commemorate',hint:'To honour the memory of'},
+    {word:'commensurate',hint:'Corresponding in size'},
     {word:'conscientious',hint:'Wishing to do one\'s work well — note the sc'},
-    {word:'consciousness',hint:'The state of being aware — double s twice'},
-    {word:'constituency',hint:'A body of voters — not *constituancy*'},
-    {word:'contemporaneous',hint:'Existing at the same time — not *contemporanious*'},
-    {word:'corroborate',hint:'To confirm or give support — double r'},
-    {word:'counterproductive',hint:'Having the opposite of the intended effect — not *counter-productive*'},
-    {word:'crystallise',hint:'To make definite; to form crystals — British spelling'},
-    {word:'deforestation',hint:'The clearing of forests — not *deforistation*'},
-    {word:'demagoguery',hint:'Political activity based on emotion — not *demagogery*'},
-    {word:'demographic',hint:'Relating to the structure of populations — not *demografic*'},
-    {word:'denunciation',hint:'Public condemnation — not *denunshiation*'},
-    {word:'desertification',hint:'The process by which land becomes desert — not *deserification*'},
-    {word:'deterioration',hint:'The process of becoming worse — not *deteriation*'},
-    {word:'disenfranchise',hint:'To deprive of a right — not *disenfranchize*'},
-    {word:'disproportionate',hint:'Too large or small in relation — not *disproporitionate*'},
-    {word:'disseminate',hint:'To spread widely — double s'},
-    {word:'dysfunctional',hint:'Not operating normally — not *disfunctional*'},
-    {word:'ecclesiastical',hint:'Relating to the church — not *ecclesiasticle*'},
-    {word:'egalitarianism',hint:'Belief in equal rights — not *egalitarianism* misspelled as *egaltarianism*'},
-    {word:'eloquence',hint:'Fluent and persuasive speaking — not *eloquanse*'},
-    {word:'emancipation',hint:'The fact of being freed — not *emancapation*'},
-    {word:'empiricism',hint:'Theory that knowledge comes from experience — not *empircism*'},
-    {word:'encapsulate',hint:'To express concisely — not *incapsulate*'},
-    {word:'enlightenment',hint:'The state of having understanding — not *inlightenment*'},
-    {word:'entrepreneurial',hint:'Relating to starting businesses — not *entrepreneural*'},
-    {word:'environmental',hint:'Relating to the natural world — not *enviromental*'},
-    {word:'epidemiological',hint:'Relating to the study of disease distribution — not *epidemiolocical*'},
-    {word:'equivocal',hint:'Ambiguous; open to multiple interpretations — not *equivocle*'},
-    {word:'exacerbate',hint:'To make a problem worse — not *exaserbate*'},
-    {word:'exaggeration',hint:'A statement that overstates — double g'},
-    {word:'exhaustive',hint:'Including all elements; thorough — not *exaustive*'},
-    {word:'expedient',hint:'Convenient and practical — not *expeedient*'},
-    {word:'extrapolate',hint:'To extend conclusions beyond the data — not *extapolate*'},
-    {word:'facetious',hint:'Treating serious issues with inappropriate humour — not *faceious*'},
-    {word:'feasibility',hint:'The state of being possible — not *feasability*'},
-    {word:'fluctuation',hint:'Irregular rising and falling — not *flucuation*'},
-    {word:'fluorescent',hint:'Emitting bright light — not *florescent*'},
-    {word:'fragmentation',hint:'The process of breaking into pieces — not *fragmentaion*'},
-    {word:'geographical',hint:'Relating to geography — not *geografical*'},
-    {word:'gerrymandering',hint:'Manipulating boundaries for political gain — note the double r'},
-    {word:'globalisation',hint:'The process of worldwide integration — British spelling'},
-    {word:'gubernatorial',hint:'Relating to a state governor — not *gubernatoral*'},
-    {word:'hallucination',hint:'An experience of perceiving something not there — double l'},
-    {word:'hegemony',hint:'Leadership or dominance — not *hegomony*'},
-    {word:'heterogeneous',hint:'Diverse in character — not *heterogenious*'},
-    {word:'hierarchical',hint:'Arranged in a hierarchy — not *heirarchical*'},
-    {word:'hypocritical',hint:'Claiming virtues one does not have — not *hypocritcal*'},
-    {word:'idiosyncrasy',hint:'A distinctive characteristic — not *idiosyncrasy* misspelled as *idiosyncracy*'},
-    {word:'immunological',hint:'Relating to the immune system — not *imunological*'},
-    {word:'imperialism',hint:'Extending power through colonisation — not *imperalisim*'},
-    {word:'indefensible',hint:'Not able to be justified — not *indefencible*'},
-    {word:'indispensable',hint:'Absolutely necessary — not *indispensible*'},
-    {word:'industrialisation',hint:'The development of industries — British spelling'},
-    {word:'infrastructure',hint:'Basic facilities of a society — not *infastructure*'},
-    {word:'institutionalise',hint:'To place in an institution — British spelling'},
-    {word:'interdependent',hint:'Mutually reliant — not *interdependant*'},
-    {word:'juxtaposition',hint:'The fact of placing two things close together — not *juxtapostion*'},
-    {word:'laissez-faire',hint:'Non-interference in economics — note the hyphens and spelling'},
-    {word:'legitimisation',hint:'The process of making something legitimate — British spelling'},
-    {word:'magnanimous',hint:'Very generous — not *magnanimious*'},
-    {word:'malnutrition',hint:'Lack of proper nutrition — not *malnurition*'},
-    {word:'marginalisation',hint:'Treatment as insignificant — not *marginalzation*'},
-    {word:'metamorphosis',hint:'A transformation — not *metamorphisis*'},
-    {word:'meteorological',hint:'Relating to weather — not *meteorologicle*'},
-    {word:'miscellaneous',hint:'Of various kinds — not *miscelaneous*'},
-    {word:'misrepresentation',hint:'A false account — not *misrepresentaion*'},
-    {word:'mitigation',hint:'The action of reducing severity — not *mitagation*'},
-    {word:'monotonous',hint:'Dull because of repetition — not *montonous*'},
-    {word:'multifaceted',hint:'Having many aspects — not *multifasceted*'},
-    {word:'multinational',hint:'Operating in many countries — not *mutlinational*'},
-    {word:'narcissism',hint:'Excessive admiration of oneself — not *narcisism*'},
-    {word:'neurological',hint:'Relating to the nervous system — not *neurologicle*'},
-    {word:'nomenclature',hint:'A system of naming — not *nomeclature*'},
-    {word:'nonchalance',hint:'Calm and relaxed manner — not *nonchalanse*'},
-    {word:'obsolescence',hint:'The process of becoming outdated — not *obscolescence*'},
-    {word:'oligarchy',hint:'Rule by a small group — not *olagarchy*'},
-    {word:'omniscient',hint:'Knowing everything — not *omnisciant*'},
-    {word:'oppression',hint:'Prolonged cruel treatment — double p, double s'},
-    {word:'ostracise',hint:'To exclude from society — British spelling, not *ostracize*'},
+    {word:'consciousness',hint:'The state of being aware'},
+    {word:'constituency',hint:'A body of voters'},
+    {word:'contemporaneous',hint:'Existing at the same time'},
+    {word:'corroborate',hint:'To confirm or give support'},
+    {word:'counterproductive',hint:'Having the opposite of the intended effect'},
+    {word:'crystallise',hint:'To make definite; to form crystals'},
+    {word:'deforestation',hint:'The clearing of forests'},
+    {word:'demagoguery',hint:'Political activity based on emotion'},
+    {word:'demographic',hint:'Relating to the structure of populations'},
+    {word:'denunciation',hint:'Public condemnation'},
+    {word:'desertification',hint:'The process by which land becomes desert'},
+    {word:'deterioration',hint:'The process of becoming worse'},
+    {word:'disenfranchise',hint:'To deprive of a right'},
+    {word:'disproportionate',hint:'Too large or small in relation'},
+    {word:'disseminate',hint:'To spread widely'},
+    {word:'dysfunctional',hint:'Not operating normally'},
+    {word:'ecclesiastical',hint:'Relating to the church'},
+    {word:'egalitarianism',hint:'Belief in equal rights'},
+    {word:'eloquence',hint:'Fluent and persuasive speaking'},
+    {word:'emancipation',hint:'The fact of being freed'},
+    {word:'empiricism',hint:'Theory that knowledge comes from experience'},
+    {word:'encapsulate',hint:'To express concisely'},
+    {word:'enlightenment',hint:'The state of having understanding'},
+    {word:'entrepreneurial',hint:'Relating to starting businesses'},
+    {word:'environmental',hint:'Relating to the natural world'},
+    {word:'epidemiological',hint:'Relating to the study of disease distribution'},
+    {word:'equivocal',hint:'Ambiguous; open to multiple interpretations'},
+    {word:'exacerbate',hint:'To make a problem worse'},
+    {word:'exaggeration',hint:'A statement that overstates'},
+    {word:'exhaustive',hint:'Including all elements; thorough'},
+    {word:'expedient',hint:'Convenient and practical'},
+    {word:'extrapolate',hint:'To extend conclusions beyond the data'},
+    {word:'facetious',hint:'Treating serious issues with inappropriate humour'},
+    {word:'feasibility',hint:'The state of being possible'},
+    {word:'fluctuation',hint:'Irregular rising and falling'},
+    {word:'fluorescent',hint:'Emitting bright light'},
+    {word:'fragmentation',hint:'The process of breaking into pieces'},
+    {word:'geographical',hint:'Relating to geography'},
+    {word:'gerrymandering',hint:'Manipulating boundaries for political gain'},
+    {word:'globalisation',hint:'The process of worldwide integration'},
+    {word:'gubernatorial',hint:'Relating to a state governor'},
+    {word:'hallucination',hint:'An experience of perceiving something not there'},
+    {word:'hegemony',hint:'Leadership or dominance'},
+    {word:'heterogeneous',hint:'Diverse in character'},
+    {word:'hierarchical',hint:'Arranged in a hierarchy'},
+    {word:'hypocritical',hint:'Claiming virtues one does not have'},
+    {word:'idiosyncrasy',hint:'A distinctive characteristic'},
+    {word:'immunological',hint:'Relating to the immune system'},
+    {word:'imperialism',hint:'Extending power through colonisation'},
+    {word:'indefensible',hint:'Not able to be justified'},
+    {word:'indispensable',hint:'Absolutely necessary'},
+    {word:'industrialisation',hint:'The development of industries'},
+    {word:'infrastructure',hint:'Basic facilities of a society'},
+    {word:'institutionalise',hint:'To place in an institution'},
+    {word:'interdependent',hint:'Mutually reliant'},
+    {word:'juxtaposition',hint:'The fact of placing two things close together'},
+    {word:'laissez-faire',hint:'Non-interference in economics'},
+    {word:'legitimisation',hint:'The process of making something legitimate'},
+    {word:'magnanimous',hint:'Very generous'},
+    {word:'malnutrition',hint:'Lack of proper nutrition'},
+    {word:'marginalisation',hint:'Treatment as insignificant'},
+    {word:'metamorphosis',hint:'A transformation'},
+    {word:'meteorological',hint:'Relating to weather'},
+    {word:'miscellaneous',hint:'Of various kinds'},
+    {word:'misrepresentation',hint:'A false account'},
+    {word:'mitigation',hint:'The action of reducing severity'},
+    {word:'monotonous',hint:'Dull because of repetition'},
+    {word:'multifaceted',hint:'Having many aspects'},
+    {word:'multinational',hint:'Operating in many countries'},
+    {word:'narcissism',hint:'Excessive admiration of oneself'},
+    {word:'neurological',hint:'Relating to the nervous system'},
+    {word:'nomenclature',hint:'A system of naming'},
+    {word:'nonchalance',hint:'Calm and relaxed manner'},
+    {word:'obsolescence',hint:'The process of becoming outdated'},
+    {word:'oligarchy',hint:'Rule by a small group'},
+    {word:'omniscient',hint:'Knowing everything'},
+    {word:'oppression',hint:'Prolonged cruel treatment'},
+    {word:'ostracise',hint:'To exclude from society'},
     {word:'paternalistic',hint:'Restricting freedom for others\' benefit — not *paternalisitic*'},
-    {word:'pathological',hint:'Relating to or caused by disease — not *pathalogical*'},
-    {word:'patronising',hint:'Treating condescendingly — British spelling'},
-    {word:'pedagogical',hint:'Relating to teaching — not *pedagogicle*'},
-    {word:'perpetuate',hint:'To make something continue — not *perpituate*'},
-    {word:'pharmaceutical',hint:'Relating to medicinal drugs — not *pharmecutical*'},
-    {word:'physiological',hint:'Relating to body functions — not *physiologicle*'},
+    {word:'pathological',hint:'Relating to or caused by disease'},
+    {word:'patronising',hint:'Treating condescendingly'},
+    {word:'pedagogical',hint:'Relating to teaching'},
+    {word:'perpetuate',hint:'To make something continue'},
+    {word:'pharmaceutical',hint:'Relating to medicinal drugs'},
+    {word:'physiological',hint:'Relating to body functions'},
     {word:'plagiarism',hint:'Presenting another\'s work as one\'s own — not *plagarism*'},
-    {word:'polarisation',hint:'Division into opposing extremes — British spelling'},
-    {word:'posthumous',hint:'Occurring after death — not *posthumeous*'},
-    {word:'precautionary',hint:'Taken to prevent harm — not *precautionairy*'},
-    {word:'predetermined',hint:'Established in advance — not *predetermained*'},
-    {word:'predominantly',hint:'Mainly; for the most part — not *predominently*'},
-    {word:'prerequisite',hint:'A required condition — not *prequisite*'},
-    {word:'proliferation',hint:'Rapid increase in number — not *proliferaton*'},
-    {word:'proportionality',hint:'The quality of being proportionate — not *proportionallity*'},
-    {word:'reconciliation',hint:'The restoration of relations — not *reconciliaion*'},
-    {word:'rehabilitation',hint:'The action of restoring — not *rehabilitaion*'},
-    {word:'remuneration',hint:'Money paid for work — not *renumeration*'},
-    {word:'reprehensible',hint:'Deserving censure — not *reprehensable*'},
-    {word:'resilience',hint:'Ability to recover quickly — not *resilliance*'},
-    {word:'retrospective',hint:'Looking back on the past — not *retrospecitive*'},
-    {word:'sanctimonious',hint:'Making a show of being moral — not *sanctimoneous*'},
-    {word:'secularisation',hint:'The process of moving away from religion — British spelling'},
-    {word:'simultaneously',hint:'At the same time — not *simultaniously*'},
-    {word:'socioeconomic',hint:'Relating to both social and economic factors — not *socio-economic* (one word)'},
-    {word:'sovereignty',hint:'Supreme power — not *soverignty*'},
-    {word:'subconscious',hint:'The part of the mind below awareness — not *subconcious*'},
-    {word:'subordinate',hint:'Lower in rank — not *subordanate*'},
-    {word:'surveillance',hint:'Close observation — not *survelance*'},
-    {word:'susceptible',hint:'Likely to be influenced — not *susceptable*'},
-    {word:'sycophantic',hint:'Seeking favour by flattery — not *sychophantic*'},
-    {word:'terminology',hint:'The body of terms used in a subject — not *terminolegy*'},
-    {word:'transformation',hint:'A thorough change — not *transformaion*'},
-    {word:'translucent',hint:'Allowing light through partly — not *translusent*'},
-    {word:'unambiguous',hint:'Not open to more than one interpretation — not *unambigous*'},
-    {word:'unprecedented',hint:'Never done before — not *unprecidented*'},
-    {word:'urbanisation',hint:'The process of becoming urban — British spelling'},
-    {word:'utilitarian',hint:'Designed to be useful rather than pleasing — not *utilitarean*'},
-    {word:'vulnerability',hint:'The quality of being exposed to harm — not *vulnerabilty*'},
-    {word:'xenophobia',hint:'Fear of people from other countries — not *xenaphobia*'},
+    {word:'polarisation',hint:'Division into opposing extremes'},
+    {word:'posthumous',hint:'Occurring after death'},
+    {word:'precautionary',hint:'Taken to prevent harm'},
+    {word:'predetermined',hint:'Established in advance'},
+    {word:'predominantly',hint:'Mainly; for the most part'},
+    {word:'prerequisite',hint:'A required condition'},
+    {word:'proliferation',hint:'Rapid increase in number'},
+    {word:'proportionality',hint:'The quality of being proportionate'},
+    {word:'reconciliation',hint:'The restoration of relations'},
+    {word:'rehabilitation',hint:'The action of restoring'},
+    {word:'remuneration',hint:'Money paid for work'},
+    {word:'reprehensible',hint:'Deserving censure'},
+    {word:'resilience',hint:'Ability to recover quickly'},
+    {word:'retrospective',hint:'Looking back on the past'},
+    {word:'sanctimonious',hint:'Making a show of being moral'},
+    {word:'secularisation',hint:'The process of moving away from religion'},
+    {word:'simultaneously',hint:'At the same time'},
+    {word:'socioeconomic',hint:'Relating to both social and economic factors'},
+    {word:'sovereignty',hint:'Supreme power'},
+    {word:'subconscious',hint:'The part of the mind below awareness'},
+    {word:'subordinate',hint:'Lower in rank'},
+    {word:'surveillance',hint:'Close observation'},
+    {word:'susceptible',hint:'Likely to be influenced'},
+    {word:'sycophantic',hint:'Seeking favour by flattery'},
+    {word:'terminology',hint:'The body of terms used in a subject'},
+    {word:'transformation',hint:'A thorough change'},
+    {word:'translucent',hint:'Allowing light through partly'},
+    {word:'unambiguous',hint:'Not open to more than one interpretation'},
+    {word:'unprecedented',hint:'Never done before'},
+    {word:'urbanisation',hint:'The process of becoming urban'},
+    {word:'utilitarian',hint:'Designed to be useful rather than pleasing'},
+    {word:'vulnerability',hint:'The quality of being exposed to harm'},
+    {word:'xenophobia',hint:'Fear of people from other countries'},
   ]
 };
 
@@ -12269,42 +12293,79 @@ function _buildBarChartSvg(data){
   if(!data)return '';
   if(data.datasets){
     // Grouped bar chart
-    const w=320,h=180,pad={t:20,r:10,b:55,l:40};
+    const numGroups=data.labels.length,numSeries=data.datasets.length;
+    const rotateLabels=numGroups>6;
+    const legendPerRow=Math.max(1,Math.min(numSeries,4));
+    const legendRows=Math.ceil(numSeries/legendPerRow);
+    const notesH=data.notes?11:0;
+    const xLabelH=rotateLabels?26:14;
+    const legendH=legendRows*13+4;
+    const w=360,pad={t:22,r:14,b:xLabelH+legendH+notesH+6,l:40};
+    const h=170+pad.b;
     const iw=w-pad.l-pad.r,ih=h-pad.t-pad.b;
     const allVals=data.datasets.flatMap(d=>d.values);
-    const maxV=Math.max(...allVals)*1.1;
-    const barW=iw/data.labels.length/(data.datasets.length+0.5);
-    let bars='',legends='';
+    const maxV=Math.max(...allVals)*1.15||1;
+    const groupW=iw/numGroups;
+    const barGap=groupW*0.18;
+    const barW=(groupW-barGap)/numSeries;
+    let bars='';
     data.datasets.forEach((ds,di)=>{
       ds.values.forEach((v,li)=>{
         const bh=Math.max(0,(v/maxV)*ih);
-        const bx=pad.l+(li*(data.datasets.length+0.5)+di)*barW+(li*barW*0.3);
+        const groupStart=pad.l+li*groupW+barGap/2;
+        const bx=groupStart+di*barW;
         const by=pad.t+ih-bh;
-        bars+=`<rect x="${bx.toFixed(1)}" y="${by.toFixed(1)}" width="${(barW*0.85).toFixed(1)}" height="${bh.toFixed(1)}" fill="${ds.color}" rx="2"/>`;
+        bars+=`<rect x="${bx.toFixed(1)}" y="${by.toFixed(1)}" width="${(barW*0.86).toFixed(1)}" height="${bh.toFixed(1)}" fill="${ds.color}" rx="1.5"/>`;
       });
-      legends+=`<rect x="${pad.l+di*70}" y="${h-15}" width="10" height="10" fill="${ds.color}" rx="2"/><text x="${pad.l+di*70+13}" y="${h-7}" font-size="8" fill="var(--text-secondary)">${ds.label}</text>`;
     });
+    const xLabelY=pad.t+ih+(rotateLabels?9:12);
     const xLabels=data.labels.map((l,li)=>{
-      const cx=pad.l+(li+0.3)*(iw/data.labels.length)+(li*barW*0.1);
-      return`<text x="${cx.toFixed(1)}" y="${pad.t+ih+12}" font-size="7" fill="var(--text-secondary)" text-anchor="middle">${l}</text>`;
+      const cx=pad.l+li*groupW+groupW/2;
+      if(rotateLabels)return`<text x="${cx.toFixed(1)}" y="${xLabelY}" font-size="7" fill="var(--text-secondary)" text-anchor="end" transform="rotate(-40,${cx.toFixed(1)},${xLabelY})">${l}</text>`;
+      return`<text x="${cx.toFixed(1)}" y="${xLabelY}" font-size="7.5" fill="var(--text-secondary)" text-anchor="middle">${l}</text>`;
     }).join('');
-    return`<svg viewBox="0 0 ${w} ${h}" style="width:100%"><text x="${w/2}" y="12" text-anchor="middle" font-size="9" font-weight="bold" fill="var(--text-primary)">${data.yLabel||''}</text>${bars}${xLabels}${legends}<text x="${pad.l-5}" y="${pad.t+ih/2}" font-size="8" fill="var(--text-secondary)" text-anchor="middle" transform="rotate(-90,${pad.l-12},${pad.t+ih/2})">${data.yLabel||''}</text><text x="${w/2}" y="${h-2}" font-size="7" fill="var(--text-secondary)" text-anchor="middle">${data.notes||''}</text></svg>`;
+    const legendTop=pad.t+ih+xLabelH+10;
+    let legends='';
+    data.datasets.forEach((ds,di)=>{
+      const row=Math.floor(di/legendPerRow),col=di%legendPerRow;
+      const colW=iw/legendPerRow;
+      const lx=pad.l+col*colW;
+      const ly=legendTop+row*13;
+      legends+=`<rect x="${lx.toFixed(1)}" y="${(ly-7).toFixed(1)}" width="8" height="8" fill="${ds.color}" rx="2"/><text x="${(lx+11).toFixed(1)}" y="${ly}" font-size="7.5" fill="var(--text-secondary)">${ds.label}</text>`;
+    });
+    const yGrid=[0,0.25,0.5,0.75,1].map(p=>{
+      const yy=pad.t+ih-p*ih,val=Math.round(maxV*p);
+      return`<line x1="${pad.l}" y1="${yy.toFixed(1)}" x2="${w-pad.r}" y2="${yy.toFixed(1)}" stroke="var(--bg-tertiary)" stroke-width="0.5"/><text x="${(pad.l-4).toFixed(1)}" y="${(yy+3).toFixed(1)}" font-size="7" text-anchor="end" fill="var(--text-secondary)">${val>=1000?(val/1000)+'k':val}</text>`;
+    }).join('');
+    const notesY=legendTop+legendRows*13+2;
+    return`<svg viewBox="0 0 ${w} ${h}" style="width:100%">${yGrid}${bars}${xLabels}${legends}<text x="${w/2}" y="12" text-anchor="middle" font-size="9" font-weight="bold" fill="var(--text-primary)">${data.yLabel||''}</text>${data.notes?`<text x="${w/2}" y="${notesY.toFixed(1)}" font-size="7" fill="var(--text-secondary)" text-anchor="middle">${data.notes}</text>`:''}</svg>`;
   }
-  // Simple bar
-  const w=300,h=180,pad={t:20,r:10,b:45,l:50};
+  // Simple bar (single series) — title shown horizontally above the chart (like the
+  // grouped chart), never rotated alongside the axis, so it can't collide with the
+  // tick numbers the way the old rotated y-axis label used to.
+  const rotateLabels=data.labels.length>6||data.labels.some(l=>l.length>8);
+  const notesH=data.notes?11:0;
+  const w=320,pad={t:24,r:12,b:(rotateLabels?46:34)+notesH,l:34};
+  const h=170+pad.b-notesH+notesH; // keep explicit for clarity
   const iw=w-pad.l-pad.r,ih=h-pad.t-pad.b;
-  const maxV=Math.max(...data.values)*1.1;
-  const barW=iw/data.labels.length*0.7;
+  const maxV=Math.max(...data.values)*1.18||1;
+  const barW=iw/data.labels.length*0.6;
   const gap=iw/data.labels.length;
   const bars=data.values.map((v,i)=>{
     const bh=(v/maxV)*ih;
     const bx=pad.l+i*gap+(gap-barW)/2;
     const by=pad.t+ih-bh;
-    return`<rect x="${bx.toFixed(1)}" y="${by.toFixed(1)}" width="${barW.toFixed(1)}" height="${bh.toFixed(1)}" fill="${(data.colors||[])[i]||'#8b5cf6'}" rx="3"/><text x="${(bx+barW/2).toFixed(1)}" y="${(by-3).toFixed(1)}" font-size="7" text-anchor="middle" fill="var(--text-secondary)">${v>=1000?(v/1000).toFixed(0)+'k':v}</text>`;
+    const valText=v>=1000?(v/1000).toFixed(0)+'k':v;
+    return`<rect x="${bx.toFixed(1)}" y="${by.toFixed(1)}" width="${barW.toFixed(1)}" height="${bh.toFixed(1)}" fill="${(data.colors||[])[i]||'#8b5cf6'}" rx="3"/><text x="${(bx+barW/2).toFixed(1)}" y="${(by-4).toFixed(1)}" font-size="7.5" text-anchor="middle" font-weight="600" fill="var(--text-primary)">${valText}</text>`;
   }).join('');
-  const xLabels=data.labels.map((l,i)=>`<text x="${(pad.l+i*gap+gap/2).toFixed(1)}" y="${pad.t+ih+14}" font-size="8" text-anchor="middle" fill="var(--text-secondary)">${l.length>8?l.slice(0,7)+'…':l}</text>`).join('');
-  const ySteps=[0,0.25,0.5,0.75,1].map(p=>{const v=Math.round(maxV*p);return`<line x1="${pad.l}" y1="${(pad.t+ih-p*ih).toFixed(1)}" x2="${w-pad.r}" y2="${(pad.t+ih-p*ih).toFixed(1)}" stroke="var(--bg-tertiary)" stroke-width="0.5"/><text x="${pad.l-4}" y="${(pad.t+ih-p*ih+3).toFixed(1)}" font-size="7" text-anchor="end" fill="var(--text-secondary)">${v>=1000?(v/1000)+'k':v}</text>`;}).join('');
-  return`<svg viewBox="0 0 ${w} ${h}" style="width:100%">${ySteps}${bars}${xLabels}<text x="${pad.l-5}" y="${pad.t+ih/2}" font-size="8" fill="var(--text-secondary)" text-anchor="middle" transform="rotate(-90,${pad.l-18},${pad.t+ih/2})">${data.yLabel||data.unit||''}</text><text x="${w/2}" y="${h-2}" font-size="7" fill="var(--text-secondary)" text-anchor="middle">${data.notes||''}</text></svg>`;
+  const xLabelY=pad.t+ih+(rotateLabels?9:13);
+  const xLabels=data.labels.map((l,i)=>{
+    const cx=pad.l+i*gap+gap/2;
+    if(rotateLabels)return`<text x="${cx.toFixed(1)}" y="${xLabelY}" font-size="7.5" text-anchor="end" fill="var(--text-secondary)" transform="rotate(-40,${cx.toFixed(1)},${xLabelY})">${l}</text>`;
+    return`<text x="${cx.toFixed(1)}" y="${xLabelY}" font-size="8" text-anchor="middle" fill="var(--text-secondary)">${l}</text>`;
+  }).join('');
+  const ySteps=[0,0.25,0.5,0.75,1].map(p=>{const v=Math.round(maxV*p);const yy=pad.t+ih-p*ih;return`<line x1="${pad.l}" y1="${yy.toFixed(1)}" x2="${w-pad.r}" y2="${yy.toFixed(1)}" stroke="var(--bg-tertiary)" stroke-width="0.5"/><text x="${(pad.l-4).toFixed(1)}" y="${(yy+3).toFixed(1)}" font-size="7" text-anchor="end" fill="var(--text-secondary)">${v>=1000?(v/1000)+'k':v}</text>`;}).join('');
+  return`<svg viewBox="0 0 ${w} ${h}" style="width:100%">${ySteps}${bars}${xLabels}<text x="${w/2}" y="12" text-anchor="middle" font-size="9" font-weight="bold" fill="var(--text-primary)">${data.yLabel||data.unit||''}</text>${data.notes?`<text x="${w/2}" y="${(h-4).toFixed(1)}" font-size="7" fill="var(--text-secondary)" text-anchor="middle">${data.notes}</text>`:''}</svg>`;
 }
 
 function _buildLineChartSvg(data){
@@ -12383,12 +12444,65 @@ function _buildProcessDiagramHtml(steps){
 
 function _buildMapHtml(maps){
   if(!maps||!maps.length)return '';
-  return`<div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">${maps.map(map=>`<div><div style="font-size:0.75rem;font-weight:800;color:var(--ielts);margin-bottom:0.35rem;text-align:center;">${map.label}</div><svg viewBox="0 0 100 100" style="width:100%;border:1.5px solid var(--bg-tertiary);border-radius:8px;background:#f0f9ff;">${map.features.map(f=>{
-    if(f.type==='rect')return`<rect x="${f.x}" y="${f.y}" width="${f.w}" height="${f.h}" fill="${f.fill||'none'}" ${f.stroke?`stroke="${f.stroke}" stroke-width="${f.strokeW||1.5}"`:''} rx="2"/>${f.label?`<text x="${f.x+f.w/2}" y="${f.y+f.h/2+3}" font-size="${f.fontSize||8}" text-anchor="middle" fill="var(--text-primary)" font-weight="600">${f.label.replace('\n','&#10;')}</text>`:''}`;
-    if(f.type==='ellipse')return`<ellipse cx="${50+f.x-50}" cy="${50+f.y-50}" rx="${f.rx}" ry="${f.ry}" fill="${f.fill}" opacity="0.7"/>`;
-    if(f.type==='line')return`<line x1="${f.x1}" y1="${f.y1}" x2="${f.x2}" y2="${f.y2}" stroke="${f.stroke||'#374151'}" stroke-width="${f.w||2}"/>${f.label?`<text x="${(f.x1+f.x2)/2}" y="${(f.y1+f.y2)/2-2}" font-size="6" text-anchor="middle" fill="var(--text-secondary)">${f.label}</text>`:''}`;
-    return'';
-  }).join('')}</svg></div>`).join('')}</div>`;
+  // Labels are placed directly ON the map wherever a shape is big enough to hold the
+  // text (like a real printed IELTS map). Anything too small gets a thin leader line
+  // out to a label in a margin column instead — never text stacked on top of text.
+  const MW=100,MARGIN=96,W=MW+MARGIN;
+  const truncate=(text,maxChars)=>text.length>maxChars?text.slice(0,maxChars-1)+'…':text;
+  const blocks=maps.map(map=>{
+    const shapes=[],inlineLabels=[],callouts=[],bgNames=[];
+    map.features.forEach(f=>{
+      if(f.type==='rect'){
+        const isFrame=!f.fill||f.fill==='none';
+        shapes.push(`<rect x="${f.x}" y="${f.y}" width="${f.w}" height="${f.h}" fill="${f.fill||'none'}" ${f.stroke?`stroke="${f.stroke}" stroke-width="${f.strokeW||1.5}"`:''} rx="1.5"/>`);
+        if(!f.label)return;
+        if(isFrame){callouts.push({ax:f.x+f.w/2,ay:f.y,text:f.label,color:f.stroke||'#374151',line:true});return;}
+        if(f.w*f.h>=4200){bgNames.push(f.label);return;}
+        const fs=Math.min(f.fontSize||8,8);
+        const estW=f.label.length*fs*0.56;
+        if(estW<=f.w*0.92&&f.h>=fs*1.4)inlineLabels.push({x:f.x+f.w/2,y:f.y+f.h/2+fs*0.32,fs,text:f.label});
+        else callouts.push({ax:f.x+f.w/2,ay:f.y+f.h/2,text:f.label,color:f.fill});
+      }else if(f.type==='ellipse'){
+        shapes.push(`<ellipse cx="${f.x}" cy="${f.y}" rx="${f.rx}" ry="${f.ry}" fill="${f.fill}" opacity="0.85"/>`);
+        if(!f.label)return;
+        if(Math.PI*f.rx*f.ry>=4200){bgNames.push(f.label);return;}
+        const fs=Math.min(f.fontSize||8,8);
+        const estW=f.label.length*fs*0.56;
+        if(estW<=f.rx*1.5&&f.ry*1.5>=fs*1.4)inlineLabels.push({x:f.x,y:f.y+fs*0.32,fs,text:f.label});
+        else callouts.push({ax:f.x,ay:f.y,text:f.label,color:f.fill});
+      }else if(f.type==='line'){
+        shapes.push(`<line x1="${f.x1}" y1="${f.y1}" x2="${f.x2}" y2="${f.y2}" stroke="${f.stroke||'#374151'}" stroke-width="${f.w||2}" stroke-linecap="round"/>`);
+        if(!f.label)return;
+        callouts.push({ax:(f.x1+f.x2)/2,ay:(f.y1+f.y2)/2,text:f.label,color:f.stroke||'#374151',line:true});
+      }
+    });
+    callouts.sort((a,b)=>a.ay-b.ay);
+    const n=callouts.length;
+    const fs=n>9?4.6:n>6?5:5.5;
+    const maxChars=Math.floor((MARGIN-18)/(fs*0.56));
+    const calloutHtml=callouts.map((c,i)=>{
+      const slotY=n<=1?50:6+i*(88/(n-1));
+      const lx=MW+7;
+      const swatch=c.line
+        ?`<line x1="${lx}" y1="${slotY.toFixed(1)}" x2="${lx+7}" y2="${slotY.toFixed(1)}" stroke="${c.color}" stroke-width="2.4"/>`
+        :`<rect x="${lx}" y="${(slotY-2.6).toFixed(1)}" width="5.2" height="5.2" fill="${c.color}" rx="1"/>`;
+      return`<line x1="${c.ax.toFixed(1)}" y1="${c.ay.toFixed(1)}" x2="${(lx-2).toFixed(1)}" y2="${slotY.toFixed(1)}" stroke="#94a3b8" stroke-width="0.4" stroke-dasharray="1,1"/><circle cx="${c.ax.toFixed(1)}" cy="${c.ay.toFixed(1)}" r="1" fill="#334155"/>${swatch}<text x="${(lx+9).toFixed(1)}" y="${(slotY+1.9).toFixed(1)}" font-size="${fs}" fill="#1e293b">${truncate(c.text,maxChars)}</text>`;
+    }).join('');
+    const inlineHtml=inlineLabels.map(l=>`<text x="${l.x.toFixed(1)}" y="${l.y.toFixed(1)}" font-size="${l.fs}" text-anchor="middle" font-weight="700" fill="#1e293b" style="paint-order:stroke;stroke:#ffffffcc;stroke-width:2.2px;">${l.text}</text>`).join('');
+    const bgCaption=bgNames.length?`Background: ${bgNames.join(', ')}`:'';
+    return`<div>
+      <div style="font-size:0.8rem;font-weight:800;color:var(--ielts);margin-bottom:${bgCaption?'0.15rem':'0.4rem'};text-align:center;">${map.label}</div>
+      ${bgCaption?`<div style="font-size:0.62rem;color:var(--text-secondary);text-align:center;margin-bottom:0.35rem;font-style:italic;">${bgCaption}</div>`:''}
+      <svg viewBox="0 0 ${W} 100" style="width:100%;display:block;border:1.5px solid var(--bg-tertiary);border-radius:8px;background:#fafafa;">
+        <rect x="0" y="0" width="${MW}" height="100" fill="#f0f9ff"/>
+        ${shapes.join('')}
+        ${inlineHtml}
+        <line x1="${MW}" y1="0" x2="${MW}" y2="100" stroke="var(--bg-tertiary)" stroke-width="0.6"/>
+        ${calloutHtml}
+      </svg>
+    </div>`;
+  }).join('');
+  return`<div style="display:flex;flex-direction:column;gap:1.1rem;">${blocks}</div>`;
 }
 
 function switchWritingTask(t){
