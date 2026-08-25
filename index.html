@@ -67,6 +67,17 @@ h1{font-size:2rem;font-weight:700;background:linear-gradient(135deg,var(--accent
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.7}}
 @keyframes errorFlash{0%,100%{border-color:var(--bg-tertiary)}50%{border-color:var(--error);box-shadow:0 0 0 3px rgba(239,68,68,0.2)}}
 .typing-area.error-flash{animation:errorFlash 0.2s ease;}
+@keyframes errorShake1{0%,100%{transform:translateX(0);border-color:var(--bg-tertiary)}25%,75%{transform:translateX(-2px)}50%{transform:translateX(2px)}}
+@keyframes errorShake2{0%,100%{transform:translateX(0);border-color:var(--bg-tertiary)}20%,60%{transform:translateX(-5px);border-color:var(--error);box-shadow:0 0 0 3px rgba(239,68,68,0.22)}40%,80%{transform:translateX(5px);border-color:var(--error);box-shadow:0 0 0 3px rgba(239,68,68,0.22)}}
+@keyframes errorShake3{0%,100%{transform:translateX(0) rotate(0deg);border-color:var(--bg-tertiary)}15%,55%{transform:translateX(-9px) rotate(-0.4deg);border-color:var(--error);box-shadow:0 0 0 5px rgba(239,68,68,0.32)}35%,75%{transform:translateX(9px) rotate(0.4deg);border-color:var(--error);box-shadow:0 0 0 5px rgba(239,68,68,0.32)}90%{transform:translateX(-3px);}}
+.typing-area.shake-1{animation:errorShake1 0.18s ease;}
+.typing-area.shake-2{animation:errorShake2 0.28s ease;}
+.typing-area.shake-3{animation:errorShake3 0.4s ease;}
+.error-streak-badge{position:absolute;top:0.5rem;right:0.6rem;background:rgba(239,68,68,0.15);color:var(--error);font-size:0.68rem;font-weight:800;padding:0.15rem 0.5rem;border-radius:20px;opacity:0;transition:opacity 0.2s;pointer-events:none;z-index:4;}
+.error-streak-badge.show{opacity:1;}
+mark.rd-passage-highlight{background:rgba(250,204,21,0.45);color:inherit;border-radius:3px;padding:0 2px;box-shadow:0 0 0 2px rgba(250,204,21,0.45);animation:rdHlPulse 1.4s ease 2;}
+@keyframes rdHlPulse{0%,100%{box-shadow:0 0 0 2px rgba(250,204,21,0.45);}50%{box-shadow:0 0 0 5px rgba(250,204,21,0.15);}}
+p.rd-passage-hl-para{scroll-margin:1.2rem;}
 .controls{display:flex;gap:0.6rem;flex-wrap:wrap;justify-content:center;}
 button{background:var(--bg-tertiary);color:var(--text-primary);border:none;padding:0.6rem 1.1rem;border-radius:8px;font-size:0.88rem;font-weight:600;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;gap:0.4rem;}
 button:hover{background:var(--accent);color:#fff;transform:translateY(-1px);}
@@ -396,6 +407,7 @@ body{padding-top:22px;}
 .mh-heading-chip{background:var(--bg-secondary);border:2px solid var(--bg-tertiary);border-radius:8px;padding:0.5rem 0.7rem;font-size:0.78rem;font-weight:600;cursor:grab;transition:all 0.13s;user-select:none;line-height:1.4;color:var(--text-primary);}
 .mh-heading-chip:active{cursor:grabbing;}
 .mh-heading-chip.dragging{opacity:0.45;border-color:var(--ielts);background:rgba(139,92,246,0.08);}
+.mh-heading-chip.selected{border-color:var(--ielts);background:rgba(139,92,246,0.12);box-shadow:0 0 0 2px rgba(139,92,246,0.25);}
 .mh-heading-chip.used{opacity:0.35;cursor:not-allowed;border-style:dashed;}
 .mh-heading-chip.matched-chip{opacity:0.35;cursor:not-allowed;}
 .mh-paras{display:flex;flex-direction:column;gap:0.5rem;}
@@ -890,12 +902,34 @@ body{padding-top:22px;}
         <input class="library-search" id="libSearch" placeholder="Search..." oninput="renderLibrary()">
         <button onclick="clearLibrary()" style="font-size:0.8rem;padding:0.35rem 0.7rem;">Clear</button>
       </div>
+      <div style="display:flex;gap:0.35rem;flex-wrap:wrap;align-items:center;">
+        <select id="libFolderFilter" onchange="renderLibrary()" style="font-size:0.75rem;padding:0.3rem 0.4rem;border-radius:6px;background:var(--bg-primary);color:var(--text-primary);border:1px solid var(--bg-tertiary);">
+          <option value="">📁 All Folders</option>
+        </select>
+        <select id="libSortSelect" onchange="renderLibrary()" style="font-size:0.75rem;padding:0.3rem 0.4rem;border-radius:6px;background:var(--bg-primary);color:var(--text-primary);border:1px solid var(--bg-tertiary);">
+          <option value="recent">Sort: Recent</option>
+          <option value="name">Sort: Name</option>
+          <option value="words">Sort: Word Count</option>
+          <option value="difficulty">Sort: Difficulty</option>
+        </select>
+        <button id="libFavToggle" onclick="libFavOnly=!libFavOnly;renderLibrary()" style="font-size:0.75rem;padding:0.3rem 0.55rem;border-radius:6px;border:1.5px solid var(--bg-tertiary);background:var(--bg-primary);color:var(--text-secondary);cursor:pointer;">⭐ Favorites</button>
+      </div>
+      <div id="libTagFilterBar" style="display:flex;gap:0.3rem;flex-wrap:wrap;"></div>
       <div class="library-list" id="libraryList"></div>
       <hr style="border:none;border-top:1px solid var(--bg-tertiary);">
+      <div style="display:flex;gap:0.4rem;align-items:center;">
+        <input id="libUrlInput" placeholder="Paste an article URL to import..." style="flex:1;font-size:0.78rem;padding:0.4rem 0.55rem;border-radius:6px;background:var(--bg-primary);color:var(--text-primary);border:1px solid var(--bg-tertiary);">
+        <button onclick="importFromUrl()" id="libUrlImportBtn" style="font-size:0.78rem;padding:0.4rem 0.6rem;border-radius:6px;background:rgba(139,92,246,0.15);color:var(--ielts);border:1px solid rgba(139,92,246,0.3);cursor:pointer;font-weight:700;white-space:nowrap;">🌐 Import</button>
+      </div>
+      <div id="libUrlStatus" style="font-size:0.7rem;color:var(--text-secondary);"></div>
       <div class="library-save-area">
         <div class="library-save-row">
           <input class="lib-name-input" id="libNameInput" placeholder="Title..." maxlength="80">
           <button class="lib-save-btn" onclick="saveToLibrary()">Save</button>
+        </div>
+        <div style="display:flex;gap:0.4rem;margin:0.3rem 0;">
+          <input id="libFolderInput" placeholder="Folder (optional)" style="flex:1;font-size:0.76rem;padding:0.35rem 0.5rem;border-radius:6px;background:var(--bg-primary);color:var(--text-primary);border:1px solid var(--bg-tertiary);">
+          <input id="libTagsInput" placeholder="Tags, comma-separated" style="flex:1;font-size:0.76rem;padding:0.35rem 0.5rem;border-radius:6px;background:var(--bg-primary);color:var(--text-primary);border:1px solid var(--bg-tertiary);">
         </div>
         <textarea class="library-textarea" id="libTextInput" placeholder="Paste text here..."></textarea>
       </div>
@@ -956,6 +990,7 @@ body{padding-top:22px;}
 
   <div class="typing-area" id="typingArea">
     <div class="paused-overlay" id="pausedOverlay">⏸ Paused — Press <b>F1</b> or click Resume</div>
+    <div class="error-streak-badge" id="errorStreakBadge">2 in a row</div>
     <div class="text-display" id="textDisplay"></div>
 
   </div>
@@ -1238,6 +1273,7 @@ body{padding-top:22px;}
     <span class="word-card-label">Synonyms </span><span class="word-card-synonyms" id="wcSyn"></span>
     <br><span class="word-card-label">Antonyms </span><span class="word-card-antonyms" id="wcAnt"></span>
   </div>
+  <button id="wcSaveBtn" style="width:100%;margin-top:0.6rem;background:rgba(139,92,246,0.12);color:#8b5cf6;border:1.5px solid rgba(139,92,246,0.3);border-radius:8px;padding:0.45rem;font-weight:700;cursor:pointer;font-size:0.78rem;pointer-events:auto;">⭐ Save to My List</button>
 </div>
 
 <!-- TYPING GAME MODAL -->
@@ -1776,9 +1812,23 @@ questions:[
     {text:"evidence that conservation efforts have produced positive outcomes for some migratory populations",answer:"G"}
   ],
   explanation:"D: fat storage before departure. C: magnetite/magnetic compass requires no learned experience. F: whales killed in other nations' waters. G: wetland restoration stabilised waterbird populations."},
-{type:"sentence",num:11,text:"Salmon locate their home rivers by detecting the stream's distinctive _______ as well as using magnetic sensing.",answer:"odour",wordLimit:1,explanation:"The passage states salmon navigate using 'chemical detection of their home stream's distinctive odour'."},
-{type:"sentence",num:12,text:"Scientists use _______ tracking devices to measure migration mortality rates in bird populations.",answer:"miniaturised",wordLimit:1,explanation:"The passage refers to 'miniaturised tracking devices' used to reveal migration mortality."},
-{type:"shortans",num:13,wordLimit:2,text:"What international agreement does the passage mention as an attempt to protect migratory species across national boundaries?",answer:"Convention on Migratory Species",explanation:"The passage explicitly names 'the Convention on Migratory Species' as the relevant international agreement."}]},
+{type:"classification",num:11,
+  text:"Classify the following navigation strategies according to the type of cue the animal primarily relies on.",
+  categories:[
+    {key:"A",label:"Geomagnetic sensing"},
+    {key:"B",label:"Chemical/olfactory cues"},
+    {key:"C",label:"Learned social knowledge"}
+  ],
+  statements:[
+    {text:"An elephant follows a route it learned by travelling with older herd members.",answer:"C"},
+    {text:"A salmon detects the distinctive odour of its home stream.",answer:"B"},
+    {text:"A migratory bird orients itself using the Earth's magnetic field.",answer:"A"},
+    {text:"A whale calf learns a migration corridor by accompanying its mother.",answer:"C"}
+  ],
+  explanation:"Elephant and whale-calf routes rely on socially transmitted knowledge (C). Salmon use chemical/olfactory detection (B). Magnetic-field orientation is geomagnetic sensing (A)."},
+{type:"sentence",num:12,text:"Salmon locate their home rivers by detecting the stream's distinctive _______ as well as using magnetic sensing.",answer:"odour",wordLimit:1,explanation:"The passage states salmon navigate using 'chemical detection of their home stream's distinctive odour'."},
+{type:"sentence",num:13,text:"Scientists use _______ tracking devices to measure migration mortality rates in bird populations.",answer:"miniaturised",wordLimit:1,explanation:"The passage refers to 'miniaturised tracking devices' used to reveal migration mortality."},
+{type:"shortans",num:14,wordLimit:2,text:"What international agreement does the passage mention as an attempt to protect migratory species across national boundaries?",answer:"Convention on Migratory Species",explanation:"The passage explicitly names 'the Convention on Migratory Species' as the relevant international agreement."}]},
 
 {id:"reading7",title:"The Silk Road: Trade and Cultural Exchange",category:"History & Culture",difficulty:"medium",
 passage:`The network of trade and communication routes that historians have come to call the Silk Road represents one of the most consequential phenomena in the long history of human civilisation. Spanning roughly four thousand kilometres from the eastern margins of the Roman world to the imperial heartlands of China, and operating over a period of more than a thousand years, these routes facilitated an exchange of goods, people, ideas, religions, and technologies so extensive that it effectively connected the major civilisations of the ancient and medieval worlds into a single, if loosely integrated, system of interaction. The name itself — coined by the German geographer Ferdinand von Richthofen in the nineteenth century — is in one sense misleading, since the Silk Road was not a single road at all, but a shifting constellation of overland paths, mountain passes, river crossings, and maritime connections that varied in their importance and usability according to season, political circumstances, and the changing priorities of states and merchants.
@@ -3561,7 +3611,7 @@ const grammarTopics = {
 //  STATE
 // ============================================================
 let currentText = articlesDB["1min"][0].text;
-let startTime=null,timerInterval=null,typedLength=0,errors=0,totalErrors=0,keyMistakeMap={};
+let startTime=null,timerInterval=null,typedLength=0,errors=0,totalErrors=0,keyMistakeMap={},errorStreak=0,maxErrorStreak=0,keystrokeTimestamps=[];
 let isActive=false,isComplete=false,isPaused=false,pauseStart=null;
 let writingMode='practice'; // 'practice' | 'test'
 let wpmHistory=[];
@@ -3635,14 +3685,30 @@ function handleInput(){
     showToast('🔴 +0.5s','#ef4444');
   }
   if(typedLength>prev){
+    keystrokeTimestamps.push(Date.now());
     const nc=val[val.length-1],ec=currentText[val.length-1];
-    if(nc===ec)playTypingSound();
+    if(nc===ec){
+      errorStreak=0;
+      const badge=document.getElementById('errorStreakBadge');
+      if(badge)badge.classList.remove('show');
+      playTypingSound();
+    }
     else{
+      errorStreak++;
+      maxErrorStreak=Math.max(maxErrorStreak,errorStreak);
       playErrorSound();
-      if(navigator.vibrate)navigator.vibrate(40);
-      typingArea.classList.remove('error-flash');void typingArea.offsetWidth;
-      typingArea.classList.add('error-flash');
-      setTimeout(()=>typingArea.classList.remove('error-flash'),250);
+      const tier=errorStreak>=4?3:errorStreak>=2?2:1;
+      const vibPattern=tier===3?[40,30,40,30,60]:tier===2?[35,20,35]:[30];
+      if(navigator.vibrate)navigator.vibrate(vibPattern);
+      typingArea.classList.remove('shake-1','shake-2','shake-3','error-flash');void typingArea.offsetWidth;
+      typingArea.classList.add('shake-'+tier);
+      const dur=tier===3?400:tier===2?280:180;
+      setTimeout(()=>typingArea.classList.remove('shake-'+tier),dur);
+      const badge=document.getElementById('errorStreakBadge');
+      if(badge && errorStreak>=2){
+        badge.textContent=errorStreak+' in a row';
+        badge.classList.add('show');
+      }
     }
   }
   if(typedLength>=currentText.length){completeTest();return;}
@@ -3758,7 +3824,8 @@ function completeTest(){
 function restartTest(){
   clearInterval(timerInterval);
   isActive=false;isComplete=false;isPaused=false;pauseStart=null;
-  startTime=null;typedLength=0;errors=0;totalErrors=0;wpmHistory=[];keyMistakeMap={};
+  startTime=null;typedLength=0;errors=0;totalErrors=0;wpmHistory=[];keyMistakeMap={};errorStreak=0;maxErrorStreak=0;keystrokeTimestamps=[];
+  {const b=document.getElementById('errorStreakBadge');if(b)b.classList.remove('show');}
   WPM_SPARK_POINTS.length=0;
   clearTimedMode();
   hiddenInput.value='';
@@ -4144,34 +4211,178 @@ function closeResults(){
 //  LIBRARY
 // ============================================================
 const LIB_KEY='mt_typing_library';
+let libFavOnly=false;
+let libActiveTags=new Set();
 function loadLibrary(){try{return JSON.parse(localStorage.getItem(LIB_KEY))||[];}catch{return[];}}
 function saveLibraryData(e){localStorage.setItem(LIB_KEY,JSON.stringify(e));updateLibCountBadge();}
 function updateLibCountBadge(){const b=document.getElementById('libCountBadge');if(b)b.textContent=loadLibrary().length;}
+
+function estimateCEFR(text){
+  const words=(text.toLowerCase().match(/[a-z']+/g)||[]).filter(w=>w.length>1);
+  if(!words.length)return'B1';
+  const cefrWeight={a1:0,a2:0.5,b1:1,b2:2,c1:3,c2:4};
+  let score=0;
+  words.forEach(w=>{
+    const v=vocabData.find(x=>x.word.toLowerCase()===w);
+    if(v&&v.cefr&&cefrWeight[v.cefr.toLowerCase()]!==undefined){
+      score+=cefrWeight[v.cefr.toLowerCase()];
+    }else{
+      score+=w.length<=4?0.3:w.length<=6?1:w.length<=9?2:3;
+    }
+  });
+  const avg=score/words.length;
+  if(avg<0.7)return'A2';
+  if(avg<1.3)return'B1';
+  if(avg<1.9)return'B2';
+  if(avg<2.5)return'C1';
+  return'C2';
+}
+const CEFR_COLORS={A1:'#22c55e',A2:'#22c55e',B1:'#3b82f6',B2:'#f59e0b',C1:'#ef4444',C2:'#a855f7'};
+
+function estimateTypingMinutes(wordCount){
+  const hist=getWpmHistory();
+  const avgWpm=hist.length?Math.round(hist.reduce((a,b)=>a+b.wpm,0)/hist.length):40;
+  return Math.max(1,Math.round(wordCount/Math.max(avgWpm,15)));
+}
+
 function saveToLibrary(){
   const name=document.getElementById('libNameInput').value.trim();
   const text=document.getElementById('libTextInput').value.trim();
+  const folder=(document.getElementById('libFolderInput').value||'').trim();
+  const tagsRaw=(document.getElementById('libTagsInput').value||'').trim();
+  const tags=tagsRaw?tagsRaw.split(',').map(t=>t.trim()).filter(Boolean):[];
   if(!name){alert('Enter a title');return;}if(text.length<20){alert('Enter at least 20 characters');return;}
   const entries=loadLibrary();
-  entries.unshift({id:Date.now().toString(),name,text,wordCount:text.split(/\s+/).filter(Boolean).length,createdAt:new Date().toLocaleDateString()});
-  saveLibraryData(entries);document.getElementById('libNameInput').value='';document.getElementById('libTextInput').value='';renderLibrary();
+  const wordCount=text.split(/\s+/).filter(Boolean).length;
+  entries.unshift({
+    id:Date.now().toString(),name,text,wordCount,createdAt:new Date().toLocaleDateString(),
+    folder,tags,favorite:false,
+    difficulty:estimateCEFR(text),
+    estMinutes:estimateTypingMinutes(wordCount)
+  });
+  saveLibraryData(entries);
+  document.getElementById('libNameInput').value='';
+  document.getElementById('libTextInput').value='';
+  document.getElementById('libFolderInput').value='';
+  document.getElementById('libTagsInput').value='';
+  renderLibrary();
+  showToast('Saved to library!','var(--success)');
 }
 function loadFromLibrary(id){const e=loadLibrary().find(x=>x.id===id);if(!e)return;currentText=e.text;restartTest();renderLibrary();}
 function deleteFromLibrary(id,ev){ev.stopPropagation();saveLibraryData(loadLibrary().filter(e=>e.id!==id));renderLibrary();}
 function clearLibrary(){const e=loadLibrary();if(!e.length)return;if(!confirm('Delete all?'))return;saveLibraryData([]);renderLibrary();}
+function toggleLibFavorite(id,ev){
+  ev.stopPropagation();
+  const entries=loadLibrary();
+  const e=entries.find(x=>x.id===id);
+  if(e)e.favorite=!e.favorite;
+  saveLibraryData(entries);
+  renderLibrary();
+}
+function toggleLibTagFilter(tag){
+  if(libActiveTags.has(tag))libActiveTags.delete(tag);
+  else libActiveTags.add(tag);
+  renderLibrary();
+}
+
+async function importFromUrl(){
+  const input=document.getElementById('libUrlInput');
+  const status=document.getElementById('libUrlStatus');
+  const btn=document.getElementById('libUrlImportBtn');
+  const url=(input.value||'').trim();
+  if(!url){status.textContent='Enter a URL first.';status.style.color='#ef4444';return;}
+  let parsed;
+  try{parsed=new URL(url);}catch(e){status.textContent='That is not a valid URL.';status.style.color='#ef4444';return;}
+  btn.disabled=true;btn.textContent='⏳ Fetching...';
+  status.textContent='Fetching and extracting article text...';status.style.color='var(--text-secondary)';
+  try{
+    const proxyUrl='https://api.allorigins.win/raw?url='+encodeURIComponent(url);
+    const res=await fetch(proxyUrl);
+    if(!res.ok)throw new Error('Fetch failed ('+res.status+')');
+    const html=await res.text();
+    const doc=new DOMParser().parseFromString(html,'text/html');
+    doc.querySelectorAll('script,style,nav,header,footer,aside,noscript,iframe,form').forEach(el=>el.remove());
+    let article=doc.querySelector('article')||doc.querySelector('main')||doc.body;
+    const paragraphs=[...article.querySelectorAll('p')]
+      .map(p=>p.textContent.replace(/\s+/g,' ').trim())
+      .filter(t=>t.split(' ').length>8);
+    const text=paragraphs.join('\n\n');
+    const title=(doc.querySelector('title')?.textContent||parsed.hostname).trim().slice(0,80);
+    if(text.length<200){
+      status.textContent='Could not extract enough article text from this page — try pasting manually instead.';
+      status.style.color='#f59e0b';
+    }else{
+      document.getElementById('libNameInput').value=title;
+      document.getElementById('libTextInput').value=text;
+      document.getElementById('libTagsInput').value=parsed.hostname.replace('www.','');
+      status.textContent='✓ Extracted '+text.split(/\s+/).length+' words from '+parsed.hostname+'. Review below, then click Save.';
+      status.style.color='var(--success)';
+    }
+  }catch(e){
+    status.textContent='Import failed — this site may block external fetches. Try pasting the text manually instead.';
+    status.style.color='#ef4444';
+  }finally{
+    btn.disabled=false;btn.textContent='🌐 Import';
+  }
+}
+
 function renderLibrary(){
   const list=document.getElementById('libraryList');if(!list)return;
   const q=(document.getElementById('libSearch')?.value||'').toLowerCase();
-  let entries=loadLibrary();if(q)entries=entries.filter(e=>e.name.toLowerCase().includes(q)||e.text.toLowerCase().includes(q));
+  let entries=loadLibrary();
+  // Backfill fields for legacy entries
+  let touched=false;
+  entries.forEach(e=>{
+    if(e.difficulty===undefined){e.difficulty=estimateCEFR(e.text);touched=true;}
+    if(e.estMinutes===undefined){e.estMinutes=estimateTypingMinutes(e.wordCount);touched=true;}
+    if(e.tags===undefined){e.tags=[];touched=true;}
+    if(e.folder===undefined){e.folder='';touched=true;}
+    if(e.favorite===undefined){e.favorite=false;touched=true;}
+  });
+  if(touched)saveLibraryData(entries);
+
+  // Populate folder filter dropdown
+  const folderSel=document.getElementById('libFolderFilter');
+  if(folderSel){
+    const folders=[...new Set(entries.map(e=>e.folder).filter(Boolean))].sort();
+    const cur=folderSel.value;
+    folderSel.innerHTML=`<option value="">📁 All Folders</option>`+folders.map(f=>`<option value="${f}">${f}</option>`).join('');
+    if(folders.includes(cur))folderSel.value=cur;
+  }
+  // Populate tag filter bar
+  const tagBar=document.getElementById('libTagFilterBar');
+  if(tagBar){
+    const allTags=[...new Set(entries.flatMap(e=>e.tags||[]))].sort();
+    tagBar.innerHTML=allTags.map(t=>`<button onclick="toggleLibTagFilter('${t}')" style="font-size:0.68rem;padding:0.2rem 0.5rem;border-radius:14px;cursor:pointer;border:1.5px solid ${libActiveTags.has(t)?'var(--ielts)':'var(--bg-tertiary)'};background:${libActiveTags.has(t)?'rgba(139,92,246,0.15)':'transparent'};color:${libActiveTags.has(t)?'var(--ielts)':'var(--text-secondary)'};">#${t}</button>`).join('');
+  }
+  document.getElementById('libFavToggle').style.borderColor=libFavOnly?'#f59e0b':'var(--bg-tertiary)';
+  document.getElementById('libFavToggle').style.color=libFavOnly?'#f59e0b':'var(--text-secondary)';
+  document.getElementById('libFavToggle').style.background=libFavOnly?'rgba(245,158,11,0.1)':'var(--bg-primary)';
+
+  if(q)entries=entries.filter(e=>e.name.toLowerCase().includes(q)||e.text.toLowerCase().includes(q));
+  const folderFilter=folderSel?.value;
+  if(folderFilter)entries=entries.filter(e=>e.folder===folderFilter);
+  if(libFavOnly)entries=entries.filter(e=>e.favorite);
+  if(libActiveTags.size)entries=entries.filter(e=>(e.tags||[]).some(t=>libActiveTags.has(t)));
+
+  const sortMode=document.getElementById('libSortSelect')?.value||'recent';
+  const diffOrder={A1:0,A2:1,B1:2,B2:3,C1:4,C2:5};
+  if(sortMode==='name')entries=entries.slice().sort((a,b)=>a.name.localeCompare(b.name));
+  else if(sortMode==='words')entries=entries.slice().sort((a,b)=>b.wordCount-a.wordCount);
+  else if(sortMode==='difficulty')entries=entries.slice().sort((a,b)=>(diffOrder[a.difficulty]||0)-(diffOrder[b.difficulty]||0));
+
   list.innerHTML=entries.map(e=>`<div class="library-entry ${e.text===currentText?'active':''}" onclick="loadFromLibrary('${e.id}')">
-    <span style="font-size:1rem">Book</span>
+    <span style="font-size:1rem">📄</span>
     <div class="library-entry-info">
-      <div class="library-entry-name">${e.name}</div>
-      <div class="library-entry-meta">${e.wordCount} words · ${e.createdAt}</div>
+      <div class="library-entry-name">${e.name}${e.folder?` <span style="font-size:0.65rem;color:var(--text-secondary);font-weight:400;">📁 ${e.folder}</span>`:''}</div>
+      <div class="library-entry-meta">${e.wordCount} words · ~${e.estMinutes} min · <span style="color:${CEFR_COLORS[e.difficulty]||'var(--text-secondary)'};font-weight:700;">${e.difficulty}</span> · ${e.createdAt}</div>
+      ${e.tags&&e.tags.length?`<div style="margin-top:0.2rem;display:flex;gap:0.25rem;flex-wrap:wrap;">${e.tags.map(t=>`<span style="font-size:0.62rem;background:rgba(139,92,246,0.1);color:var(--ielts);border-radius:10px;padding:0.05rem 0.4rem;">#${t}</span>`).join('')}</div>`:''}
     </div>
-    <div onclick="event.stopPropagation()">
+    <div onclick="event.stopPropagation()" style="display:flex;align-items:center;gap:0.3rem;">
+      <button onclick="toggleLibFavorite('${e.id}',event)" style="background:none;border:none;cursor:pointer;font-size:1rem;opacity:${e.favorite?'1':'0.35'};">⭐</button>
       <button class="lib-icon-btn delete" onclick="deleteFromLibrary('${e.id}',event)">Delete</button>
     </div>
-  </div>`).join('');
+  </div>`).join('')||`<div style="text-align:center;color:var(--text-secondary);font-size:0.8rem;padding:1rem;">No matching texts.</div>`;
 }
 
 // ============================================================
@@ -4361,6 +4572,67 @@ document.addEventListener('keydown',e=>{
 let vocabState={mode:'menu',cardIdx:0,score:0,streak:0,shuffled:[],currentAnswer:'',correctAnswer:'',typedAnswer:'',choiceSelected:null,choiceIsCorrect:false,answerShown:false,choices:[]};
 let vocabTab='vocab';
 
+// ============================================================
+//  SPACED REPETITION SYSTEM (SRS) — "My List"
+// ============================================================
+const SRS_KEY='mt_srs_list';
+const SRS_INTERVALS_DAYS=[1,3,7,14]; // Anki-style box -> days until next review
+let srsReviewState={queue:[],idx:0,revealed:false,sessionCorrect:0,sessionTotal:0};
+
+function _srsLoad(){
+  try{return JSON.parse(localStorage.getItem(SRS_KEY)||'[]');}catch(e){return [];}
+}
+function _srsSave(list){localStorage.setItem(SRS_KEY,JSON.stringify(list));}
+
+function srsIsSaved(word){
+  return _srsLoad().some(e=>e.word.toLowerCase()===word.toLowerCase());
+}
+
+function srsSaveWord(word){
+  const list=_srsLoad();
+  if(list.some(e=>e.word.toLowerCase()===word.toLowerCase())){
+    showToast(word+' is already in My List','#8b5cf6');
+    return;
+  }
+  list.push({word,box:0,dueDate:Date.now(),addedDate:Date.now(),reviews:0,lapses:0});
+  _srsSave(list);
+  showToast('⭐ Saved "'+word+'" to My List','#8b5cf6');
+  // Refresh star button state if visible
+  const starBtn=document.getElementById('wcSaveBtn');
+  if(starBtn){starBtn.textContent='✓ Saved';starBtn.disabled=true;starBtn.style.opacity='0.65';}
+}
+
+function srsRemoveWord(word){
+  let list=_srsLoad();
+  list=list.filter(e=>e.word.toLowerCase()!==word.toLowerCase());
+  _srsSave(list);
+  showToast('Removed "'+word+'" from My List','#64748b');
+}
+
+function srsDueCount(){
+  const now=Date.now();
+  return _srsLoad().filter(e=>e.dueDate<=now).length;
+}
+
+function srsGradeWord(word,grade){
+  // grade: 'again' (reset) or 'good' (advance)
+  const list=_srsLoad();
+  const entry=list.find(e=>e.word.toLowerCase()===word.toLowerCase());
+  if(!entry)return;
+  entry.reviews=(entry.reviews||0)+1;
+  if(grade==='again'){
+    entry.box=0;
+    entry.lapses=(entry.lapses||0)+1;
+  }else{
+    entry.box=Math.min(entry.box+1,SRS_INTERVALS_DAYS.length-1);
+  }
+  const days=SRS_INTERVALS_DAYS[entry.box];
+  entry.dueDate=Date.now()+days*24*60*60*1000;
+  entry.lastReviewed=Date.now();
+  _srsSave(list);
+}
+
+
 function openVocabModal(){document.getElementById('vocabModal').classList.add('show');vocabTab='vocab';renderVocabMenu();}
 function closeVocabModal(){
   _clearVocabKeyHandler();
@@ -4381,8 +4653,9 @@ function renderVocabMenu(){
       <button onclick="vocabTab='vocab';renderVocabMenu()" style="flex:1;padding:0.5rem;border-radius:8px;border:2px solid ${vocabTab==='vocab'?'var(--accent)':'var(--bg-tertiary)'};background:${vocabTab==='vocab'?'var(--accent-glow)':'var(--bg-primary)'};color:${vocabTab==='vocab'?'var(--accent)':'var(--text-secondary)'};cursor:pointer;font-weight:600;font-size:0.82rem;">📖 Vocab</button>
       <button onclick="vocabTab='collocations';renderVocabMenu()" style="flex:1;padding:0.5rem;border-radius:8px;border:2px solid ${vocabTab==='collocations'?'var(--warning)':'var(--bg-tertiary)'};background:${vocabTab==='collocations'?'rgba(245,158,11,0.12)':'var(--bg-primary)'};color:${vocabTab==='collocations'?'var(--warning)':'var(--text-secondary)'};cursor:pointer;font-weight:600;font-size:0.82rem;">🔗 Collocations</button>
       <button onclick="vocabTab='mixed';renderVocabMenu()" style="flex:1;padding:0.5rem;border-radius:8px;border:2px solid ${vocabTab==='mixed'?'#ef4444':'var(--bg-tertiary)'};background:${vocabTab==='mixed'?'rgba(239,68,68,0.1)':'var(--bg-primary)'};color:${vocabTab==='mixed'?'#ef4444':'var(--text-secondary)'};cursor:pointer;font-weight:700;font-size:0.82rem;">🎯 Mixed</button>
+      <button onclick="vocabTab='srs';renderVocabMenu()" style="flex:1;padding:0.5rem;border-radius:8px;border:2px solid ${vocabTab==='srs'?'#8b5cf6':'var(--bg-tertiary)'};background:${vocabTab==='srs'?'rgba(139,92,246,0.12)':'var(--bg-primary)'};color:${vocabTab==='srs'?'#8b5cf6':'var(--text-secondary)'};cursor:pointer;font-weight:700;font-size:0.82rem;position:relative;">⭐ My List${srsDueCount()>0?`<span style="position:absolute;top:-6px;right:-6px;background:var(--error);color:#fff;font-size:0.6rem;font-weight:800;border-radius:10px;padding:0.05rem 0.32rem;">${srsDueCount()}</span>`:''}</button>
     </div>
-    ${vocabTab==='vocab'?renderVocabMenuContent():vocabTab==='collocations'?renderCollocationContent():renderMixedMenuContent()}
+    ${vocabTab==='vocab'?renderVocabMenuContent():vocabTab==='collocations'?renderCollocationContent():vocabTab==='srs'?renderSrsMenuContent():renderMixedMenuContent()}
   `;
 }
 
@@ -4435,7 +4708,116 @@ function renderCollocationContent(){
   </div>
   <p style="color:var(--text-secondary);font-size:0.78rem;margin-bottom:0.5rem;"><span style="color:var(--accent);">■</span> verb &nbsp;<span style="color:var(--success);">■</span> adjective</p>
   <div class="coll-grid" style="max-height:36vh;overflow-y:auto;">${html}</div>
-  <button onclick="startCollocationQuiz()" style="margin-top:0.75rem;width:100%;background:var(--warning);color:#000;border:none;border-radius:8px;padding:0.6rem;font-weight:700;cursor:pointer;">🎯 Collocation Quiz</button>`;
+  <div style="display:flex;gap:0.5rem;margin-top:0.75rem;">
+    <button onclick="startCollocationQuiz()" style="flex:1;background:var(--warning);color:#000;border:none;border-radius:8px;padding:0.6rem;font-weight:700;cursor:pointer;">🎯 Quiz</button>
+    <button onclick="collGameStart()" style="flex:1;background:#8b5cf6;color:#fff;border:none;border-radius:8px;padding:0.6rem;font-weight:700;cursor:pointer;">🧩 Matching Game</button>
+  </div>`;
+}
+
+function renderSrsMenuContent(){
+  const list=_srsLoad();
+  const due=list.filter(e=>e.dueDate<=Date.now());
+  const upcoming=list.filter(e=>e.dueDate>Date.now()).sort((a,b)=>a.dueDate-b.dueDate);
+  if(!list.length){
+    return`<div style="text-align:center;padding:1.5rem 0.5rem;color:var(--text-secondary);">
+      <div style="font-size:1.8rem;margin-bottom:0.5rem;">⭐</div>
+      <div style="font-size:0.85rem;">No saved words yet.</div>
+      <div style="font-size:0.75rem;margin-top:0.3rem;">Click any word in a passage or "Browse All Words" and hit <b>Save to My List</b> to start building your SRS deck.</div>
+      <button onclick="vocabTab='vocab';renderVocabMenu()" style="margin-top:1rem;background:var(--bg-tertiary);color:var(--text-primary);border:none;border-radius:8px;padding:0.55rem 0.9rem;cursor:pointer;font-size:0.82rem;">← Back to Vocab</button>
+    </div>`;
+  }
+  const boxLabels=['New/Learning (1d)','3-day box','7-day box','14-day box'];
+  const boxCounts=[0,0,0,0];
+  list.forEach(e=>boxCounts[e.box||0]++);
+  return`
+  <div style="display:flex;gap:0.5rem;margin-bottom:0.8rem;">
+    <div style="flex:1;background:var(--bg-primary);border:1px solid var(--bg-tertiary);border-radius:10px;padding:0.6rem;text-align:center;">
+      <div style="font-size:1.4rem;font-weight:900;color:${due.length?'#8b5cf6':'var(--text-secondary)'};">${due.length}</div>
+      <div style="font-size:0.62rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.05em;">Due Now</div>
+    </div>
+    <div style="flex:1;background:var(--bg-primary);border:1px solid var(--bg-tertiary);border-radius:10px;padding:0.6rem;text-align:center;">
+      <div style="font-size:1.4rem;font-weight:900;color:var(--text-primary);">${list.length}</div>
+      <div style="font-size:0.62rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.05em;">Total Saved</div>
+    </div>
+  </div>
+  <button onclick="srsStartReview()" ${due.length?'':'disabled'} style="width:100%;background:${due.length?'#8b5cf6':'var(--bg-tertiary)'};color:${due.length?'#fff':'var(--text-secondary)'};border:none;border-radius:8px;padding:0.65rem;font-weight:700;cursor:${due.length?'pointer':'not-allowed'};font-size:0.9rem;margin-bottom:0.9rem;">🧠 Review ${due.length} Due Card${due.length===1?'':'s'}</button>
+  <div style="font-size:0.72rem;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.4rem;">Box Distribution</div>
+  <div style="display:flex;flex-direction:column;gap:0.35rem;margin-bottom:0.9rem;">
+    ${boxLabels.map((lbl,i)=>`<div style="display:flex;justify-content:space-between;align-items:center;font-size:0.75rem;">
+      <span style="color:var(--text-secondary);">${lbl}</span><span style="font-weight:700;">${boxCounts[i]}</span>
+    </div>`).join('')}
+  </div>
+  <div style="font-size:0.72rem;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.4rem;">All Saved Words</div>
+  <div style="max-height:28vh;overflow-y:auto;display:flex;flex-direction:column;gap:0.3rem;">
+    ${list.slice().sort((a,b)=>a.dueDate-b.dueDate).map(e=>{
+      const isDue=e.dueDate<=Date.now();
+      const daysLeft=Math.ceil((e.dueDate-Date.now())/(24*60*60*1000));
+      return`<div style="display:flex;align-items:center;justify-content:space-between;background:var(--bg-primary);border:1px solid var(--bg-tertiary);border-radius:7px;padding:0.4rem 0.6rem;">
+        <span style="font-weight:600;font-size:0.82rem;cursor:pointer;" onclick="showWordCard('${e.word}',this)">${e.word}</span>
+        <div style="display:flex;align-items:center;gap:0.4rem;">
+          <span style="font-size:0.65rem;color:${isDue?'#8b5cf6':'var(--text-secondary)'};font-weight:${isDue?'700':'400'};">${isDue?'Due now':'in '+daysLeft+'d'}</span>
+          <button onclick="srsRemoveWord('${e.word}');renderVocabMenu()" style="background:none;border:none;color:var(--text-secondary);cursor:pointer;font-size:0.85rem;padding:0 0.1rem;">✕</button>
+        </div>
+      </div>`;
+    }).join('')}
+  </div>`;
+}
+
+function srsStartReview(){
+  const due=_srsLoad().filter(e=>e.dueDate<=Date.now());
+  if(!due.length)return;
+  srsReviewState={queue:shuffle(due.slice()),idx:0,revealed:false,sessionCorrect:0,sessionTotal:due.length};
+  renderSrsFlashcard();
+}
+
+function renderSrsFlashcard(){
+  const box=document.getElementById('vocabBox');
+  if(srsReviewState.idx>=srsReviewState.queue.length){
+    box.innerHTML=`<div style="text-align:center;padding:1.2rem 0.5rem;">
+      <div style="font-size:1.8rem;margin-bottom:0.4rem;">🎉</div>
+      <div style="font-weight:800;font-size:1.1rem;color:#8b5cf6;">Review Complete!</div>
+      <div style="color:var(--text-secondary);font-size:0.82rem;margin:0.4rem 0 1rem;">${srsReviewState.sessionCorrect}/${srsReviewState.sessionTotal} remembered</div>
+      <button onclick="vocabTab='srs';renderVocabMenu()" style="width:100%;background:#8b5cf6;color:#fff;border:none;border-radius:8px;padding:0.6rem;font-weight:700;cursor:pointer;">Back to My List</button>
+    </div>`;
+    return;
+  }
+  const entry=srsReviewState.queue[srsReviewState.idx];
+  const v=vocabData.find(x=>x.word.toLowerCase()===entry.word.toLowerCase());
+  srsReviewState.revealed=false;
+  const collHtml=v&&v.collocations&&v.collocations.length?`<div style="margin-top:0.5rem;"><div style="font-size:0.6rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">Collocations</div><div style="display:flex;flex-wrap:wrap;gap:0.25rem;">${v.collocations.slice(0,4).map(c=>`<span style="font-size:0.68rem;background:rgba(139,92,246,0.1);color:#8b5cf6;border:1px solid rgba(139,92,246,0.25);border-radius:5px;padding:0.1rem 0.4rem;font-style:italic;">${c}</span>`).join('')}</div></div>`:'';
+  box.innerHTML=`
+    <div style="display:flex;justify-content:space-between;font-size:0.72rem;color:var(--text-secondary);margin-bottom:0.6rem;">
+      <span>Card ${srsReviewState.idx+1}/${srsReviewState.queue.length}</span>
+      <span>Box: ${['1d','3d','7d','14d'][entry.box]||'1d'}</span>
+    </div>
+    <div style="background:var(--bg-primary);border:2px solid #8b5cf6;border-radius:12px;padding:1.4rem 1rem;text-align:center;min-height:120px;display:flex;flex-direction:column;justify-content:center;cursor:pointer;" onclick="srsRevealCard()" id="srsCardFace">
+      <div style="font-size:1.35rem;font-weight:900;color:#8b5cf6;">${entry.word}</div>
+      <div id="srsCardBack" style="display:none;margin-top:0.7rem;text-align:left;">
+        <div style="font-size:0.85rem;color:var(--text-primary);line-height:1.5;">${v?v.definition:'(definition unavailable)'}</div>
+        ${collHtml}
+      </div>
+      <div id="srsTapHint" style="font-size:0.68rem;color:var(--text-secondary);margin-top:0.6rem;">Tap card to reveal</div>
+    </div>
+    <div id="srsGradeButtons" style="display:none;gap:0.5rem;margin-top:0.8rem;">
+      <button onclick="srsAnswerCard('again')" style="flex:1;background:rgba(239,68,68,0.12);color:#ef4444;border:1.5px solid rgba(239,68,68,0.3);border-radius:8px;padding:0.6rem;font-weight:700;cursor:pointer;">😵 Forgot</button>
+      <button onclick="srsAnswerCard('good')" style="flex:1;background:rgba(34,197,94,0.12);color:var(--success);border:1.5px solid rgba(34,197,94,0.3);border-radius:8px;padding:0.6rem;font-weight:700;cursor:pointer;">✓ Remembered</button>
+    </div>`;
+}
+
+function srsRevealCard(){
+  if(srsReviewState.revealed)return;
+  srsReviewState.revealed=true;
+  document.getElementById('srsCardBack').style.display='block';
+  document.getElementById('srsTapHint').style.display='none';
+  document.getElementById('srsGradeButtons').style.display='flex';
+}
+
+function srsAnswerCard(grade){
+  const entry=srsReviewState.queue[srsReviewState.idx];
+  srsGradeWord(entry.word,grade);
+  if(grade==='good')srsReviewState.sessionCorrect++;
+  srsReviewState.idx++;
+  renderSrsFlashcard();
 }
 
 const VOCAB_SESSION=15;
@@ -5093,6 +5475,104 @@ function revealVocabAnswer(choices,answer){
 
 
 // ============================================================
+// ============================================================
+//  COLLOCATION MATCHING GAME (tap-to-match, mobile-friendly)
+// ============================================================
+let collGameState=null;
+
+function collGameStart(){
+  const properCollocations=collocationSets.filter(s=>s.noun!==undefined&&((s.verbs&&s.verbs.length)||(s.adjectives&&s.adjectives.length)));
+  const picks=shuffle(properCollocations.slice()).slice(0,6);
+  const pairs=picks.map(s=>{
+    const useVerb=s.verbs&&s.verbs.length&&(!s.adjectives||!s.adjectives.length||Math.random()<0.5);
+    const term=useVerb?s.verbs[Math.floor(Math.random()*s.verbs.length)]:s.adjectives[Math.floor(Math.random()*s.adjectives.length)];
+    return{noun:s.noun,term};
+  });
+  const leftOrder=shuffle(pairs.map((p,i)=>i));
+  const rightOrder=shuffle(pairs.map((p,i)=>i));
+  collGameState={pairs,leftOrder,rightOrder,matched:new Set(),selectedLeft:null,mistakes:0,startTime:Date.now(),elapsed:0,timerId:null,done:false};
+  collGameState.timerId=setInterval(()=>{
+    if(collGameState.done)return;
+    collGameState.elapsed=Math.floor((Date.now()-collGameState.startTime)/1000);
+    const t=document.getElementById('collGameTimer');
+    if(t)t.textContent=collGameState.elapsed+'s';
+  },1000);
+  openVocabModal();
+  vocabTab='collocations';
+  renderCollGame();
+}
+
+function renderCollGame(){
+  const box=document.getElementById('vocabBox');
+  if(!box||!collGameState)return;
+  const s=collGameState;
+  const leftHtml=s.leftOrder.map(i=>{
+    const matched=s.matched.has(i);
+    const selected=s.selectedLeft===i;
+    const bg=matched?'rgba(34,197,94,0.15)':selected?'rgba(139,92,246,0.25)':'var(--bg-primary)';
+    const bd=matched?'#22c55e':selected?'#8b5cf6':'var(--bg-tertiary)';
+    return`<div onclick="collGameLeftClick(${i})" style="padding:0.55rem 0.7rem;border-radius:8px;border:2px solid ${bd};background:${bg};margin-bottom:0.35rem;cursor:${matched?'default':'pointer'};font-size:0.85rem;font-weight:600;color:${matched?'#22c55e':'var(--text-primary)'};text-align:center;transition:all 0.15s;">${s.pairs[i].term}</div>`;
+  }).join('');
+  const rightHtml=s.rightOrder.map(i=>{
+    const matched=s.matched.has(i);
+    const bg=matched?'rgba(34,197,94,0.15)':'var(--bg-primary)';
+    const bd=matched?'#22c55e':'var(--bg-tertiary)';
+    return`<div onclick="collGameRightClick(${i})" style="padding:0.55rem 0.7rem;border-radius:8px;border:2px solid ${bd};background:${bg};margin-bottom:0.35rem;cursor:${matched?'default':'pointer'};font-size:0.85rem;font-weight:700;color:${matched?'#22c55e':'var(--text-primary)'};text-align:center;transition:all 0.15s;">${s.pairs[i].noun}</div>`;
+  }).join('');
+
+  if(s.matched.size===s.pairs.length&&!s.done){
+    s.done=true;
+    clearInterval(s.timerId);
+  }
+
+  box.innerHTML=`
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.7rem;">
+      <h2 style="color:#8b5cf6;font-size:1.05rem;">🧩 Collocation Match</h2>
+      <button onclick="renderVocabMenu()" style="background:none;border:none;font-size:0.85rem;cursor:pointer;color:var(--text-secondary);font-weight:700;">✕ Close</button>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:var(--text-secondary);margin-bottom:0.6rem;">
+      <span>⏱ <b id="collGameTimer">${s.elapsed}s</b></span>
+      <span>Matched: <b style="color:#22c55e;">${s.matched.size}/${s.pairs.length}</b></span>
+      <span>Mistakes: <b style="color:#ef4444;">${s.mistakes}</b></span>
+    </div>
+    ${s.done?`<div style="text-align:center;background:rgba(34,197,94,0.1);border:1.5px solid #22c55e;border-radius:10px;padding:0.9rem;margin-bottom:0.8rem;">
+      <div style="font-size:1.5rem;">🎉</div>
+      <div style="font-weight:800;color:#22c55e;">Complete in ${s.elapsed}s with ${s.mistakes} mistake${s.mistakes===1?'':'s'}!</div>
+    </div>`:''}
+    <div style="display:flex;gap:0.6rem;">
+      <div style="flex:1;">
+        <div style="font-size:0.62rem;font-weight:800;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.3rem;text-align:center;">Verb / Adjective</div>
+        ${leftHtml}
+      </div>
+      <div style="flex:1;">
+        <div style="font-size:0.62rem;font-weight:800;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.3rem;text-align:center;">Noun</div>
+        ${rightHtml}
+      </div>
+    </div>
+    <button onclick="collGameStart()" style="width:100%;margin-top:0.9rem;background:var(--bg-tertiary);color:var(--text-primary);border:none;border-radius:8px;padding:0.6rem;font-weight:700;cursor:pointer;font-size:0.85rem;">↺ New Round</button>`;
+}
+
+function collGameLeftClick(i){
+  const s=collGameState;
+  if(!s||s.matched.has(i)||s.done)return;
+  s.selectedLeft=(s.selectedLeft===i)?null:i;
+  renderCollGame();
+}
+
+function collGameRightClick(i){
+  const s=collGameState;
+  if(!s||s.matched.has(i)||s.done||s.selectedLeft===null)return;
+  if(s.pairs[s.selectedLeft].noun===s.pairs[i].noun){
+    s.matched.add(s.selectedLeft);
+    s.matched.add(i);
+    s.selectedLeft=null;
+  }else{
+    s.mistakes++;
+    s.selectedLeft=null;
+  }
+  renderCollGame();
+}
+
 //  COLLOCATION QUIZ WITH TYPING + DIFFICULTY
 // ============================================================
 const COLL_SESSION=15;
@@ -6037,7 +6517,7 @@ const writingTestSets=[
 function switchWritingMode(mode){
   writingMode=mode;
   document.querySelectorAll('.writing-mode-tab').forEach(b=>{
-    b.classList.toggle('active',b.textContent.includes(mode==='practice'?'Practice':'Test'));
+    b.classList.toggle('active',b.getAttribute('data-mode')===mode);
   });
   const ts=document.getElementById('typingStatsPanels');
   const pb=document.getElementById('topProgressBar');
@@ -6045,11 +6525,12 @@ function switchWritingMode(mode){
   document.getElementById('articleList').style.display='none';
   if(ts)ts.style.display='none';
   if(pb)pb.style.display='none';
+  document.getElementById('writingTestOverlay')?.remove();
   if(mode==='test'){
-    document.getElementById('writingTestOverlay')?.remove();
     _renderWritingTestMenu();
+  }else if(mode==='instructions'){
+    _renderWritingInstructionsMenu();
   }else{
-    document.getElementById('writingTestOverlay')?.remove();
     _renderWritingPracticeMenu();
   }
 }
@@ -6130,6 +6611,209 @@ function toggleTopicDetailsPractice(i){
   document.querySelectorAll('[id^="wp2_det_"]').forEach(el=>el.style.display='none');
   document.querySelectorAll('[id^="wp2_chev_"]').forEach(el=>el.textContent='▼');
   if(open){det.style.display='block';if(chev)chev.textContent='▲';}
+}
+
+/* ══════════════ WRITING INSTRUCTIONS ══════════════ */
+let wiTask=1;          // 1 or 2
+let wiView1='summary'; // 'summary' | 'full'  (Task 1)
+let wiView2='summary'; // 'summary' | 'full'  (Task 2)
+let wiT1Type='general';
+let wiT2Type='general';
+
+function _renderWritingInstructionsMenu(){
+  const cp=document.getElementById('ieltsContentPanel');
+  if(!cp)return;
+  document.getElementById('typingArea').style.display='none';
+  document.getElementById('articleList').style.display='none';
+  cp.style.display='block';
+  cp.innerHTML=`<div style="padding:0.3rem 0 0.5rem;">
+    <div style="font-weight:900;color:var(--ielts);font-size:1rem;margin-bottom:0.65rem;">📖 Writing Instructions</div>
+    <div class="rd-mode-tabs" style="margin-bottom:1rem;">
+      <button class="rd-mode-tab ${wiTask===1?'active':''}" id="wi_t1_btn" onclick="showWritingInstructionsTask(1)">📊 Task 1 — Visual Data</button>
+      <button class="rd-mode-tab ${wiTask===2?'active':''}" id="wi_t2_btn" onclick="showWritingInstructionsTask(2)">📝 Task 2 — Essay</button>
+    </div>
+    <div id="wi_task1_section" style="display:${wiTask===1?'block':'none'};">${_buildTask1InstructionsSection()}</div>
+    <div id="wi_task2_section" style="display:${wiTask===2?'block':'none'};">${_buildTask2InstructionsSection()}</div>
+  </div>`;
+}
+
+function showWritingInstructionsTask(t){
+  wiTask=t;
+  document.getElementById('wi_t1_btn').classList.toggle('active',t===1);
+  document.getElementById('wi_t2_btn').classList.toggle('active',t===2);
+  document.getElementById('wi_task1_section').style.display=t===1?'block':'none';
+  document.getElementById('wi_task2_section').style.display=t===2?'block':'none';
+}
+
+/* ── Shared summary/full switcher markup ── */
+function _viewSwitcher(idPrefix,active){
+  return`<div class="rd-mode-tabs" style="margin-bottom:0.85rem;transform:scale(0.92);transform-origin:left;">
+    <button class="rd-mode-tab ${active==='summary'?'active':''}" onclick="${idPrefix}('summary')">⚡ Summary</button>
+    <button class="rd-mode-tab ${active==='full'?'active':''}" onclick="${idPrefix}('full')">📚 Full</button>
+  </div>`;
+}
+
+/* ══════ TASK 1 INSTRUCTIONS ══════ */
+function _buildTask1InstructionsSection(){
+  return`${_viewSwitcher('showTask1InstructionsView',wiView1)}
+  <div id="wi_t1_summary" style="display:${wiView1==='summary'?'block':'none'};">${_buildTask1InstructionsSummary()}</div>
+  <div id="wi_t1_full" style="display:${wiView1==='full'?'block':'none'};">${_buildTask1InstructionsFull()}</div>`;
+}
+
+function showTask1InstructionsView(v){
+  wiView1=v;
+  const s=document.getElementById('wi_task1_section');
+  if(s)s.innerHTML=_buildTask1InstructionsSection();
+}
+
+function _instrCard(title,body){
+  return`<div style="background:var(--bg-primary);border:1.5px solid var(--bg-tertiary);border-radius:10px;padding:0.75rem 0.9rem;margin-bottom:0.5rem;">
+    <div style="font-size:0.82rem;font-weight:800;color:var(--ielts);margin-bottom:0.3rem;">${title}</div>
+    <div style="font-size:0.78rem;line-height:1.65;color:var(--text-secondary);">${body}</div>
+  </div>`;
+}
+
+function _buildTask1InstructionsSummary(){
+  return`<div style="font-size:0.72rem;color:var(--text-secondary);margin-bottom:0.6rem;font-style:italic;">The short version — everything you need at a glance.</div>
+  ${_instrCard('⏱️ Time &amp; Length','20 minutes · minimum 150 words')}
+  ${_instrCard('🎯 What to do','Describe the visual (chart, table, diagram or map) objectively. Never give your opinion.')}
+  ${_instrCard('🧱 Structure','1. Paraphrase the question &nbsp;→&nbsp; 2. Overview of the 2 biggest trends/features (no numbers) &nbsp;→&nbsp; 3. Body paragraphs with supporting data, grouped logically.')}
+  ${_instrCard('🚫 Avoid','Don\'t list every number. Don\'t speculate on causes. Don\'t use bullet points or contractions.')}
+  ${_instrCard('✅ Band-boosters','Vary sentence structure, use precise data-language (e.g. "rose sharply", "a marginal decline"), and stay 100% factual.')}`;
+}
+
+const _t1FullTypes=[
+  {id:'general',icon:'📖',label:'General'},
+  {id:'bar',icon:'📊',label:'Bar Chart'},
+  {id:'line',icon:'📈',label:'Line Graph'},
+  {id:'pie',icon:'🥧',label:'Pie Chart'},
+  {id:'table',icon:'📋',label:'Table'},
+  {id:'process',icon:'🔄',label:'Process Diagram'},
+  {id:'map',icon:'🗺️',label:'Maps'}
+];
+
+function _buildTask1InstructionsFull(){
+  return`<div style="display:flex;gap:0.35rem;flex-wrap:wrap;margin-bottom:0.75rem;">
+    ${_t1FullTypes.map(t=>`<button class="ielts-inner-tab ${wiT1Type===t.id?'active':''}" onclick="showTask1FullType('${t.id}')">${t.icon} ${t.label}</button>`).join('')}
+  </div>
+  <div id="wi_t1_full_body">${_task1FullBody(wiT1Type)}</div>`;
+}
+
+function showTask1FullType(type){
+  wiT1Type=type;
+  const body=document.getElementById('wi_t1_full_body');
+  const wrap=document.getElementById('wi_t1_full');
+  if(wrap)wrap.innerHTML=_buildTask1InstructionsFull();
+}
+
+function _task1FullBody(type){
+  const bodies={
+    general:`${_instrCard('Overview','Task 1 assesses your ability to describe, summarise, or explain visual information accurately and objectively in your own words. You will be given one or more charts, a table, a diagram, or a map.')}
+      ${_instrCard('Timing &amp; length','Spend about 20 minutes on this task (out of 60 total) and write at least 150 words. Writing significantly under this loses marks; writing far more eats into Task 2 time.')}
+      ${_instrCard('Ideal structure','<b>Paragraph 1 — Introduction:</b> paraphrase the question in one sentence (what the visual shows).<br><b>Paragraph 2 — Overview:</b> 2–3 sentences on the most striking trends or features, with no specific numbers.<br><b>Paragraphs 3–4 — Details:</b> group and compare the data logically, using key figures to support each point.')}
+      ${_instrCard('The 4 scoring criteria','<b>Task Achievement</b> — covers all key features accurately.<br><b>Coherence &amp; Cohesion</b> — logical paragraphing and linking words.<br><b>Lexical Resource</b> — varied, precise vocabulary for describing data.<br><b>Grammatical Range &amp; Accuracy</b> — correct tenses and sentence variety.')}
+      ${_instrCard('Common mistakes to avoid','Giving opinions or reasons not shown in the data · describing every single data point · missing the overview · writing under 150 words.')}`,
+    bar:`${_instrCard('What it shows','Bar charts compare quantities across categories (e.g. countries, age groups, years).')}
+      ${_instrCard('How to approach it','Identify the highest, lowest, and any notable groupings before you write. Group similar bars together rather than describing left-to-right.')}
+      ${_instrCard('Useful language','Comparatives (higher than, the lowest of), "significantly/slightly", "in contrast", "whereas".')}
+      ${_instrCard('Overview tip','State which category dominates and which is smallest — that is usually your overview.')}`,
+    line:`${_instrCard('What it shows','Line graphs track change over time — one or more variables across a timeline.')}
+      ${_instrCard('How to approach it','Note the overall direction (up, down, stable), the start and end points, and any peaks, dips, or plateaus.')}
+      ${_instrCard('Useful language','Trend verbs: rose, fell, fluctuated, peaked, levelled off, plummeted. Adverbs: sharply, gradually, steadily, dramatically.')}
+      ${_instrCard('Overview tip','Your overview should capture the overall trend across the whole period, not the individual ups and downs.')}`,
+    pie:`${_instrCard('What it shows','Pie charts show proportions of a whole, usually as percentages, sometimes across two or more pies for comparison.')}
+      ${_instrCard('How to approach it','Identify the largest and smallest segments first. If there are multiple pies, compare how a segment changes between them.')}
+      ${_instrCard('Useful language','"accounted for X%", "a quarter of", "made up the majority", "a marginal proportion".')}
+      ${_instrCard('Overview tip','Name the single biggest category overall and the clearest difference between the pies.')}`,
+    table:`${_instrCard('What it shows','Tables present precise numerical data in rows and columns — often the most data-dense Task 1 type.')}
+      ${_instrCard('How to approach it','Do not describe every cell. Scan for the highest/lowest values, clear patterns, and useful comparisons, then group these into paragraphs.')}
+      ${_instrCard('Useful language','Ranking language ("the second-highest"), comparison structures ("more than double"), rounding ("approximately", "just under").')}
+      ${_instrCard('Overview tip','Pick the two or three most significant patterns in the whole table — this becomes your overview.')}`,
+    process:`${_instrCard('What it shows','Process diagrams illustrate the stages of a natural or manufacturing process (e.g. the water cycle, recycling paper).')}
+      ${_instrCard('How to approach it','Describe every stage in order. Count the stages first so you don\'t miss or repeat one.')}
+      ${_instrCard('Useful language','Sequencing words: first, next, after this, subsequently, finally. Use the passive voice ("the material is heated") since no specific agent performs the action.')}
+      ${_instrCard('Tense &amp; overview tip','Use present simple (passive) unless the process is historical. Your overview states how many stages there are and where the process starts and ends.')}`,
+    map:`${_instrCard('What it shows','Maps compare a location at two (or more) points in time, showing how it has changed or is proposed to change.')}
+      ${_instrCard('How to approach it','Work systematically, e.g. north to south or edge to centre. Note what was added, removed, or changed.')}
+      ${_instrCard('Useful language','Compass directions (to the north of), spatial prepositions (adjacent to, opposite), change verbs (was replaced by, was converted into, was built).')}
+      ${_instrCard('Tense &amp; overview tip','Use past tense for "before" and either past or present for "after", depending on the labels. Your overview names the two or three biggest changes overall.')}`
+  };
+  return bodies[type]||bodies.general;
+}
+
+/* ══════ TASK 2 INSTRUCTIONS ══════ */
+function _buildTask2InstructionsSection(){
+  return`${_viewSwitcher('showTask2InstructionsView',wiView2)}
+  <div id="wi_t2_summary" style="display:${wiView2==='summary'?'block':'none'};">${_buildTask2InstructionsSummary()}</div>
+  <div id="wi_t2_full" style="display:${wiView2==='full'?'block':'none'};">${_buildTask2InstructionsFull()}</div>`;
+}
+
+function showTask2InstructionsView(v){
+  wiView2=v;
+  const s=document.getElementById('wi_task2_section');
+  if(s)s.innerHTML=_buildTask2InstructionsSection();
+}
+
+function _buildTask2InstructionsSummary(){
+  return`<div style="font-size:0.72rem;color:var(--text-secondary);margin-bottom:0.6rem;font-style:italic;">The short version — everything you need at a glance.</div>
+  ${_instrCard('⏱️ Time &amp; Length','40 minutes · minimum 250 words')}
+  ${_instrCard('🎯 What to do','Write a formal essay responding directly to every part of the question, with your own reasons and examples.')}
+  ${_instrCard('🧱 Structure','1. Introduction (paraphrase + thesis) → 2. Two or three body paragraphs, one main idea each → 3. Conclusion (restate your position).')}
+  ${_instrCard('🚫 Avoid','Don\'t ignore part of the question. Don\'t use informal language or contractions. Don\'t list ideas without explaining or supporting them.')}
+  ${_instrCard('✅ Band-boosters','One clear idea per paragraph, specific examples (not vague generalisations), and a consistent position throughout.')}`;
+}
+
+const _t2FullTypes=[
+  {id:'general',icon:'📖',label:'General'},
+  {id:'opinion',icon:'🗣️',label:'Opinion'},
+  {id:'discussion',icon:'⚖️',label:'Discussion'},
+  {id:'problem-solution',icon:'🛠️',label:'Problem-Solution'},
+  {id:'advantage-disadvantage',icon:'📊',label:'Adv/Disadv'},
+  {id:'two-part',icon:'❓',label:'Two-Part Question'}
+];
+
+function _buildTask2InstructionsFull(){
+  return`<div style="display:flex;gap:0.35rem;flex-wrap:wrap;margin-bottom:0.75rem;">
+    ${_t2FullTypes.map(t=>`<button class="ielts-inner-tab ${wiT2Type===t.id?'active':''}" onclick="showTask2FullType('${t.id}')">${t.icon} ${t.label}</button>`).join('')}
+  </div>
+  <div id="wi_t2_full_body">${_task2FullBody(wiT2Type)}</div>`;
+}
+
+function showTask2FullType(type){
+  wiT2Type=type;
+  const wrap=document.getElementById('wi_t2_full');
+  if(wrap)wrap.innerHTML=_buildTask2InstructionsFull();
+}
+
+function _task2FullBody(type){
+  const bodies={
+    general:`${_instrCard('Overview','Task 2 assesses your ability to present and justify an argument, evaluate ideas, and write a well-organised, formal essay in response to a point of view, argument, or problem.')}
+      ${_instrCard('Timing &amp; length','Spend about 40 minutes on this task (it carries more weight than Task 1) and write at least 250 words.')}
+      ${_instrCard('Ideal structure','<b>Introduction:</b> paraphrase the topic, then state your thesis/position.<br><b>Body paragraph 1 &amp; 2:</b> one main idea each — a claim, an explanation, and a specific example.<br><b>Conclusion:</b> summarise your main points and restate your position, without adding new ideas.')}
+      ${_instrCard('The 4 scoring criteria','<b>Task Response</b> — answers every part of the question with a clear position.<br><b>Coherence &amp; Cohesion</b> — clear paragraphing and logical flow.<br><b>Lexical Resource</b> — topic-appropriate, varied vocabulary.<br><b>Grammatical Range &amp; Accuracy</b> — a mix of simple and complex sentences, accurately used.')}
+      ${_instrCard('Common mistakes to avoid','Answering only part of the question · sitting on the fence with no clear position · memorised "template" phrases that don\'t fit the topic · going under 250 words.')}`,
+    opinion:`${_instrCard('What it asks','"To what extent do you agree or disagree?" — you must state and defend a clear personal position.')}
+      ${_instrCard('How to approach it','Decide your position before writing: fully agree, fully disagree, or partly agree. Keep that position consistent in every paragraph.')}
+      ${_instrCard('Structure tip','Introduction states your position → each body paragraph gives one reason supporting it → conclusion restates it.')}
+      ${_instrCard('Useful language','"I firmly believe that...", "While some argue X, I contend that...", "This is primarily because...".')}`,
+    discussion:`${_instrCard('What it asks','"Discuss both views and give your own opinion" — you must present both sides fairly before giving your view.')}
+      ${_instrCard('How to approach it','Give one balanced body paragraph per view (even if you disagree with one), then make your own opinion clear — usually in a third paragraph or the conclusion.')}
+      ${_instrCard('Structure tip','Introduction outlines both views → body 1 explains view A → body 2 explains view B → conclusion/final paragraph gives your opinion.')}
+      ${_instrCard('Useful language','"On the one hand... on the other hand", "Proponents of this view argue that...", "Personally, I side with...".')}`,
+    'problem-solution':`${_instrCard('What it asks','You are given a problem (or problems) and must identify causes and/or propose solutions.')}
+      ${_instrCard('How to approach it','Read carefully — some questions ask for problems AND solutions, others just one. Address exactly what is asked.')}
+      ${_instrCard('Structure tip','Body 1 explains the problem(s)/causes in depth → body 2 proposes realistic solutions with how they would work.')}
+      ${_instrCard('Useful language','"A major cause of this is...", "One effective solution would be to...", "This could be addressed by...".')}`,
+    'advantage-disadvantage':`${_instrCard('What it asks','Either a neutral "discuss advantages and disadvantages" or an opinion version, "do the advantages outweigh the disadvantages?"')}
+      ${_instrCard('How to approach it','For the neutral version, cover both sides evenly. For the opinion version, still cover both — but make clear which side you think is stronger.')}
+      ${_instrCard('Structure tip','Body 1 = advantages, body 2 = disadvantages (or vice-versa) → conclusion weighs them up if an opinion is required.')}
+      ${_instrCard('Useful language','"A key benefit of this is...", "This is not without drawbacks, however...", "On balance, the advantages outweigh the disadvantages because...".')}`,
+    'two-part':`${_instrCard('What it asks','A direct question essay with two related questions to answer (e.g. "Why is this happening? What can be done about it?").')}
+      ${_instrCard('How to approach it','Treat each question as its own body paragraph. Make sure both are answered fully and directly — this is a common place to lose Task Response marks.')}
+      ${_instrCard('Structure tip','Introduction paraphrases both questions → body 1 answers question 1 → body 2 answers question 2 → conclusion sums up both answers.')}
+      ${_instrCard('Useful language','"Turning to the first question...", "As for why this trend has emerged...", "In terms of possible solutions...".')}`
+  };
+  return bodies[type]||bodies.general;
 }
 
 function openTask1Practice(id){
@@ -6311,7 +6995,7 @@ function selectIELTSTab(tab){
     if(writingHeader){
       let modeDiv=writingHeader.querySelector('.writing-mode-tabs');
       if(!modeDiv){modeDiv=document.createElement('div');modeDiv.className='writing-mode-tabs';writingHeader.prepend(modeDiv);}
-      modeDiv.innerHTML=`<button class="writing-mode-tab ${writingMode==='practice'?'active':''}" onclick="switchWritingMode('practice')">📝 Practice</button><button class="writing-mode-tab ${writingMode==='test'?'active':''}" onclick="switchWritingMode('test')">📋 Test</button>`;
+      modeDiv.innerHTML=`<button class="writing-mode-tab ${writingMode==='instructions'?'active':''}" data-mode="instructions" onclick="switchWritingMode('instructions')">📖 Instructions</button><button class="writing-mode-tab ${writingMode==='practice'?'active':''}" data-mode="practice" onclick="switchWritingMode('practice')">📝 Practice</button><button class="writing-mode-tab ${writingMode==='test'?'active':''}" data-mode="test" onclick="switchWritingMode('test')">📋 Test</button>`;
     }
     // Both modes: hide typing stats, progress bar, articleList, typingArea
     typingStats.style.display='none';
@@ -6323,6 +7007,8 @@ function selectIELTSTab(tab){
     contentPanel.style.display='block';
     if(writingMode==='test'){
       _renderWritingTestMenu();
+    }else if(writingMode==='instructions'){
+      _renderWritingInstructionsMenu();
     }else{
       _renderWritingPracticeMenu();
     }
@@ -7431,6 +8117,25 @@ function submitTest(timedOut=false){
   localStorage.setItem('mt_test_done',JSON.stringify([...readingState.completedTests]));
   updateIELTSStats();
 
+  // ── Band score & per-skill history tracking ──
+  const perType={};
+  readingState.testPassages.forEach((pp,i)=>{
+    pp.questions.forEach((q,qi)=>{
+      const given=(readingState.testAnswers[i][qi]||'').toString();
+      const scored=_scoreQuestion(q,given,qi);
+      const t=q.type||'other';
+      if(!perType[t])perType[t]={c:0,n:0};
+      perType[t].n++;
+      if(scored.correct)perType[t].c+=scored.partial;
+    });
+  });
+  const bandNow=_getBandFromScore(totalCorrect,totalQ);
+  let bandHistory=[];
+  try{bandHistory=JSON.parse(localStorage.getItem('mt_band_history')||'[]');}catch(e){bandHistory=[];}
+  bandHistory.push({date:Date.now(),testSetId:readingState.testSetId,correct:totalCorrect,total:totalQ,band:bandNow,perType});
+  if(bandHistory.length>50)bandHistory=bandHistory.slice(-50);
+  localStorage.setItem('mt_band_history',JSON.stringify(bandHistory));
+
   _showTestResults(totalCorrect,totalQ,timeUsed,perPassage,timedOut);
 }
 
@@ -7465,6 +8170,19 @@ function _showTestResults(totalCorrect,totalQ,timeUsed,perPassage,timedOut){
         <div style="font-size:0.58rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.3rem;font-weight:700;">Time Used</div>
         <div style="font-size:1.3rem;font-weight:900;color:var(--accent);">${timeStr}</div>
       </div>
+    </div>
+
+    <div style="margin-bottom:1rem;background:var(--bg-primary);border:1px solid var(--bg-tertiary);border-radius:10px;padding:0.85rem;">
+      <div style="font-size:0.65rem;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.55rem;">Per-Skill Accuracy (this test)</div>
+      ${_renderPerSkillBars()}
+    </div>
+
+    <div style="margin-bottom:1rem;background:var(--bg-primary);border:1px solid var(--bg-tertiary);border-radius:10px;padding:0.85rem;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.4rem;">
+        <div style="font-size:0.65rem;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.06em;">Band Trend</div>
+        <div style="font-size:0.68rem;color:var(--text-secondary);">Last ${Math.min(10,_getBandHistory().length)} tests</div>
+      </div>
+      ${_renderBandTrendSparkline()}
     </div>
 
     <div style="margin-bottom:1rem;">
@@ -7540,7 +8258,7 @@ function _reviewTestAnswers(){
         <div class="reading-passage-pane" style="flex:1;overflow-y:auto;" id="reviewPassagePane">
           <span class="passage-label">PASSAGE ${pIdx+1}</span>
           <h3>${p.title}</h3>
-          ${_buildClickablePassage(p.passage)}
+          <div id="reviewPassageBody">${_buildClickablePassage(p.passage)}</div>
         </div>
         <div class="rd-def-bar">
           <button class="rd-def-toggle ${readingState.reviewDefMode?'active':''}" id="reviewDefToggle" onclick="toggleRdDefMode('review')">
@@ -7560,6 +8278,37 @@ function _reviewTestAnswers(){
         ${_buildReviewHtml(p, pIdx)}
       </div>
     </div>`;
+}
+
+// ── Extract the best quoted excerpt from an explanation string ──
+function _extractExplanationQuote(explanation){
+  if(!explanation)return null;
+  const matches=[...explanation.matchAll(/'([^']{6,})'/g)];
+  if(!matches.length)return null;
+  // Prefer the longest quote — most likely to uniquely locate the segment
+  matches.sort((a,b)=>b[1].length-a[1].length);
+  return matches[0][1];
+}
+
+// ── Highlight & scroll to the passage segment that supports an answer ──
+function rdLocateAnswer(pIdx,qi){
+  const passages=readingState.testPassages;
+  const p=passages[pIdx];
+  const q=p.questions[qi];
+  const body=document.getElementById('reviewPassageBody');
+  if(!body||!p)return;
+  const quote=_extractExplanationQuote(q.explanation);
+  if(!quote){
+    showToast('No exact excerpt available for this question','#f59e0b');
+    return;
+  }
+  body.innerHTML=_buildClickablePassage(p.passage,quote);
+  const mark=document.getElementById('rdPassageHL');
+  if(mark){
+    mark.scrollIntoView({behavior:'smooth',block:'center'});
+  }else{
+    showToast('Could not locate exact text — try Show explanation instead','#f59e0b');
+  }
 }
 
 function rdJumpToReviewQ(qi){
@@ -7601,6 +8350,9 @@ function _buildReviewHtml(test, pIdx){
         Your answer: <b>${given||'(no answer)'}</b>
       </div>`;
     }
+    const tfngTip=(!ok && (q.type==='tfng'||q.type==='ynng'))?`<div style="margin-top:0.4rem;padding:0.4rem 0.55rem;background:rgba(99,102,241,0.08);border-left:3px solid #6366f1;border-radius:4px;font-size:0.72rem;color:var(--text-secondary);">
+        💡 <b>${q.type==='tfng'?'FALSE':'NO'} vs ${q.type==='tfng'?'NOT GIVEN':'NOT GIVEN'}:</b> Choose <b>${q.type==='tfng'?'FALSE/NO':'NO'}</b> when the passage directly contradicts the statement. Choose <b>NOT GIVEN</b> when the passage simply never mentions that specific information — don't infer or assume.
+      </div>`:'';
     return`<div class="reading-question-item ${ok?'correct-q':'wrong-q'}">
       <div class="reading-question-text">
         <span class="reading-question-num">${qi+1}</span>
@@ -7608,6 +8360,10 @@ function _buildReviewHtml(test, pIdx){
         <span class="reading-question-type-badge">${typeLabel}</span>
       </div>
       ${inputHtml}
+      ${tfngTip}
+      <div style="display:flex;gap:0.4rem;margin-top:0.35rem;">
+        <button onclick="event.stopPropagation();rdLocateAnswer(${pIdx},${qi})" style="flex:1;background:rgba(250,204,21,0.15);color:#b45309;border:1px solid rgba(250,204,21,0.4);border-radius:6px;padding:0.32rem 0.5rem;font-size:0.68rem;font-weight:700;cursor:pointer;">🔍 Locate in passage</button>
+      </div>
       <div class="reading-explanation" style="cursor:pointer;" onclick="this.querySelector('.rd-expl-body').style.display=this.querySelector('.rd-expl-body').style.display==='none'?'block':'none';this.querySelector('.rd-expl-toggle').textContent=this.querySelector('.rd-expl-body').style.display==='none'?'▶ Show explanation':'▼ Hide explanation'">
         <div style="display:flex;justify-content:space-between;align-items:center;">
           <b style="color:${ok?'var(--success)':'var(--error)'};">${ok?'✓ Correct':'✗ Incorrect'}</b>
@@ -7728,11 +8484,11 @@ function _buildQuestionsHtml(test,prefix,qOffset){
     const typeLabelMap={
       tfng:'T/F/NG',ynng:'Y/N/NG',multiple:'MCQ',sentence:'Short Answer',
       matchheading:'Match Headings',summary:'Summary',diagram:'Diagram',
-      matchpara:'Match Info',matchsent:'Match Endings',
+      matchpara:'Match Info',matchsent:'Match Endings',matchfeature:'Match Features',classification:'Classification',
       table:'Table/Note',flowchart:'Flowchart',shortans:'Short Answer'
     };
     const typeLabel=typeLabelMap[q.type]||'Question';
-    const badgeClass=({ynng:'ynng',matchpara:'matchpara',matchsent:'matchsent',table:'table',flowchart:'table',shortans:'shortans'})[q.type]||'';
+    const badgeClass=({ynng:'ynng',matchpara:'matchpara',matchsent:'matchsent',matchfeature:'matchpara',classification:'matchpara',table:'table',flowchart:'table',shortans:'shortans'})[q.type]||'';
     let inputHtml='';
     if(q.type==='tfng'){
       inputHtml=`<div class="reading-options">${['TRUE','FALSE','NOT GIVEN'].map(opt=>`
@@ -7765,6 +8521,8 @@ function _buildQuestionsHtml(test,prefix,qOffset){
       inputHtml=_buildMatchSentHtml(q,qi,prefix);
     }else if(q.type==='matchfeature'){
       inputHtml=_buildMatchFeatHtml(q,qi,prefix);
+    }else if(q.type==='classification'){
+      inputHtml=_buildClassificationHtml(q,qi,prefix);
     }else if(q.type==='table'){
       inputHtml=_buildTableHtml(q,qi,prefix);
     }else if(q.type==='flowchart'){
@@ -7875,17 +8633,79 @@ function rdScrollToQ(prefix,qi){
 }
 
 // ── Matching Paragraph Information ──
-function _buildMatchParaHtml(q,qi,prefix){
-  const paraOptions=q.paragraphs.map((p,i)=>`<option value="${p}">${p}</option>`).join('');
-  return`<div style="font-size:0.68rem;color:var(--text-secondary);margin-bottom:0.35rem;">Match each statement to the correct paragraph (${q.paragraphs.join(', ')}). Paragraphs may be used more than once.</div>
-  ${q.statements.map((st,si)=>`
-    <div class="mpi-item">
+// ============================================================
+//  GENERIC TAP/DRAG CHIP-MATCHING ENGINE
+//  (used by Matching Paragraphs, Matching Features, and can be
+//   reused by any future "match X to statement" question type)
+// ============================================================
+let _chipMatchDragSrc=null;
+let _chipMatchPending=null;
+
+function _buildChipMatchHtml(qi,prefix,idBase,items,statements,saveFnName,instructions,zonePrefix){
+  const chipsHtml=items.map((it,ii)=>`<div class="mh-heading-chip" id="${idBase}_chip_${ii}" draggable="true"
+    ondragstart="chipMatchDragStart(event,'${idBase}',${ii})" ondragend="chipMatchDragEnd(event)"
+    onclick="chipMatchChipClick('${idBase}',${ii})" data-key="${it.key}">${it.key}${it.label?': '+it.label:''}</div>`).join('');
+  const rowsHtml=statements.map((st,si)=>{
+    const zoneId=`${prefix}${zonePrefix}_${qi}_${si}`;
+    return`<div class="mpi-item">
       <div class="mpi-statement">${st.text}</div>
-      <select class="mpi-select" id="${prefix}MPI_${qi}_${si}" onchange="saveMPIAnswer('${prefix}',${qi},${si},this.value)">
-        <option value="">Para?</option>
-        ${paraOptions}
-      </select>
-    </div>`).join('')}`;
+      <div class="mh-drop-zone" id="${zoneId}"
+        ondragover="event.preventDefault();this.classList.add('drag-over')"
+        ondragleave="this.classList.remove('drag-over')"
+        ondrop="chipMatchDrop(event,'${idBase}','${zoneId}',${si},${qi},'${prefix}','${saveFnName}')"
+        onclick="chipMatchZoneClick('${idBase}','${zoneId}',${si},${qi},'${prefix}','${saveFnName}')">
+        <span id="${zoneId}_label">Drop here</span>
+      </div>
+    </div>`;
+  }).join('');
+  return`<div style="font-size:0.68rem;color:var(--text-secondary);margin-bottom:0.35rem;">${instructions}</div>
+  <div class="mh-chip-pool" id="${idBase}_pool" style="display:flex;gap:0.4rem;flex-wrap:wrap;margin-bottom:0.6rem;">${chipsHtml}</div>
+  ${rowsHtml}`;
+}
+
+function chipMatchDragStart(e,idBase,ii){
+  _chipMatchDragSrc={idBase,ii};
+  e.dataTransfer.effectAllowed='move';
+  document.getElementById(idBase+'_chip_'+ii)?.classList.add('dragging');
+}
+function chipMatchDragEnd(e){
+  if(_chipMatchDragSrc)document.getElementById(_chipMatchDragSrc.idBase+'_chip_'+_chipMatchDragSrc.ii)?.classList.remove('dragging');
+  document.querySelectorAll('.mh-drop-zone').forEach(z=>z.classList.remove('drag-over'));
+}
+function chipMatchDrop(e,idBase,zoneId,si,qi,prefix,saveFnName){
+  e.preventDefault();e.currentTarget.classList.remove('drag-over');
+  if(!_chipMatchDragSrc||_chipMatchDragSrc.idBase!==idBase)return;
+  const key=document.getElementById(idBase+'_chip_'+_chipMatchDragSrc.ii)?.dataset.key;
+  _chipMatchAssign(zoneId,si,qi,prefix,saveFnName,key);
+  _chipMatchDragSrc=null;
+}
+function chipMatchChipClick(idBase,ii){
+  document.querySelectorAll('#'+idBase+'_pool .mh-heading-chip').forEach(c=>c.classList.remove('selected'));
+  if(_chipMatchPending&&_chipMatchPending.idBase===idBase&&_chipMatchPending.ii===ii){_chipMatchPending=null;return;}
+  document.getElementById(idBase+'_chip_'+ii)?.classList.add('selected');
+  _chipMatchPending={idBase,ii};
+}
+function chipMatchZoneClick(idBase,zoneId,si,qi,prefix,saveFnName){
+  if(!_chipMatchPending||_chipMatchPending.idBase!==idBase)return;
+  const key=document.getElementById(idBase+'_chip_'+_chipMatchPending.ii)?.dataset.key;
+  _chipMatchAssign(zoneId,si,qi,prefix,saveFnName,key);
+  document.querySelectorAll('#'+idBase+'_pool .mh-heading-chip').forEach(c=>c.classList.remove('selected'));
+  _chipMatchPending=null;
+}
+function _chipMatchAssign(zoneId,si,qi,prefix,saveFnName,key){
+  if(!key)return;
+  const labelEl=document.getElementById(zoneId+'_label');
+  if(labelEl)labelEl.textContent=key;
+  const zone=document.getElementById(zoneId);
+  if(zone)zone.classList.add('filled');
+  window[saveFnName](prefix,qi,si,key);
+}
+
+function _buildMatchParaHtml(q,qi,prefix){
+  const idBase=`${prefix}_mp_${qi}`;
+  const items=q.paragraphs.map(p=>({key:p,label:''}));
+  return _buildChipMatchHtml(qi,prefix,idBase,items,q.statements,'saveMPIAnswer',
+    `Drag (or tap) a paragraph letter onto each statement. Paragraphs may be used more than once: ${q.paragraphs.join(', ')}.`,'MPI');
 }
 
 // ── Matching Sentence Endings ──
@@ -8405,6 +9225,15 @@ function _scoreQuestion(q,given){
       });
       return{correct:correct===q.statements.length,partial:correct,total:q.statements.length};
     }catch{return{correct:false,partial:0,total:q.statements?q.statements.length:1};}
+  }else if(q.type==='classification'){
+    try{
+      const answers=JSON.parse(given||'{}');
+      let correct=0;
+      q.statements.forEach((st,si)=>{
+        if((answers[si]||'').toUpperCase().trim()===(st.answer||'').toUpperCase().trim())correct++;
+      });
+      return{correct:correct===q.statements.length,partial:correct,total:q.statements.length};
+    }catch{return{correct:false,partial:0,total:q.statements?q.statements.length:1};}
   }
   // Simple text/sentence types
   const expSafe=(q.answer||'').toLowerCase().trim();
@@ -8674,6 +9503,27 @@ function _highlightPassageAnswers(test){
           if(sel){sel.classList.add((answers[si]||'').toUpperCase()===st.answer.toUpperCase()?'correct':'wrong');sel.disabled=true;}
         });
       }catch{}
+    }else if(q.type==='matchfeature'){
+      try{
+        const answers=JSON.parse(given||'{}');
+        q.statements.forEach((st,si)=>{
+          const zone=document.getElementById('rdMF_'+qi+'_'+si);
+          if(zone)zone.classList.add((answers[si]||'').toUpperCase()===(st.answer||'').toUpperCase()?'correct':'wrong');
+        });
+      }catch{}
+    }else if(q.type==='classification'){
+      try{
+        const answers=JSON.parse(given||'{}');
+        q.statements.forEach((st,si)=>{
+          q.categories.forEach(c=>{
+            const btn=document.getElementById('rdCLS_'+qi+'_'+si+'_btn_'+c.key);
+            if(!btn)return;
+            btn.disabled=true;
+            if(c.key===st.answer){btn.style.borderColor='var(--success)';btn.style.background='rgba(34,197,94,0.15)';btn.style.color='var(--success)';}
+            else if(c.key===(answers[si]||'')){btn.style.borderColor='var(--error)';btn.style.background='rgba(239,68,68,0.15)';btn.style.color='var(--error)';}
+          });
+        });
+      }catch{}
     }else if(q.type==='matchsent'){
       try{
         const answers=JSON.parse(given||'{}');
@@ -8731,6 +9581,62 @@ function _highlightPassageAnswers(test){
 
   const btn=document.getElementById('rdSubmitBtn');
   if(btn){btn.style.background='var(--bg-tertiary)';btn.style.color='var(--text-secondary)';btn.textContent='✓ Submitted';btn.style.cursor='default';}
+}
+
+function _getBandHistory(){
+  try{return JSON.parse(localStorage.getItem('mt_band_history')||'[]');}catch(e){return [];}
+}
+
+const RD_TYPE_LABELS={tfng:'True/False/NG',ynng:'Yes/No/NG',multiple:'Multiple Choice',sentence:'Sentence Completion',matchpara:'Matching Paragraphs',summary:'Summary Completion',other:'Other'};
+
+function _renderPerSkillBars(){
+  const perType={};
+  readingState.testPassages.forEach((pp,i)=>{
+    pp.questions.forEach((q,qi)=>{
+      const given=(readingState.testAnswers[i][qi]||'').toString();
+      const scored=_scoreQuestion(q,given,qi);
+      const t=q.type||'other';
+      if(!perType[t])perType[t]={c:0,n:0};
+      perType[t].n++;
+      if(scored.correct)perType[t].c+=scored.partial;
+    });
+  });
+  const types=Object.keys(perType);
+  if(!types.length)return`<div style="font-size:0.75rem;color:var(--text-secondary);">No data</div>`;
+  return types.map(t=>{
+    const {c,n}=perType[t];
+    const pct=Math.round((c/n)*100);
+    const color=pct>=80?'var(--success)':pct>=50?'#f59e0b':'var(--error)';
+    return`<div style="margin-bottom:0.5rem;">
+      <div style="display:flex;justify-content:space-between;font-size:0.7rem;margin-bottom:0.2rem;">
+        <span style="color:var(--text-secondary);">${RD_TYPE_LABELS[t]||t}</span>
+        <span style="font-weight:700;color:${color};">${c}/${n} (${pct}%)</span>
+      </div>
+      <div style="height:6px;background:var(--bg-tertiary);border-radius:4px;overflow:hidden;">
+        <div style="height:100%;width:${pct}%;background:${color};border-radius:4px;"></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function _renderBandTrendSparkline(){
+  const hist=_getBandHistory().slice(-10);
+  if(hist.length<2)return`<div style="font-size:0.75rem;color:var(--text-secondary);">Complete more tests to see your trend.</div>`;
+  const vals=hist.map(h=>parseFloat(h.band)||0);
+  const min=Math.min(...vals),max=Math.max(...vals);
+  const range=(max-min)||1;
+  const w=280,h=60,pad=8;
+  const pts=vals.map((v,i)=>{
+    const x=pad+(i/(vals.length-1))*(w-pad*2);
+    const y=h-pad-((v-min)/range)*(h-pad*2);
+    return`${x.toFixed(1)},${y.toFixed(1)}`;
+  });
+  const lastX=pts[pts.length-1].split(',')[0],lastY=pts[pts.length-1].split(',')[1];
+  return`<svg width="100%" height="${h}" viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMidYMid meet">
+    <polyline points="${pts.join(' ')}" fill="none" stroke="var(--ielts)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="${lastX}" cy="${lastY}" r="4" fill="var(--ielts)"/>
+    <text x="${lastX}" y="${parseFloat(lastY)-8}" font-size="10" fill="var(--ielts)" font-weight="700" text-anchor="middle">${vals[vals.length-1].toFixed(1)}</text>
+  </svg>`;
 }
 
 function _getBandFromScore(correct,total){
@@ -9209,6 +10115,12 @@ function _buildGrammarShell(){
       <button id="gfpFitbBtn" onclick="_gfpSetView('fitb')"
         style="padding:0.35rem 0.55rem;border-radius:8px;font-size:0.75rem;font-weight:700;cursor:pointer;
                border:2px solid var(--bg-tertiary);background:transparent;color:var(--text-secondary);">🖊 Fill</button>
+      <button id="gfpRaceBtn" onclick="_gfpSetView('race')"
+        style="padding:0.35rem 0.55rem;border-radius:8px;font-size:0.75rem;font-weight:700;cursor:pointer;
+               border:2px solid var(--bg-tertiary);background:transparent;color:var(--text-secondary);">⚡ Race</button>
+      <button id="gfpTransformBtn" onclick="_gfpSetView('transform')"
+        style="padding:0.35rem 0.55rem;border-radius:8px;font-size:0.75rem;font-weight:700;cursor:pointer;
+               border:2px solid var(--bg-tertiary);background:transparent;color:var(--text-secondary);">🔄 Transform</button>
     </div>
 
     <!-- DRAWER BACKDROP -->
@@ -9277,6 +10189,8 @@ function _gfpRefreshContent(){
   _gfpUpdateTopbarButtons();
   if(grammarView==='rules') _renderGrammarRules();
   else if(grammarView==='fitb') _renderGrammarFitb();
+  else if(grammarView==='race') _renderGrammarRace();
+  else if(grammarView==='transform') _renderGrammarTransform();
   else _renderGrammarQuiz();
 }
 
@@ -9315,6 +10229,8 @@ function _gfpUpdateTopbarButtons(){
   const rb=document.getElementById('gfpRulesBtn');
   const qb=document.getElementById('gfpQuizBtn');
   const fb=document.getElementById('gfpFitbBtn');
+  const raceBtn=document.getElementById('gfpRaceBtn');
+  const trBtn=document.getElementById('gfpTransformBtn');
   if(rb){
     rb.style.borderColor=grammarView==='rules'?'var(--accent)':'var(--bg-tertiary)';
     rb.style.background=grammarView==='rules'?'var(--accent-glow)':'transparent';
@@ -9331,6 +10247,16 @@ function _gfpUpdateTopbarButtons(){
     fb.style.borderColor=grammarView==='fitb'?'#22c55e':'var(--bg-tertiary)';
     fb.style.background=grammarView==='fitb'?'rgba(34,197,94,0.12)':'transparent';
     fb.style.color=grammarView==='fitb'?'#22c55e':'var(--text-secondary)';
+  }
+  if(raceBtn){
+    raceBtn.style.borderColor=grammarView==='race'?'#ef4444':'var(--bg-tertiary)';
+    raceBtn.style.background=grammarView==='race'?'rgba(239,68,68,0.12)':'transparent';
+    raceBtn.style.color=grammarView==='race'?'#ef4444':'var(--text-secondary)';
+  }
+  if(trBtn){
+    trBtn.style.borderColor=grammarView==='transform'?'#6366f1':'var(--bg-tertiary)';
+    trBtn.style.background=grammarView==='transform'?'rgba(99,102,241,0.12)':'transparent';
+    trBtn.style.color=grammarView==='transform'?'#6366f1':'var(--text-secondary)';
   }
 }
 
@@ -9420,6 +10346,190 @@ function _renderGrammarFitb(){
     }
   }
   render();
+}
+
+// ============================================================
+//  ERROR CORRECTION RACE
+// ============================================================
+const errorRaceSets=[
+  {title:"Academic Style I",text:"The government have introduced several new policies to tackle the raising cost of living. Despite theses measures, many families continues to struggle financially. Economists believe that the situation will improved gradually over the next few years.",
+   errors:[{wrong:"have",correct:"has"},{wrong:"raising",correct:"rising"},{wrong:"theses",correct:"these"},{wrong:"continues",correct:"continue"},{wrong:"improved",correct:"improve"}]},
+  {title:"Academic Style II",text:"Renewable energy have become increasingly affordable over the past decade. However, many countries is still relying heavily on fossil fuels for they electricity needs. Unless governments act quickly, emissions will continued to rise despite of growing public concern.",
+   errors:[{wrong:"have",correct:"has"},{wrong:"is",correct:"are"},{wrong:"they",correct:"their"},{wrong:"continued",correct:"continue"},{wrong:"of",correct:""}]},
+  {title:"Academic Style III",text:"Social media have transformed the way young people communicates with each other. While this technology offer clear benefits, it also create serious risks for mental health. Researchers has found that excessive use are linked to higher rates of anxiety.",
+   errors:[{wrong:"have",correct:"has"},{wrong:"communicates",correct:"communicate"},{wrong:"offer",correct:"offers"},{wrong:"create",correct:"creates"},{wrong:"has",correct:"have"}]},
+  {title:"Academic Style IV",text:"Urban populations has grown rapidly since the 1990s, placing enormous pressure on housing and transport. Cities who fail to plan ahead often experiences severe congestion. Experts argues that investment in public transport are the most effective long-term solution.",
+   errors:[{wrong:"has",correct:"have"},{wrong:"who",correct:"that"},{wrong:"experiences",correct:"experience"},{wrong:"argues",correct:"argue"},{wrong:"are",correct:"is"}]}
+];
+
+function _errTokenize(text){
+  return text.split(/(\s+)/).filter(t=>t.length);
+}
+function _errCore(token){
+  return token.replace(/^[^A-Za-z]+|[^A-Za-z]+$/g,'');
+}
+
+let raceState=null;
+
+function _renderGrammarRace(){
+  const el=document.getElementById('gfpContent');
+  if(!el)return;
+  if(!raceState||raceState.ended===undefined){
+    _raceNewSet();
+    return;
+  }
+  const set=errorRaceSets[raceState.setIdx];
+  const tokens=raceState.tokens;
+
+  const tokensHtml=tokens.map((tok,i)=>{
+    if(/^\s+$/.test(tok))return tok;
+    const core=_errCore(tok);
+    if(!core)return tok;
+    const isErrorTok=raceState.errorTokenIdx.includes(i);
+    const isSelected=raceState.selected.has(i);
+    let style='cursor:pointer;border-radius:4px;padding:0 1px;';
+    if(raceState.ended){
+      if(isErrorTok&&isSelected)style+='background:rgba(34,197,94,0.35);text-decoration:line-through;';
+      else if(isErrorTok&&!isSelected)style+='background:rgba(245,158,11,0.35);text-decoration:underline wavy #f59e0b;';
+      else if(!isErrorTok&&isSelected)style+='background:rgba(239,68,68,0.3);text-decoration:line-through;';
+    } else if(isSelected){
+      style+='background:rgba(239,68,68,0.25);';
+    }
+    return`<span onclick="_raceToggleToken(${i})" style="${style}">${tok}</span>`;
+  }).join('');
+
+  const correctionsHtml=raceState.ended?`<div style="margin-top:0.9rem;background:var(--bg-primary);border:1px solid var(--bg-tertiary);border-radius:10px;padding:0.75rem;">
+    <div style="font-size:0.68rem;font-weight:800;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.4rem;">Corrections</div>
+    ${set.errors.map(e=>`<div style="font-size:0.8rem;margin-bottom:0.25rem;"><span style="color:#ef4444;text-decoration:line-through;">${e.wrong}</span> → <span style="color:#22c55e;font-weight:700;">${e.correct||'(delete)'}</span></div>`).join('')}
+  </div>`:'';
+
+  const foundCount=[...raceState.selected].filter(i=>raceState.errorTokenIdx.includes(i)).length;
+  const falseCount=[...raceState.selected].filter(i=>!raceState.errorTokenIdx.includes(i)).length;
+
+  el.innerHTML=`
+    <div style="font-weight:800;color:#ef4444;font-size:1rem;margin-bottom:0.2rem;">⚡ Error Correction Race — ${set.title}</div>
+    <div style="font-size:0.72rem;color:var(--text-secondary);margin-bottom:0.8rem;">Find the <b>5 grammar mistakes</b> before time runs out. Tap a word to mark it as an error.</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.7rem;">
+      <div style="font-size:1.5rem;font-weight:900;color:${raceState.timeLeft<=15?'#ef4444':'var(--text-primary)'};">${raceState.started&&!raceState.ended?raceState.timeLeft+'s':raceState.ended?'⏹ Stopped':'Ready'}</div>
+      <div style="font-size:0.78rem;color:var(--text-secondary);">Found: <b style="color:#22c55e;">${foundCount}/5</b> ${raceState.started?`· False marks: <b style="color:#ef4444;">${falseCount}</b>`:''}</div>
+    </div>
+    <div style="background:var(--bg-secondary);border:1px solid var(--bg-tertiary);border-radius:12px;padding:1rem;font-size:0.92rem;line-height:2;">${tokensHtml}</div>
+    ${correctionsHtml}
+    <div style="display:flex;gap:0.5rem;margin-top:0.9rem;">
+      ${!raceState.started?`<button onclick="_raceStart()" style="flex:1;background:#ef4444;color:#fff;border:none;border-radius:10px;padding:0.7rem;font-weight:800;cursor:pointer;font-size:0.9rem;">▶ Start Race (90s)</button>`
+      :!raceState.ended?`<button onclick="_raceEnd()" style="flex:1;background:#22c55e;color:#fff;border:none;border-radius:10px;padding:0.7rem;font-weight:800;cursor:pointer;font-size:0.9rem;">✓ Submit</button>`
+      :`<button onclick="_raceNewSet()" style="flex:1;background:var(--bg-tertiary);color:var(--text-primary);border:none;border-radius:10px;padding:0.7rem;font-weight:700;cursor:pointer;font-size:0.9rem;">↺ New Paragraph</button>`}
+    </div>`;
+}
+
+function _raceNewSet(){
+  clearInterval(raceState&&raceState.timerId);
+  const setIdx=Math.floor(Math.random()*errorRaceSets.length);
+  const set=errorRaceSets[setIdx];
+  const tokens=_errTokenize(set.text);
+  const errorTokenIdx=[];
+  set.errors.forEach(e=>{
+    const idx=tokens.findIndex((t,i)=>!errorTokenIdx.includes(i)&&_errCore(t)===e.wrong);
+    if(idx>-1)errorTokenIdx.push(idx);
+  });
+  raceState={setIdx,tokens,errorTokenIdx,selected:new Set(),started:false,ended:false,timeLeft:90,timerId:null};
+  _renderGrammarRace();
+}
+
+function _raceStart(){
+  raceState.started=true;
+  raceState.timerId=setInterval(()=>{
+    raceState.timeLeft--;
+    if(raceState.timeLeft<=0){_raceEnd();return;}
+    _renderGrammarRace();
+  },1000);
+  _renderGrammarRace();
+}
+
+function _raceToggleToken(i){
+  if(!raceState.started||raceState.ended)return;
+  if(raceState.selected.has(i))raceState.selected.delete(i);
+  else raceState.selected.add(i);
+  _renderGrammarRace();
+}
+
+function _raceEnd(){
+  clearInterval(raceState.timerId);
+  raceState.ended=true;
+  raceState.started=true;
+  _renderGrammarRace();
+}
+
+// ============================================================
+//  SENTENCE TRANSFORMATION
+// ============================================================
+const transformExercises=[
+  {category:"Passive Voice",instruction:"Rewrite in the passive voice:",original:"The government introduced a new tax last year.",model:"A new tax was introduced (by the government) last year.",keyPhrase:"was introduced",hint:"was/were + past participle"},
+  {category:"Passive Voice",instruction:"Rewrite in the passive voice:",original:"Scientists have discovered a new treatment for the disease.",model:"A new treatment for the disease has been discovered (by scientists).",keyPhrase:"has been discovered",hint:"has/have been + past participle"},
+  {category:"Passive Voice",instruction:"Rewrite in the passive voice:",original:"They will announce the results next month.",model:"The results will be announced next month.",keyPhrase:"will be announced",hint:"will be + past participle"},
+  {category:"Conditionals",instruction:"Rewrite as a Type 2 (unreal present) conditional:",original:"Governments do not invest more in renewable energy, so emissions do not decline.",model:"If governments invested more in renewable energy, emissions would decline.",keyPhrase:"would decline",hint:"If + past simple, ... would + base verb"},
+  {category:"Conditionals",instruction:"Rewrite as a Type 1 (real future) conditional:",original:"Emissions are not cut immediately. Temperatures will keep rising.",model:"Unless emissions are cut immediately, temperatures will keep rising.",keyPhrase:"will keep rising",hint:"Unless + present simple, ... will + base verb"},
+  {category:"Conditionals",instruction:"Rewrite as a Type 3 (unreal past) conditional:",original:"The policy failed because the evidence was ignored.",model:"If the evidence had not been ignored, the policy would not have failed.",keyPhrase:"would not have failed",hint:"If + past perfect, ... would have + past participle"},
+  {category:"Relative Clauses",instruction:"Combine using a relative clause:",original:"The scientist won the award. She discovered the new treatment.",model:"The scientist who discovered the new treatment won the award.",keyPhrase:"who discovered",hint:"who/that = subject relative pronoun for people"},
+  {category:"Relative Clauses",instruction:"Combine using a relative clause:",original:"The report was published last week. It examined climate policy in detail.",model:"The report, which examined climate policy in detail, was published last week.",keyPhrase:"which examined",hint:"which = non-defining relative pronoun for things"},
+  {category:"Relative Clauses",instruction:"Combine using a relative clause:",original:"The city invested heavily in public transport. Its air quality improved significantly.",model:"The city whose air quality improved significantly invested heavily in public transport.",keyPhrase:"whose air quality",hint:"whose = possessive relative pronoun"}
+];
+
+let transformState=null;
+
+function _tfNormalize(s){
+  return s.toLowerCase().replace(/[.,!?;:()]/g,'').replace(/\s+/g,' ').trim();
+}
+
+function _renderGrammarTransform(){
+  const el=document.getElementById('gfpContent');
+  if(!el)return;
+  if(!transformState){
+    transformState={cat:'All',idx:0,answer:'',checked:false,correct:false};
+  }
+  const pool=transformState.cat==='All'?transformExercises:transformExercises.filter(t=>t.category===transformState.cat);
+  if(transformState.idx>=pool.length)transformState.idx=0;
+  const item=pool[transformState.idx];
+  const cats=['All',...new Set(transformExercises.map(t=>t.category))];
+  const catTabsHtml=cats.map(c=>`<button onclick="transformState={cat:'${c}',idx:0,answer:'',checked:false,correct:false};_renderGrammarTransform()"
+    style="padding:0.3rem 0.6rem;border-radius:20px;font-size:0.7rem;font-weight:700;cursor:pointer;border:1.5px solid ${c===transformState.cat?'#6366f1':'var(--bg-tertiary)'};background:${c===transformState.cat?'rgba(99,102,241,0.15)':'transparent'};color:${c===transformState.cat?'#6366f1':'var(--text-secondary)'};margin-right:0.3rem;">${c}</button>`).join('');
+
+  el.innerHTML=`
+    <div style="font-weight:800;color:#6366f1;font-size:1rem;margin-bottom:0.4rem;">🔄 Sentence Transformation</div>
+    <div style="margin-bottom:0.8rem;">${catTabsHtml}</div>
+    <div style="font-size:0.7rem;color:var(--text-secondary);margin-bottom:0.4rem;">Exercise ${transformState.idx+1}/${pool.length} · <span style="color:#6366f1;font-weight:700;">${item.category}</span></div>
+    <div style="background:var(--bg-secondary);border:1px solid var(--bg-tertiary);border-radius:12px;padding:1rem;margin-bottom:0.8rem;">
+      <div style="font-size:0.78rem;color:var(--text-secondary);margin-bottom:0.4rem;font-weight:700;">${item.instruction}</div>
+      <div style="font-size:0.92rem;color:var(--text-primary);font-style:italic;margin-bottom:0.7rem;">"${item.original}"</div>
+      <textarea id="tfInput" rows="2" placeholder="Type your transformed sentence..." style="width:100%;background:var(--bg-primary);border:1.5px solid ${transformState.checked?(transformState.correct?'#22c55e':'#ef4444'):'var(--bg-tertiary)'};border-radius:8px;padding:0.6rem;font-size:0.88rem;color:var(--text-primary);font-family:inherit;resize:vertical;outline:none;" oninput="transformState.answer=this.value">${transformState.answer}</textarea>
+      ${transformState.checked?`<div style="margin-top:0.5rem;font-size:0.8rem;font-weight:700;color:${transformState.correct?'#22c55e':'#ef4444'};">${transformState.correct?'✓ Looks right!':'✗ Not quite — compare with the model answer:'}</div>
+      <div style="margin-top:0.3rem;font-size:0.84rem;color:var(--text-primary);background:rgba(34,197,94,0.08);border-left:3px solid #22c55e;padding:0.4rem 0.6rem;border-radius:4px;">${item.model}</div>
+      <div style="margin-top:0.35rem;font-size:0.72rem;color:var(--text-secondary);">💡 ${item.hint}</div>`
+      :`<div style="margin-top:0.4rem;font-size:0.72rem;color:var(--text-secondary);">💡 ${item.hint}</div>`}
+    </div>
+    <div style="display:flex;gap:0.5rem;">
+      <button onclick="_tfCheck()" style="flex:1;background:#6366f1;color:#fff;border:none;border-radius:10px;padding:0.65rem;font-weight:700;cursor:pointer;font-size:0.88rem;">✓ Check</button>
+      <button onclick="_tfNext(${pool.length})" style="flex:1;background:var(--bg-tertiary);color:var(--text-primary);border:none;border-radius:10px;padding:0.65rem;font-weight:700;cursor:pointer;font-size:0.88rem;">Next →</button>
+    </div>`;
+  const ta=document.getElementById('tfInput');
+  if(ta)ta.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.ctrlKey){_tfCheck();}});
+}
+
+function _tfCheck(){
+  const pool=transformState.cat==='All'?transformExercises:transformExercises.filter(t=>t.category===transformState.cat);
+  const item=pool[transformState.idx];
+  const norm=_tfNormalize(transformState.answer||'');
+  transformState.correct=norm.includes(_tfNormalize(item.keyPhrase));
+  transformState.checked=true;
+  _renderGrammarTransform();
+}
+
+function _tfNext(poolLen){
+  transformState.idx=(transformState.idx+1)%poolLen;
+  transformState.answer='';
+  transformState.checked=false;
+  transformState.correct=false;
+  _renderGrammarTransform();
 }
 
 function _renderGrammarRules(){
@@ -10028,6 +11138,16 @@ function showWordCard(word, anchorEl){
     synSec.style.display='block';
   } else synSec.style.display='none';
 
+  // Save-to-My-List button
+  const saveBtn=document.getElementById('wcSaveBtn');
+  if(saveBtn){
+    const already=srsIsSaved(v.word);
+    saveBtn.textContent=already?'✓ Saved':'⭐ Save to My List';
+    saveBtn.disabled=already;
+    saveBtn.style.opacity=already?'0.65':'1';
+    saveBtn.onclick=function(){srsSaveWord(v.word);};
+  }
+
   // Position
   card.classList.remove('show');
   card.style.left='';card.style.top='';
@@ -10067,19 +11187,30 @@ document.addEventListener('click',function(e){
 });
 
 // ── Build clickable passage (for definition mode) ──
-function _buildClickablePassage(passageText){
+function _buildClickablePassage(passageText,highlightPhrase){
+  let hlDone=false;
   return passageText.split('\n\n').filter(p=>p.trim()).map(para=>{
     const lbl=para.trim().match(/^\[([A-G])\]\s*/);
     const clean=lbl?para.trim().replace(/^\[[A-G]\]\s*/,''):para.trim();
     const lblHtml=lbl?`<span class="para-sec-lbl">${lbl[1]}</span>`:'';
-    // Wrap each word in a span for click-to-lookup
-    const wordified=clean.replace(/([a-zA-Z]{3,})/g,(match)=>{
+    const wordify=(str)=>str.replace(/([a-zA-Z]{3,})/g,(match)=>{
       const key=match.toLowerCase();
       const hasData=vocabData.some(v=>v.word.toLowerCase()===key);
       if(hasData) return`<span class="rd-def-word" data-word="${key}" onclick="rdPassageWordClick(event,'${key}')">${match}</span>`;
       return match;
     });
-    return`<p>${lblHtml}${wordified}</p>`;
+    let bodyHtml;
+    let paraHasHl=false;
+    if(highlightPhrase && !hlDone){
+      const idx=clean.toLowerCase().indexOf(highlightPhrase.toLowerCase());
+      if(idx>-1){
+        hlDone=true;paraHasHl=true;
+        const before=clean.slice(0,idx),match=clean.slice(idx,idx+highlightPhrase.length),after=clean.slice(idx+highlightPhrase.length);
+        bodyHtml=`${wordify(before)}<mark id="rdPassageHL" class="rd-passage-highlight">${wordify(match)}</mark>${wordify(after)}`;
+      }
+    }
+    if(!bodyHtml)bodyHtml=wordify(clean);
+    return`<p${paraHasHl?' class="rd-passage-hl-para"':''}>${lblHtml}${bodyHtml}</p>`;
   }).join('');
 }
 
@@ -10122,20 +11253,60 @@ function rdDefLockedNotice(){
 
 // ── Matching Features builder ──
 function _buildMatchFeatHtml(q,qi,prefix){
-  const featureOptions=q.features.map((f,i)=>`<option value="${f.key}">${f.label}</option>`).join('');
-  return`<div style="background:rgba(99,102,241,0.05);border:1px solid rgba(99,102,241,0.18);border-radius:8px;padding:0.55rem 0.75rem;margin-bottom:0.55rem;">
+  const idBase=`${prefix}_mf_${qi}`;
+  const legendHtml=`<div style="background:rgba(99,102,241,0.05);border:1px solid rgba(99,102,241,0.18);border-radius:8px;padding:0.55rem 0.75rem;margin-bottom:0.55rem;">
     <div style="font-size:0.65rem;font-weight:900;color:#6366f1;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.35rem;">Feature Options</div>
     ${q.features.map(f=>`<div style="font-size:0.72rem;color:var(--text-secondary);padding:0.15rem 0;"><b style="color:#6366f1;min-width:48px;display:inline-block;">${f.key}</b>${f.label}</div>`).join('')}
-  </div>
-  <div style="font-size:0.68rem;color:var(--text-secondary);margin-bottom:0.38rem;">Match each statement with the correct feature.</div>
-  ${q.statements.map((st,si)=>`
-    <div class="mf-item">
-      <div class="mf-statement">${st.text}</div>
-      <select class="mf-select" id="${prefix}MF_${qi}_${si}" onchange="saveMFAnswer('${prefix}',${qi},${si},this.value)">
-        <option value="">— select —</option>
-        ${featureOptions}
-      </select>
-    </div>`).join('')}`;
+  </div>`;
+  return legendHtml+_buildChipMatchHtml(qi,prefix,idBase,q.features,q.statements,'saveMFAnswer2',
+    'Drag (or tap) a feature letter onto each matching statement.','MF');
+}
+function saveMFAnswer2(prefix,qi,si,val){
+  if(!readingState._mfAnswers)readingState._mfAnswers={};
+  const key=prefix+'_'+qi+'_'+si;
+  readingState._mfAnswers[key]=val;
+  const q=_getQByPrefixAndIdx(prefix,qi);
+  if(!q)return;
+  const result={};
+  q.statements.forEach((_,i)=>{result[i]=readingState._mfAnswers[prefix+'_'+qi+'_'+i]||'';});
+  _saveAnswerForPrefix(prefix,qi,JSON.stringify(result));
+}
+
+// ── Classification ──
+function _buildClassificationHtml(q,qi,prefix){
+  const legendHtml=`<div style="background:rgba(139,92,246,0.05);border:1px solid rgba(139,92,246,0.18);border-radius:8px;padding:0.55rem 0.75rem;margin-bottom:0.55rem;">
+    <div style="font-size:0.65rem;font-weight:900;color:var(--ielts);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.35rem;">Categories</div>
+    ${q.categories.map(c=>`<div style="font-size:0.72rem;color:var(--text-secondary);padding:0.15rem 0;"><b style="color:var(--ielts);min-width:24px;display:inline-block;">${c.key}</b>${c.label}</div>`).join('')}
+  </div>`;
+  const rowsHtml=q.statements.map((st,si)=>{
+    const zoneId=`${prefix}CLS_${qi}_${si}`;
+    return`<div class="mpi-item" style="flex-direction:column;align-items:stretch;">
+      <div class="mpi-statement" style="margin-bottom:0.35rem;">${st.text}</div>
+      <div id="${zoneId}" style="display:flex;gap:0.35rem;flex-wrap:wrap;">
+        ${q.categories.map(c=>`<button type="button" id="${zoneId}_btn_${c.key}" onclick="saveClassAnswer('${prefix}',${qi},${si},'${c.key}','${zoneId}')"
+          style="padding:0.3rem 0.6rem;border-radius:7px;border:1.5px solid var(--bg-tertiary);background:var(--bg-primary);color:var(--text-primary);cursor:pointer;font-weight:700;font-size:0.75rem;">${c.key}</button>`).join('')}
+      </div>
+    </div>`;
+  }).join('');
+  return`<div style="font-size:0.68rem;color:var(--text-secondary);margin-bottom:0.35rem;">${q.text||'Classify each statement into the correct category.'}</div>
+  ${legendHtml}${rowsHtml}`;
+}
+function saveClassAnswer(prefix,qi,si,val,zoneId){
+  if(!readingState._classAnswers)readingState._classAnswers={};
+  const key=prefix+'_'+qi+'_'+si;
+  readingState._classAnswers[key]=val;
+  const q=_getQByPrefixAndIdx(prefix,qi);
+  if(!q)return;
+  // Visually select the chosen button
+  q.categories.forEach(c=>{
+    const btn=document.getElementById(zoneId+'_btn_'+c.key);
+    if(!btn)return;
+    if(c.key===val){btn.style.borderColor='var(--ielts)';btn.style.background='rgba(139,92,246,0.15)';btn.style.color='var(--ielts)';}
+    else{btn.style.borderColor='var(--bg-tertiary)';btn.style.background='var(--bg-primary)';btn.style.color='var(--text-primary)';}
+  });
+  const result={};
+  q.statements.forEach((_,i)=>{result[i]=readingState._classAnswers[prefix+'_'+qi+'_'+i]||'';});
+  _saveAnswerForPrefix(prefix,qi,JSON.stringify(result));
 }
 
 function saveMFAnswer(prefix,qi,si,val){
@@ -10600,10 +11771,32 @@ function getWpmHistory(){
   try{return JSON.parse(localStorage.getItem(HIST_KEY)||'[]');}catch(e){return[];}
 }
 
+function _computeConsistency(timestamps){
+  if(!timestamps||timestamps.length<4)return null;
+  const intervals=[];
+  for(let i=1;i<timestamps.length;i++){
+    const d=timestamps[i]-timestamps[i-1];
+    if(d>0&&d<3000)intervals.push(d); // ignore pauses >3s (thinking time, not typing rhythm)
+  }
+  if(intervals.length<4)return null;
+  const mean=intervals.reduce((a,b)=>a+b,0)/intervals.length;
+  const variance=intervals.reduce((a,b)=>a+(b-mean)*(b-mean),0)/intervals.length;
+  const stdev=Math.sqrt(variance);
+  // Convert to a 0-100 "consistency score" — lower stdev relative to mean = more consistent
+  const cv=stdev/mean; // coefficient of variation
+  const score=Math.max(0,Math.min(100,Math.round(100-cv*100)));
+  return{score,stdevMs:Math.round(stdev),meanMs:Math.round(mean)};
+}
+
 function saveSessionToHistory(wpm, acc){
   if(wpm<5)return;
   const hist=getWpmHistory();
-  hist.push({wpm,acc,date:new Date().toLocaleDateString(),ts:Date.now()});
+  const consistency=_computeConsistency(keystrokeTimestamps);
+  const entry={wpm,acc,date:new Date().toLocaleDateString(),ts:Date.now(),hour:new Date().getHours()};
+  if(consistency)entry.consistency=consistency.score;
+  if(keyMistakeMap&&Object.keys(keyMistakeMap).length)entry.keyMistakes=Object.assign({},keyMistakeMap);
+  if(wpmHistory&&wpmHistory.length)entry.curve=wpmHistory.slice(-80);
+  hist.push(entry);
   if(hist.length>60)hist.splice(0,hist.length-60);
   localStorage.setItem(HIST_KEY,JSON.stringify(hist));
 }
@@ -10619,20 +11812,39 @@ function checkPersonalBest(articleTitle, wpm, acc){
   return isNewBest;
 }
 
+let analyticsTab='overview';
+
 function openAnalytics(){
   const modal=document.getElementById('analyticsModal');
   modal.classList.add('show');
+  analyticsTab='overview';
   renderAnalytics();
   modal.onclick=e=>{if(e.target===modal)modal.classList.remove('show');};
 }
 
 function renderAnalytics(){
   const box=document.getElementById('analyticsBox');
+  const tabs=[['overview','📊 Overview'],['trends','📈 Trends'],['keys','⌨️ Keys'],['timing','🕐 Timing'],['compare','⚖️ Compare']];
+  const tabBar=`<div style="display:flex;gap:0.3rem;margin-bottom:0.9rem;flex-wrap:wrap;">
+    ${tabs.map(([id,label])=>`<button onclick="analyticsTab='${id}';renderAnalytics()" style="flex:1;min-width:80px;padding:0.4rem 0.3rem;border-radius:8px;border:2px solid ${analyticsTab===id?'var(--accent)':'var(--bg-tertiary)'};background:${analyticsTab===id?'var(--accent-glow)':'var(--bg-primary)'};color:${analyticsTab===id?'var(--accent)':'var(--text-secondary)'};cursor:pointer;font-weight:700;font-size:0.68rem;">${label}</button>`).join('')}
+  </div>`;
+  const header=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.8rem;">
+      <div style="font-size:1.15rem;font-weight:900;color:var(--accent);">📊 Progress & Analytics</div>
+      <button onclick="document.getElementById('analyticsModal').classList.remove('show')" style="background:none;border:none;font-size:1.2rem;cursor:pointer;color:var(--text-secondary);">✕</button>
+    </div>`;
+  let body='';
+  if(analyticsTab==='overview')body=_renderAnalyticsOverview();
+  else if(analyticsTab==='trends')body=_renderAnalyticsTrends();
+  else if(analyticsTab==='keys')body=_renderAnalyticsKeys();
+  else if(analyticsTab==='timing')body=_renderAnalyticsTiming();
+  else if(analyticsTab==='compare')body=_renderAnalyticsCompare();
+  box.innerHTML=header+tabBar+body;
+}
+
+function _renderAnalyticsOverview(){
   const hist=getWpmHistory();
   const bests=getPersonalBests();
   const bestEntries=Object.entries(bests).sort((a,b)=>b[1].wpm-a[1].wpm);
-
-  // WPM chart
   const recent=hist.slice(-30);
   const maxWpm=Math.max(1,...recent.map(h=>h.wpm));
   const chartHTML=recent.length<2
@@ -10644,17 +11856,10 @@ function renderAnalytics(){
       <div style="display:flex;justify-content:space-between;font-size:0.65rem;color:var(--text-secondary);">
         <span>${recent[0]?.date||''}</span><span>${recent[recent.length-1]?.date||''}</span>
       </div>`;
-
-  // Session summary
   const avgWpm=hist.length?Math.round(hist.reduce((a,b)=>a+b.wpm,0)/hist.length):0;
   const bestWpm=hist.length?Math.max(...hist.map(h=>h.wpm)):0;
   const avgAcc=hist.length?Math.round(hist.reduce((a,b)=>a+b.acc,0)/hist.length):0;
-
-  box.innerHTML=`
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
-      <div style="font-size:1.15rem;font-weight:900;color:var(--accent);">📊 Progress & Analytics</div>
-      <button onclick="document.getElementById('analyticsModal').classList.remove('show')" style="background:none;border:none;font-size:1.2rem;cursor:pointer;color:var(--text-secondary);">✕</button>
-    </div>
+  return`
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.5rem;margin-bottom:1rem;">
       <div class="ielts-stat-card" style="border-color:rgba(99,102,241,0.3);">
         <div class="ielts-stat-label" style="color:var(--accent);">Avg WPM</div>
@@ -10686,6 +11891,165 @@ function renderAnalytics(){
     <div style="margin-top:0.85rem;display:flex;gap:0.4rem;justify-content:flex-end;">
       <button onclick="if(confirm('Clear all analytics data?')){localStorage.removeItem('${HIST_KEY}');localStorage.removeItem('${PB_KEY}');renderAnalytics();}" style="font-size:0.75rem;background:rgba(239,68,68,0.1);color:#ef4444;border:1px solid #ef4444;border-radius:7px;padding:0.3rem 0.65rem;cursor:pointer;">🗑 Clear Data</button>
     </div>`;
+}
+
+// ── Trends: WPM trend line + consistency score, aggregated by day/week/month ──
+let analyticsTrendGrain='day';
+function _aggregateHist(hist,grain){
+  const buckets={};
+  hist.forEach(h=>{
+    const d=new Date(h.ts||Date.now());
+    let key;
+    if(grain==='day')key=d.toISOString().slice(0,10);
+    else if(grain==='week'){const onejan=new Date(d.getFullYear(),0,1);const wk=Math.ceil((((d-onejan)/86400000)+onejan.getDay()+1)/7);key=d.getFullYear()+'-W'+wk;}
+    else key=d.getFullYear()+'-'+(d.getMonth()+1);
+    if(!buckets[key])buckets[key]={wpmSum:0,accSum:0,consSum:0,consN:0,n:0,label:key};
+    buckets[key].wpmSum+=h.wpm;buckets[key].accSum+=h.acc;buckets[key].n++;
+    if(h.consistency!=null){buckets[key].consSum+=h.consistency;buckets[key].consN++;}
+  });
+  return Object.values(buckets).map(b=>({label:b.label,wpm:Math.round(b.wpmSum/b.n),acc:Math.round(b.accSum/b.n),consistency:b.consN?Math.round(b.consSum/b.consN):null}));
+}
+function _svgLineChart(vals,opts){
+  opts=opts||{};
+  const w=opts.w||300,h=opts.h||70,pad=10,color=opts.color||'var(--accent)';
+  if(vals.length<2)return`<div style="text-align:center;color:var(--text-secondary);font-size:0.78rem;padding:0.8rem;">Not enough data yet.</div>`;
+  const min=Math.min(...vals),max=Math.max(...vals);
+  const range=(max-min)||1;
+  const pts=vals.map((v,i)=>{
+    const x=pad+(i/(vals.length-1))*(w-pad*2);
+    const y=h-pad-((v-min)/range)*(h-pad*2);
+    return`${x.toFixed(1)},${y.toFixed(1)}`;
+  });
+  const lastPt=pts[pts.length-1].split(',');
+  return`<svg width="100%" height="${h}" viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMidYMid meet">
+    <polyline points="${pts.join(' ')}" fill="none" stroke="${color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="${lastPt[0]}" cy="${lastPt[1]}" r="3.5" fill="${color}"/>
+  </svg>`;
+}
+function _renderAnalyticsTrends(){
+  const hist=getWpmHistory();
+  if(hist.length<2)return`<div style="text-align:center;color:var(--text-secondary);font-size:0.85rem;padding:1.5rem;">Complete at least 2 sessions to see trends.</div>`;
+  const agg=_aggregateHist(hist,analyticsTrendGrain);
+  const wpmVals=agg.map(a=>a.wpm);
+  const consVals=agg.filter(a=>a.consistency!=null).map(a=>a.consistency);
+  const grainBtns=['day','week','month'].map(g=>`<button onclick="analyticsTrendGrain='${g}';renderAnalytics()" style="flex:1;padding:0.3rem;border-radius:6px;font-size:0.7rem;font-weight:700;cursor:pointer;border:1.5px solid ${analyticsTrendGrain===g?'var(--accent)':'var(--bg-tertiary)'};background:${analyticsTrendGrain===g?'var(--accent-glow)':'transparent'};color:${analyticsTrendGrain===g?'var(--accent)':'var(--text-secondary)'};text-transform:capitalize;">${g}</button>`).join('');
+  const latestCons=consVals.length?consVals[consVals.length-1]:null;
+  return`
+    <div style="display:flex;gap:0.4rem;margin-bottom:0.8rem;">${grainBtns}</div>
+    <div style="font-size:0.75rem;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.3rem;">WPM Trend (by ${analyticsTrendGrain})</div>
+    <div style="background:var(--bg-primary);border:1px solid var(--bg-tertiary);border-radius:10px;padding:0.6rem;margin-bottom:0.9rem;">${_svgLineChart(wpmVals,{color:'var(--accent)'})}</div>
+    <div style="font-size:0.75rem;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.3rem;display:flex;justify-content:space-between;">
+      <span>Consistency Score${latestCons!=null?` — <span style="color:${latestCons>=75?'var(--success)':latestCons>=50?'var(--warning)':'#ef4444'};">${latestCons}/100</span>`:''}</span>
+    </div>
+    <div style="font-size:0.68rem;color:var(--text-secondary);margin-bottom:0.4rem;">Based on the standard deviation of your keystroke intervals — higher means steadier, more rhythmic typing (not just fast bursts).</div>
+    <div style="background:var(--bg-primary);border:1px solid var(--bg-tertiary);border-radius:10px;padding:0.6rem;">${_svgLineChart(consVals,{color:'#8b5cf6'})}</div>`;
+}
+
+// ── Keys: accuracy-by-key heatmap over time with improving/worsening trend ──
+function _renderAnalyticsKeys(){
+  const hist=getWpmHistory().filter(h=>h.keyMistakes);
+  if(!hist.length)return`<div style="text-align:center;color:var(--text-secondary);font-size:0.85rem;padding:1.5rem;">No key-mistake data yet — complete a few typing sessions.</div>`;
+  const half=Math.ceil(hist.length/2);
+  const older=hist.slice(0,half),newer=hist.slice(half);
+  function sumKeys(arr){const m={};arr.forEach(h=>{Object.entries(h.keyMistakes).forEach(([k,v])=>{m[k]=(m[k]||0)+v;});});return m;}
+  const olderM=sumKeys(older),newerM=sumKeys(newer),totalM=sumKeys(hist);
+  const maxCount=Math.max(1,...Object.values(totalM));
+  const rows=['1234567890','qwertyuiop','asdfghjkl','zxcvbnm'];
+  const rowsHtml=rows.map(row=>`<div style="display:flex;gap:0.2rem;justify-content:center;margin-bottom:0.22rem;">
+    ${row.split('').map(k=>{
+      const count=totalM[k]||0;
+      const intensity=count/maxCount;
+      const bg=count===0?'var(--bg-primary)':`rgba(239,68,68,${0.15+intensity*0.65})`;
+      const oldRate=(olderM[k]||0)/(older.length||1);
+      const newRate=(newerM[k]||0)/(newer.length||1);
+      let trend='';
+      if(count>0&&older.length&&newer.length){
+        if(newRate<oldRate*0.7)trend='📉'; // improving
+        else if(newRate>oldRate*1.3)trend='📈'; // worsening
+      }
+      return`<div style="width:26px;height:30px;border-radius:5px;background:${bg};display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:0.62rem;font-weight:800;color:${count>0?'#fff':'var(--text-secondary)'};border:1px solid var(--bg-tertiary);">
+        <span>${k.toUpperCase()}</span>${trend?`<span style="font-size:0.5rem;">${trend}</span>`:''}
+      </div>`;
+    }).join('')}
+  </div>`).join('');
+  const worst=Object.entries(totalM).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  return`
+    <div style="font-size:0.75rem;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.5rem;">Mistake Heatmap (last ${hist.length} sessions)</div>
+    <div style="background:var(--bg-primary);border:1px solid var(--bg-tertiary);border-radius:10px;padding:0.7rem;margin-bottom:0.6rem;">${rowsHtml}</div>
+    <div style="font-size:0.68rem;color:var(--text-secondary);margin-bottom:0.8rem;">📉 improving · 📈 getting worse — comparing your first half vs second half of recent sessions.</div>
+    <div style="font-size:0.75rem;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.4rem;">Top Problem Keys</div>
+    ${worst.length?worst.map(([k,c])=>`<div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:0.3rem;"><span style="font-weight:700;">${k.toUpperCase()}</span><span style="color:var(--text-secondary);">${c} mistake${c===1?'':'s'}</span></div>`).join(''):'<div style="color:var(--text-secondary);font-size:0.8rem;">No mistakes recorded — great job!</div>'}`;
+}
+
+// ── Timing: performance by time of day ──
+function _renderAnalyticsTiming(){
+  const hist=getWpmHistory().filter(h=>h.hour!=null);
+  if(hist.length<3)return`<div style="text-align:center;color:var(--text-secondary);font-size:0.85rem;padding:1.5rem;">Complete a few more sessions at different times of day to see this.</div>`;
+  const buckets=[
+    {label:'Night',range:[0,6],icon:'🌙'},
+    {label:'Morning',range:[6,12],icon:'🌅'},
+    {label:'Afternoon',range:[12,17],icon:'☀️'},
+    {label:'Evening',range:[17,24],icon:'🌆'}
+  ];
+  const stats=buckets.map(b=>{
+    const sessions=hist.filter(h=>h.hour>=b.range[0]&&h.hour<b.range[1]);
+    const avgWpm=sessions.length?Math.round(sessions.reduce((a,c)=>a+c.wpm,0)/sessions.length):0;
+    return{...b,n:sessions.length,avgWpm};
+  });
+  const maxWpm=Math.max(1,...stats.map(s=>s.avgWpm));
+  const best=stats.filter(s=>s.n>0).sort((a,b)=>b.avgWpm-a.avgWpm)[0];
+  return`
+    ${best?`<div style="background:rgba(34,197,94,0.1);border:1.5px solid var(--success);border-radius:10px;padding:0.7rem;margin-bottom:0.9rem;text-align:center;">
+      <div style="font-size:0.8rem;color:var(--text-secondary);">You type fastest in the</div>
+      <div style="font-size:1.1rem;font-weight:900;color:var(--success);">${best.icon} ${best.label} (${best.avgWpm} WPM avg)</div>
+    </div>`:''}
+    <div style="display:flex;flex-direction:column;gap:0.5rem;">
+      ${stats.map(s=>`<div>
+        <div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:0.2rem;">
+          <span>${s.icon} ${s.label} <span style="color:var(--text-secondary);font-size:0.7rem;">(${s.n} session${s.n===1?'':'s'})</span></span>
+          <span style="font-weight:700;color:var(--accent);">${s.avgWpm||'—'} WPM</span>
+        </div>
+        <div style="height:8px;background:var(--bg-tertiary);border-radius:4px;overflow:hidden;">
+          <div style="height:100%;width:${s.avgWpm?Math.round((s.avgWpm/maxWpm)*100):0}%;background:var(--accent);border-radius:4px;"></div>
+        </div>
+      </div>`).join('')}
+    </div>`;
+}
+
+// ── Compare: today's/most recent session vs personal best curve ──
+function _renderAnalyticsCompare(){
+  const hist=getWpmHistory().filter(h=>h.curve&&h.curve.length>1);
+  if(hist.length<1)return`<div style="text-align:center;color:var(--text-secondary);font-size:0.85rem;padding:1.5rem;">Complete a full typing test to unlock session comparison.</div>`;
+  const latest=hist[hist.length-1];
+  const best=hist.reduce((a,b)=>b.wpm>a.wpm?b:a,hist[0]);
+  const len=Math.max(latest.curve.length,best.curve.length);
+  const sample=(curve,n)=>{const out=[];for(let i=0;i<n;i++){const idx=Math.round((i/(n-1))*(curve.length-1));out.push(curve[idx]);}return out;};
+  const latestSamp=sample(latest.curve,Math.min(len,40));
+  const bestSamp=sample(best.curve,Math.min(len,40));
+  const allVals=[...latestSamp,...bestSamp];
+  const min=Math.min(...allVals),max=Math.max(...allVals);
+  const range=(max-min)||1;
+  const w=300,h=110,pad=12;
+  const toPts=(arr)=>arr.map((v,i)=>{
+    const x=pad+(i/(arr.length-1))*(w-pad*2);
+    const y=h-pad-((v-min)/range)*(h-pad*2);
+    return`${x.toFixed(1)},${y.toFixed(1)}`;
+  }).join(' ');
+  const isSameSession=latest.ts===best.ts;
+  return`
+    <div style="font-size:0.75rem;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.4rem;">Most Recent vs Personal Best</div>
+    <div style="display:flex;gap:1rem;margin-bottom:0.5rem;font-size:0.75rem;">
+      <span><span style="display:inline-block;width:10px;height:10px;background:var(--accent);border-radius:2px;margin-right:0.3rem;"></span>Latest (${latest.wpm} WPM, ${latest.date})</span>
+      <span><span style="display:inline-block;width:10px;height:10px;background:var(--success);border-radius:2px;margin-right:0.3rem;"></span>Best (${best.wpm} WPM, ${best.date})</span>
+    </div>
+    <div style="background:var(--bg-primary);border:1px solid var(--bg-tertiary);border-radius:10px;padding:0.7rem;">
+      <svg width="100%" height="${h}" viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMidYMid meet">
+        <polyline points="${toPts(bestSamp)}" fill="none" stroke="var(--success)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
+        <polyline points="${toPts(latestSamp)}" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    ${isSameSession?'<div style="font-size:0.7rem;color:var(--text-secondary);margin-top:0.4rem;text-align:center;">Your latest session is your personal best! 🎉</div>':
+      `<div style="font-size:0.75rem;color:var(--text-secondary);margin-top:0.5rem;text-align:center;">${latest.wpm>=best.wpm?'You matched or beat your best!':`${best.wpm-latest.wpm} WPM below your best — keep going!`}</div>`}`;
 }
 
 // ============================================================
